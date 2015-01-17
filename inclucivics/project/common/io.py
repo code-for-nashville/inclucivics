@@ -25,7 +25,7 @@ def write_csv(path, name, sep="|", encoding="utf-8"):
     return "CSV written to %s" % path
 
 
-def rethink_import_data(files_to_import, file_type="json"):
+def rethink_import_data(files_to_import, file_type="json", delimitter=","):
     from os import system, listdir
 
     extension = file_type
@@ -37,20 +37,39 @@ def rethink_import_data(files_to_import, file_type="json"):
         print "Only 'json' or 'csv' file_types accepted as params. got %s" % file_type
         return
     """
+    if extension == "csv":
+        import_command = "rethinkdb import -c localhost:28015 --table %s -f %s/%s --force --format %s %s> /dev/null"
 
-    import_command = "rethinkdb import -c localhost:28015 --table %s -f %s/%s --force --format %s > /dev/null"
+    else:
+        import_command = "rethinkdb import -c localhost:28015 --table %s -f %s/%s --force --format %s > /dev/null"
 
     for file_object in files_to_import:
         file_directory = listdir(file_object['path'])
         for file_name in file_directory:
-            if not file_name.startswith('.'):
-                command = import_command % (
-                    file_object['table'],
-                    file_object['path'],
-                    file_name,
-                    extension
-                )
-                system(command)
+
+            if file_name.endswith(extension):
+
+                if not file_name.startswith('.'):
+                    if extension == "csv":
+                        print "yes"
+                        delimit = "--delimiter '%s'" % delimitter
+                        print delimit
+                        command = import_command % (
+                            file_object['table'],
+                            file_object['path'],
+                            file_name,
+                            extension,
+                            delimit
+                        )
+                    else:
+                        command = import_command % (
+                            file_object['table'],
+                            file_object['path'],
+                            file_name,
+                            extension
+                        )
+
+                    system(command)
 
 
 def rethink_export_data(files_to_export):

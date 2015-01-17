@@ -1,0 +1,10 @@
+INCLUCIVICS_DB = "INCLUCIVICS"
+
+TABLE_RAW = "raw_data"
+
+TABLES = [
+    TABLE_RAW
+]
+
+IMPORT_STRING = "%s.%s" % (INCLUCIVICS_DB, TABLE_RAW)
+IMPORT_PATH = "files/input/"
