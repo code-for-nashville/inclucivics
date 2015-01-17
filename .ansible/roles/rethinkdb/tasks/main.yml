@@ -1,0 +1,23 @@
+---
+- name: Add rethinkdb apt repo
+  script: scripts/rethink_install.sh
+
+- name: Update apt-get
+  apt: update_cache=yes
+
+- name: Install latest rethinkdb
+  apt: name=rethinkdb
+
+- name: Configure rethinkdb
+  copy: src=include/instance1.conf
+    dest=/etc/rethinkdb/instances.d/instance1.conf
+    owner={{ user }}
+
+- name: Start rethinkdb service
+  service: name=rethinkdb pattern=rethinkdb state=started
+
+- name: Wait for rethinkdb to not be such a bitch about accepting connections.
+  wait_for: port=28015 delay=10
+
+- name: Install python rethinkdb drivers
+  pip: name=rethinkdb

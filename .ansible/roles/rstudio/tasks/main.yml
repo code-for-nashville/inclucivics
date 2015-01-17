@@ -1,0 +1,26 @@
+---
+- name: Install R-Studio requirements
+  sudo: yes
+  apt: pkg={{ item }} state=installed update_cache=yes
+  tags: [packages]
+  with_items:
+    - gdebi-core
+    - libapparmor1
+    - libcurl4-gnutls-dev
+
+# http://www.rstudio.com/products/rstudio/download-server/
+- name: Ensure ansible-cache directory exists
+  shell: mkdir /var/local/ansible-cache creates=/var/local/ansible-cache
+  sudo: yes
+
+- name: Download rstudio-server
+  get_url: url=http://download2.rstudio.org/rstudio-server-0.98.1091-amd64.deb dest=/var/local/ansible-cache/rstudio-server-0.98.1091-amd64.deb
+  sudo: yes
+
+- name: Install RStudio Server 
+  shell: yes | gdebi /var/local/ansible-cache/rstudio-server-0.98.1091-amd64.deb
+  sudo: yes
+
+#- name: "Setup username: rsuser, password: rspword to log into RStudio Server"
+#  user: name=rsuser password=$6$rounds=100000$INgo5pOSR6YJURX2$MycqcjP9HV.P01xyzCqN8mQWJ/WLtIcjptd4waokL22/x2pg5g/spXf2BAG0IC/BiSLlA2MrJUURQVs6kuaFB0 update_password=always uid=1031
+#  sudo: yes

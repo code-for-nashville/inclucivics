@@ -1,0 +1,28 @@
+---
+- name: Update apt-get
+  apt: update_cache=yes
+
+- name: Install pip
+  apt: name=python-pip
+
+- name: Install git
+  apt: name=git
+
+- name: Install base python libs
+  action: apt name={{item}} state=latest
+  with_items:
+    - python-nose
+    - libpq-dev
+    - python-dev
+    - python-matplotlib
+
+- name: Install python libraries
+  action: pip name={{item}} state=latest
+  with_items:
+    - boto
+
+#- name: Create project subdirectory in vagrant home
+#  command: mkdir -p /vagrant/project/
+
+#- name: Add namespace_app.py script to vagrant home
+#  copy: src=../files/include/namespace_app.py dest=/vagrant/project/

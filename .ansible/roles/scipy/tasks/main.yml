@@ -1,0 +1,16 @@
+---
+- name: Install SciPy stack
+  action: apt name={{item}} state=latest
+  with_items:
+    - python-scipy
+    - python-sympy
+
+- name: Download python dependencies
+  action: pip name={{item}} state=latest
+  with_items:
+    - scikit-learn
+    - numpy
+    - pandas
+    - numexpr
+    - xlrd
+    - xlwt

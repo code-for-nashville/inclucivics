@@ -1,0 +1,26 @@
+---
+
+- name: Add node apt repo.
+  apt_repository: repo='ppa:chris-lea/node.js'
+
+- name: Install nodejs
+  apt: name=nodejs update-cache=yes
+
+- name: Create npm packages directory
+  file: path=~{{ user }}/.npm-packages state=directory owner={{ user }} group={{ user }} mode=0775
+
+- name: Add prefix to npmrc
+  lineinfile: dest="/home/{{ user }}/.npmrc" regexp="^prefix = /home/{{ user }}/.npm-packages" line='prefix = /home/{{ user }}/.npm-packages' create=yes owner={{ user }} group={{ user }} mode=0664
+
+- name: Add some PATH info for nodejs
+  lineinfile: dest='/home/{{ user }}/.bashrc' regexp={{ item.regexp }} line={{ item.line }}
+  with_items:
+    -
+      regexp: ^NPM_PACKAGES
+      line: NPM_PACKAGES="$HOME/.npm-packages"
+    -
+      regexp: ^PATH=\\$NPM_PACKAGES
+      line: PATH="$NPM_PACKAGES/bin:$PATH"
+    -
+      regexp: ^NODE_PATH
+      line: NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
