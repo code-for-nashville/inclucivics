@@ -1,4 +1,4 @@
-from ..sanitize.vars import CLEAN_SALARY
+from ..sanitize.vars import CLEAN_SALARY, NAME
 
 INCLUCIVICS_DB = "INCLUCIVICS"
 
@@ -17,5 +17,9 @@ INDEXES = [
     dict(
         table=TABLE_RAW,
         index=CLEAN_SALARY
+    ),
+    dict(
+        table=TABLE_GROUPED,
+        index=NAME
     )
 ]

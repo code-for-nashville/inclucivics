@@ -5,11 +5,11 @@
 - hosts: all
   sudo: yes
   vars:
-    user: ubuntu
+    user: vagrant
 
   roles:
-    - base
-    - node
+    #- base
+    #- node
     #- scipy
     #- elasticsearch
     - rethinkdb

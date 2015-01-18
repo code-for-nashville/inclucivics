@@ -50,8 +50,3 @@ def update_department_by_attribute(table_object, key_name, attribute):
         )\
         .run()
 
-    table_object.replace(
-        lambda row:
-        row.without(EMPLOYEES)
-    ).run()
-

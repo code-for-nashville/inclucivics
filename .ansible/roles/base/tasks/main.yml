@@ -2,15 +2,13 @@
 - name: Update apt-get
   apt: update_cache=yes
 
-- name: Install pip
-  apt: name=python-pip
-
 - name: Install git
   apt: name=git
 
 - name: Install base python libs
   action: apt name={{item}} state=latest
   with_items:
+    - python-pip
     - python-nose
     - libpq-dev
     - python-dev

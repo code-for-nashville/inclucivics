@@ -1,5 +1,5 @@
 from include.rethinkdb.tables import RdbTableEmployeesByDepartment, RdbTableRawData
-from include.sanitize.vars import CLEAN_SALARY, ETHNICITY, GENDER
+from include.sanitize.vars import CLEAN_SALARY, ETHNICITY, GENDER, EMPLOYEES
 from include.aggregate.queries import RdbGroupByDepartment
 from include.aggregate.functions import update_income_level, update_department_by_attribute
 from include.aggregate.vars import INCOME_DISTRIBUTIONS
@@ -42,3 +42,7 @@ update_department_by_attribute(
     GENDER
 )
 
+RdbTableEmployeesByDepartment\
+    .replace(
+        lambda row: row.without(EMPLOYEES)
+).run()
