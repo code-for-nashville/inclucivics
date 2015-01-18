@@ -12,7 +12,6 @@ FILES_TO_IMPORT = [
 print FILES_TO_IMPORT
 rethink_import_data(
     FILES_TO_IMPORT,
-    file_type="csv",
-    delimitter="|"
+    file_type="json"
 )
 
