@@ -1,0 +1,74 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+.navbar {
+	background-color:#3a3c4a;
+}
+
+.navbar-brand {
+	color:#FFF;
+	text-shadow:none;
+}
+
+.navbar-brand:hover {
+	color:#FFF;
+	text-shadow:none;
+}
+
+.jumbotron {
+	background-color: #FFF;
+	background-image:url(../img/nashville.png);
+	background-size:100% auto;
+	background-repeat: no-repeat;
+}
+
+.filter-container {
+	position:fixed;
+	top:350px;
+	left:50px;
+	padding:10px;
+	z-index:5;
+}
+
+.filter-container select {
+	height: 32px;
+	width: 190px;
+	font-size: 18px;
+}
+
+#charts-container {
+	min-width: 310px; 
+	max-width: 600px; 
+	min-height: 400px;
+	margin: 0 auto;
+}
+
+.chart {
+	margin:20px auto;
+	margin-bottom:100px;
+	clear: both;
+}
+
+.loading {
+	padding:20px;
+	text-align: center;
+	background-image:url(../img/ajax-loader.gif);
+	background-position: center center;
+	background-repeat: no-repeat;
+	height:400px;
+}
+
+
+
+
+
+
+
+
+
+
+
+

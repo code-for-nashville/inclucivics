@@ -1,0 +1,53 @@
+[
+{
+        "type": "pie",
+        "name": "High Income Individuals by Race within the Education Department",
+        "data": [
+            ["White",   75.0],
+            ["African American",       10.0],
+            {
+                "name": "Chrome",
+                "y": 12.8,
+                "sliced": true,
+                "selected": true
+            },
+            ["Asian American",    10.0],
+            ["Latino",     4.3],
+            ["Others",   0.7]
+        ]
+},
+{
+        "type": "pie",
+        "name": "Medium Income Individuals by Race within the Education Department",
+        "data": [
+            ["White",   45.0],
+            ["African American",       26.8],
+            {
+                "name": "Chrome",
+                "y": 12.8,
+                "sliced": true,
+                "selected": true
+            },
+            ["Asian American",    8.5],
+            ["Latino",     6.2],
+            ["Others",   0.7]
+        ]
+},
+{
+        "type": "pie",
+        "name": "Low Income Individuals by Race within the Education Department",
+        "data": [
+            ["White",   45.0],
+            ["African American",       26.8],
+            {
+                "name": "Chrome",
+                "y": 12.8,
+                "sliced": true,
+                "selected": true
+            },
+            ["Asian American",    8.5],
+            ["Latino",     6.2],
+            ["Others",   0.7]
+        ]
+}
+]
