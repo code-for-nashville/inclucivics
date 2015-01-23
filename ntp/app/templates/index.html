@@ -19,8 +19,9 @@
         </style>
         <link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="../static/css/main.css">
-
-        <script src="../static/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="{{ url_for('static', filename='js/vendor/modernizr-2.6.2-respond-1.1.0.min.js')}}"></script>
+        <script src= "{{ url_for('static', filename='js/charts.js') }}"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -35,7 +36,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Nashville Civic Transparency Project</a>
+          <a class="navbar-brand" href="#">Nashville Transparency Project</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
         
@@ -46,29 +47,24 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Announce the project</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <h1>INCLUCIVICS</h1>
+        <p>Brought to you by the Nashville Transparency Project</p>
       </div>
     </div>
 
     <div class="filter-container">
         <h4>Department</h4>
-        <select id="department">
-            <option vale="all">All</option>
-            <option value="education">Education</option>
-            <option value="transportation">Transportation</option>
-            <option value="administration">Administration</option>
-        </select>
+
+        <select id="department"></select>
         <hr>
         <h4>Demographics:</h4>
         <select id="demographics">
-            <option vale="race">Race</option>
-            <option value="sex">Sex</option>
+            <option value="ethnicity">Race</option>
+            <option value="gender">Sex</option>
         </select>
     </div>
 
     <div class="container">
-
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-12">
@@ -80,16 +76,12 @@
       <hr>
 
       <footer>
-        <p>&copy; Company 2014</p>
+        <p><a href="http://www.codefornashville.org">Code for Nashville 2015</a></p>
       </footer>
     </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
 <script>window.jQuery || document.write('<script src="../static/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
-
-<script src="../static/js/vendor/bootstrap.min.js"></script>
-
-<script src="../static/js/main.js"></script>
-
+<script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/main.js')}}"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 
@@ -101,93 +93,6 @@
     e.src='//www.google-analytics.com/analytics.js';
     r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
     ga('create','UA-XXXXX-X');ga('send','pageview');
-</script>
-
-<script type='text/javascript'>
-
-$(function () {
-
-    $(document).ready(function () {
-
-            reloadCharts();
-
-          $('select#department, select#demographics').change(function(){
-            reloadCharts();
-          });
-
-    });
-
-    Highcharts.getOptions().plotOptions.pie.colors = (function () {
-        var colors = [],
-            base = Highcharts.getOptions().colors[0],
-            i;
-
-        for (i = 0; i < 10; i += 1) {
-            colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
-        }
-        return colors;
-    }());
-
-});
-
-function reloadCharts(){
-    var department      = $('select#department').val();
-    var demographics    = $('select#demographics').val();
-
-    $('#charts-container').html('');
-    $('#charts-container').html('<div class="loading">Loading...</div>');
-
-    $.getJSON('chart_sample.json', function(data){
-        var charts = data;
-        $('#charts-container').html('');
-
-        $.each(charts, function(key){
-            var elementId = 'chart-' + key;
-            $('#charts-container').append('<div id="' + elementId + '" class="chart">CHART</div>');
-            drawPieChart(elementId, charts[key]);
-        });
-    });
-}
-
-function drawPieChart(elementId, chartData){
-
-    $('#' + elementId).highcharts({
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        exporting: {
-            enabled: false
-        },
-        title: {
-            text: chartData.name
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        legend: { 
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: <b>{point.y}</b> ({point.percentage:.1f})%',
-                    style: {
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    }
-                },
-                showInLegend: true
-            }
-        },
-        series: [chartData]
-    });
-
-}
-
 </script>
     </body>
 </html>

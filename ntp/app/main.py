@@ -14,7 +14,6 @@ app.debug = True
 def data():
 
     if request.method == "POST":
-
         request_params = request.json.keys()
         if "attribute" not in request_params or NAME not in request_params:
 
@@ -35,7 +34,7 @@ def data():
 
         return jsonify(
             {
-                attribute: response
+                "attribute": response
             }
         )
 
@@ -60,7 +59,7 @@ def departments():
 
 @app.route("/")
 def hello():
-    return render_template("test.html")
+    return render_template("index.html")
 
 
 def run_server():
