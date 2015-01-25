@@ -8,11 +8,12 @@
     user: vagrant
 
   roles:
-    #- base
-    #- node
-    #- scipy
+    - base
+    - node
+    - scipy
     #- elasticsearch
     - rethinkdb
+    - pyweb
     #- ipython
     # - rstudio
     #- postgres

@@ -51,8 +51,6 @@ class RethinkValidator(RethinkBase):
 
         for database in self.db_list:
             if database not in existing_databases:
-               # print "DATABASE WARNING: %s not found" % database
-               # print "Creating database: %s\n" % database
                 self.r.db_create(database).run()
 
         return self
@@ -67,8 +65,6 @@ class RethinkValidator(RethinkBase):
 
         for table in self.tables:
             if table not in existing_tables:
-              #  print "TABLE WARNING: '%s' not found in database '%s'" % (table, self.database)
-              #  print "Creating..."
                 self.db.table_create(table).run()
 
     def validate_indexes(self, indexes_object):
