@@ -1,22 +1,29 @@
-
-$.getJSON("/api/departments", function( response ) {
+$.getJSON("/api/departments", function (response) {
     var departments = $("#department");
 
-    $.each(response.departments, function ( val, text ) {
-         departments.append($("<option></option>").val(text).html(text));
+    $.each(response.departments, function (val, text) {
+        departments.append($("<option></option>").val(text).html(text));
     });
 
 });
+
 
 $(function () {
 
     $(document).ready(function () {
 
-            reloadCharts();
+        $('#charts-container')
+            .append("<p> " +
+            "The Nashville Transparency Project in partnership with the Human Relation's Commission is proud to present" +
+            " IncluCivics, a simple data visualization tool for tracking the Nashville Metro employee demographics. " +
+            " Simply choose a department and demographic to get started. " +
+            "</p>"
+        );
 
-          $('select#department, select#demographics').change(function(){
+        $('select#department, select#demographics').change(function () {
+
             reloadCharts();
-          });
+        });
 
     });
 
@@ -59,36 +66,38 @@ function reloadCharts() {
     });
 };
 
-function drawPieChart(elementId, chartData){
-
+function drawPieChart(elementId, chartData) {
+    console.log(chartData);
     $('#' + elementId).highcharts({
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
-            plotShadow: false
+            plotShadow: true
         },
         exporting: {
             enabled: false
         },
         title: {
-            text: chartData.name
+            text: chartData.income_level
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            pointFormat: '{name}: <b>{point.percentage:.1f}%</b>'
         },
         legend: {
-            enabled: false
+            enabled: true,
+            labelFormat: '<b>{name}</b>: Number of Employees: <b>{y}</b>   ({percentage:.1f}%)</b>'
         },
         plotOptions: {
             pie: {
                 allowPointSelect: true,
                 cursor: 'pointer',
                 dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: <b>{point.y}</b> ({point.percentage:.1f})%',
+                    enabled: false,
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     }
+
+
                 },
                 showInLegend: true
             }

@@ -46,6 +46,15 @@
 	margin: 0 auto;
 }
 
+#charts-container p {
+	font-size: 16pt;
+	font-family: Arial;
+	margin-top: 0.8in;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: justify;
+}
+
 .chart {
 	margin:20px auto;
 	margin-bottom:100px;
