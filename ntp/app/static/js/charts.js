@@ -20,13 +20,6 @@ $(function () {
             "</p>"
         );
 
-        $('#charts-container2')
-            .append("<p> " +
-            "The Nashville Transparency Project in partnership with the Human Relation's Commission is proud to present" +
-            " IncluCivics, a simple data visualization tool for tracking the Nashville Metro employee demographics. " +
-            " Simply choose a department and demographic to get started. " +
-            "</p>"
-        );
 
         $('select#department, select#demographics').change(function () {
 
@@ -90,7 +83,7 @@ function reloadCharts() {
 
             $.each(ideal, function (key) {
                 var elementId = 'chart-' + key + '2';
-                $('#charts-container2').append('<div id="' + elementId + '" class="chart">CHART</div>');
+                $('#charts-container2').append('<div id="' + elementId + '" class="chart"></div>');
                 drawPieChart(elementId, charts[key]);
             });
 

@@ -40,14 +40,14 @@
 }
 
 #charts-container {
-	min-width: 310px; 
-	max-width: 600px; 
+	min-width: 450px;
+	max-width: 600px;
 	min-height: 400px;
 	margin: 0 auto;
 }
 
 #charts-container2 {
-	min-width: 310px;
+	min-width: 450px;
 	max-width: 600px;
 	min-height: 400px;
 	margin: 0 auto;
