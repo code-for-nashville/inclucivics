@@ -20,6 +20,14 @@ $(function () {
             "</p>"
         );
 
+        $('#charts-container2')
+            .append("<p> " +
+            "The Nashville Transparency Project in partnership with the Human Relation's Commission is proud to present" +
+            " IncluCivics, a simple data visualization tool for tracking the Nashville Metro employee demographics. " +
+            " Simply choose a department and demographic to get started. " +
+            "</p>"
+        );
+
         $('select#department, select#demographics').change(function () {
 
             reloadCharts();
@@ -46,6 +54,8 @@ function reloadCharts() {
 
     $('#charts-container').html('');
     $('#charts-container').html('<div class="loading">Loading...</div>');
+    $('#charts-container2').html('');
+
 
     var request_data = JSON.stringify({name: department_name, attribute: demographic_type});
     $.ajax({
@@ -55,19 +65,40 @@ function reloadCharts() {
         data: request_data,
         success: function (data) {
             var charts = data.attribute;
-            console.log(data.attribute);
             $('#charts-container').html('');
             $.each(charts, function (key) {
                 var elementId = 'chart-' + key;
                 $('#charts-container').append('<div id="' + elementId + '" class="chart">CHART</div>');
                 drawPieChart(elementId, charts[key]);
             });
+
+            var census = {
+                "White (Not of Hispanic Origin)": 0.1,
+                "Black": 0.3,
+                "Hispanic": 0.4,
+                "Unknown": 0.1,
+                "Asian or Pacific Islander": 0.1,
+                "American Indian/Alaskan Native": 0.2,
+                "Hawaiian or Pacific Islander": 0.1
+            };
+
+            var sum = charts[0].data.reduce(function(prev, cur) {return prev + cur.y}, 0);
+            var ideal = charts[0].data.map(function(elem) {
+                elem.y = census[elem.name] * sum
+                return elem
+            });
+
+            $.each(ideal, function (key) {
+                var elementId = 'chart-' + key + '2';
+                $('#charts-container2').append('<div id="' + elementId + '" class="chart">CHART</div>');
+                drawPieChart(elementId, charts[key]);
+            });
+
         }
     });
 };
 
 function drawPieChart(elementId, chartData) {
-    console.log(chartData);
     $('#' + elementId).highcharts({
         chart: {
             plotBackgroundColor: null,
@@ -96,8 +127,6 @@ function drawPieChart(elementId, chartData) {
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                     }
-
-
                 },
                 showInLegend: true
             }
