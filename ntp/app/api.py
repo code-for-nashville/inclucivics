@@ -10,13 +10,7 @@ def data():
         request_params = request.json.keys()
         if "attribute" not in request_params or NAME not in request_params:
 
-            return jsonify(
-            {
-                "error": "Required key not found",
-                "keys_found": request.json.keys()
-
-            }
-        )
+            return jsonify({"error": "Required key not found", "keys_found": request.json.keys()})
 
         attribute = request.json["attribute"]
         output = rdb_get_data_by_department(
@@ -25,29 +19,15 @@ def data():
         )
         response = output[attribute]
 
-        return jsonify(
-            {
-                "attribute": response
-            }
-        )
+        return jsonify({"attribute": response})
 
     if request.method == "GET":
 
-        return jsonify(
-            {
-                "status": "good"
-            }
-        )
+        return jsonify({"status": "good"})
 
 @app.route('/api/departments', methods=["GET"])
 def departments():
 
-    response = sorted(
-        rdb_get_department_names(NAME)
-    )
+    response = sorted(rdb_get_department_names(NAME))
 
-    return jsonify(
-        {
-            "departments": response
-        }
-    )
+    return jsonify({"departments": response})
