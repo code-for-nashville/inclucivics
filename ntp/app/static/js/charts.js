@@ -72,16 +72,22 @@ function reloadCharts() {
                 "Unknown": 0.1,
                 "Asian or Pacific Islander": 0.1,
                 "American Indian/Alaskan Native": 0.2,
-                "Hawaiian or Pacific Islander": 0.1
+                "Hawaiian or Pacific Islander": 0.1,
+                "Two or More Races": 0.1
             };
 
-            var sum = charts[0].data.reduce(function(prev, cur) {return prev + cur.y}, 0);
-            var ideal = charts[0].data.map(function(elem) {
-                elem.y = census[elem.name] * sum
-                return elem
-            });
+            //var ideal = charts[0].data.map(function(elem) {
+            //    elem.y = census[elem.name] * sum
+            //    return elem
+            //});
 
-            $.each(ideal, function (key) {
+            $.each(charts, function (key) {
+                var sum = charts[key].data.reduce(function(prev, cur) {return prev + cur.y}, 0);
+                charts[key].data.map(function(elem) {
+                    elem["y"] = Math.round(census[elem.name] * sum)
+                    return elem
+                })
+                console.log(charts[key].data)
                 var elementId = 'chart-' + key + '2';
                 $('#charts-container2').append('<div id="' + elementId + '" class="chart"></div>');
                 drawPieChart(elementId, charts[key]);
