@@ -12,7 +12,7 @@ update_income_level(
 )
 
 ALL_DEPARTMENTS = dict(
-    name="all_departments",
+    name="All Departments",
     employees=[
         elem
         for
@@ -21,28 +21,8 @@ ALL_DEPARTMENTS = dict(
     ]
 )
 
-RdbTableEmployeesByDepartment.insert(
-    ALL_DEPARTMENTS
-).run()
-
-RdbTableEmployeesByDepartment.insert(
-    RdbGroupByDepartment,
-    conflict="replace"
-).run()
-
-update_department_by_attribute(
-    RdbTableEmployeesByDepartment,
-    "ethnicity",
-    ETHNICITY
-)
-
-update_department_by_attribute(
-    RdbTableEmployeesByDepartment,
-    "gender",
-    GENDER
-)
-
-RdbTableEmployeesByDepartment\
-    .replace(
-        lambda row: row.without(EMPLOYEES)
-).run()
+RdbTableEmployeesByDepartment.insert(ALL_DEPARTMENTS).run()
+RdbTableEmployeesByDepartment.insert(RdbGroupByDepartment, conflict="replace").run()
+update_department_by_attribute(RdbTableEmployeesByDepartment, "ethnicity", ETHNICITY)
+update_department_by_attribute(RdbTableEmployeesByDepartment, "gender", GENDER)
+RdbTableEmployeesByDepartment.replace(lambda row: row.without(EMPLOYEES)).run()

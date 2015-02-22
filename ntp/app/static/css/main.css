@@ -40,10 +40,26 @@
 }
 
 #charts-container {
-	min-width: 310px; 
-	max-width: 600px; 
+	min-width: 450px;
+	max-width: 600px;
 	min-height: 400px;
 	margin: 0 auto;
+}
+
+#charts-container2 {
+	min-width: 450px;
+	max-width: 600px;
+	min-height: 400px;
+	margin: 0 auto;
+}
+
+#charts-container p {
+	font-size: 16pt;
+	font-family: Arial;
+	margin-top: 0.8in;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: justify;
 }
 
 .chart {

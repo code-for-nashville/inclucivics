@@ -1,3 +1,4 @@
+import rethinkdb as r
 
 
 def update_income_level(table_object, income_distributions, index):
@@ -37,6 +38,11 @@ def update_department_by_attribute(table_object, key_name, attribute):
                             .group(attribute)
                             .count()
                             .ungroup()
+                            .order_by(
+                                r.desc(
+                                    lambda order: order["reduction"]
+                                )
+                            )
                             .map(
                                 lambda data:
                                     [
