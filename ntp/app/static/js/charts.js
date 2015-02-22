@@ -66,14 +66,14 @@ function reloadCharts() {
             });
 
             var census = {
-                "White (Not of Hispanic Origin)": 0.1,
-                "Black": 0.3,
-                "Hispanic": 0.4,
+                "White (Not of Hispanic Origin)": 0.571,
+                "Black": 0.281,
+                "Hispanic": 0.099,
                 "Unknown": 0.1,
-                "Asian or Pacific Islander": 0.1,
-                "American Indian/Alaskan Native": 0.2,
-                "Hawaiian or Pacific Islander": 0.1,
-                "Two or More Races": 0.1
+                "Asian or Pacific Islander": 0.032,
+                "American Indian/Alaskan Native": 0.005,
+                "Hawaiian or Pacific Islander": 0.01,
+                "Two or More Races": 0.0231
             };
 
             //var ideal = charts[0].data.map(function(elem) {
@@ -84,7 +84,7 @@ function reloadCharts() {
             $.each(charts, function (key) {
                 var sum = charts[key].data.reduce(function(prev, cur) {return prev + cur.y}, 0);
                 charts[key].data.map(function(elem) {
-                    elem["y"] = Math.round(census[elem.name] * sum)
+                    elem["y"] = Math.round(census[elem.name] * sum) / 10
                     return elem
                 })
                 console.log(charts[key].data)
