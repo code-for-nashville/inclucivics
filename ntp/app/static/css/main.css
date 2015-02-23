@@ -5,13 +5,40 @@
    ========================================================================== */
 
 .navbar {
-	background-color:#3a3c4a;
+	background-color:#374F9A;
+}
+
+
+.jumbotron h1 {
+	color:#489DB8;
+	font-family: Arial, 'sans serif';
+}
+
+.container {
+	width:100%;
+}
+
+#graph-container {
+
+}
+
+.jumbotron a {
+	color: #EF5325;
+}
+
+#ntp {
+	color:#AB509E;
+}
+
+.main-content h4 {
+	color:#374F9A;
 }
 
 .navbar-brand, .navbar-brand:hover {
 	color:#FFF;
 	text-shadow:none;
 }
+
 
 .jumbotron img {
   position: absolute;
@@ -28,9 +55,11 @@
 	background-image:url(../img/nashville.png);
 	background-size: cover;
 	background-repeat: no-repeat;
+	
   height: 250px;
   position: relative;
   margin-bottom: 130px;
+	width: 100%;
 }
 
 .fields {
