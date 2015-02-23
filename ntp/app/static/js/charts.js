@@ -60,21 +60,34 @@ function reloadCharts() {
             var charts = data.attribute;
             $('#charts-container').html('');
             $.each(charts, function (key) {
+                console.log(charts[key].data)
                 var elementId = 'chart-' + key;
                 $('#charts-container').append('<div id="' + elementId + '" class="chart">CHART</div>');
                 drawPieChart(elementId, charts[key]);
+
+                var census = {
+                    "White (Not of Hispanic Origin)": 0.571,
+                    "Black": 0.281,
+                    "Hispanic": 0.099,
+                    "Unknown": 0.001,
+                    "Asian or Pacific Islander": 0.032,
+                    "American Indian/Alaskan Native": 0.005,
+                    "Hawaiian or Pacific Islander": 0.01,
+                    "Two or More Races": 0.0231
+                };
+                var sum = charts[key].data.reduce(function(prev, cur) {return prev + cur.y}, 0);
+
+                charts[key].data.map(function(elem) {
+                    elem.y = census[elem.name] * sum
+                    return elem
+                });
+
+                var elementId2 = 'chart-2' + key;
+                $('#charts-container2').append('<div id="' + elementId2 + '" class="chart"></div>');
+                drawPieChart(elementId2, charts[key]);
+                console.log(charts[key])
             });
 
-            var census = {
-                "White (Not of Hispanic Origin)": 0.571,
-                "Black": 0.281,
-                "Hispanic": 0.099,
-                "Unknown": 0.1,
-                "Asian or Pacific Islander": 0.032,
-                "American Indian/Alaskan Native": 0.005,
-                "Hawaiian or Pacific Islander": 0.01,
-                "Two or More Races": 0.0231
-            };
 
             //var ideal = charts[0].data.map(function(elem) {
             //    elem.y = census[elem.name] * sum
@@ -82,15 +95,7 @@ function reloadCharts() {
             //});
 
             $.each(charts, function (key) {
-                var sum = charts[key].data.reduce(function(prev, cur) {return prev + cur.y}, 0);
-                charts[key].data.map(function(elem) {
-                    elem["y"] = Math.round(census[elem.name] * sum) / 10
-                    return elem
-                })
-                console.log(charts[key].data)
-                var elementId = 'chart-' + key + '2';
-                $('#charts-container2').append('<div id="' + elementId + '" class="chart"></div>');
-                drawPieChart(elementId, charts[key]);
+
             });
 
         }
