@@ -1,9 +1,0 @@
----
-- name: Install postgres
-  action: apt name={{item}} state=latest
-  with_items:
-    - postgresql
-    - postgresql-contrib
-
-- name: Install python driver for postgres
-  pip: name=psycopg2 state=latest

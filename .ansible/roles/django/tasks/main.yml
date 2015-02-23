@@ -1,6 +1,0 @@
----
-- name: Install Django and South
-  action: pip name={{item}} state=latest
-  with_items:
-    - Django
-    - south

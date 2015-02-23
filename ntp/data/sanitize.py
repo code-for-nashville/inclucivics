@@ -1,16 +1,12 @@
+import os
 from include.sanitize.functions import lazy_read
 from include.rethinkdb.vars import IMPORT_PATH
 from include.sanitize.vars import DIRTY_SALARY, CLEAN_SALARY, GENDER, DEPARTMENT, ETHNICITY
 from include.rethinkdb.tables import RdbTableRawData
-#
-# DATA = load_csv(
-#     IMPORT_PATH + "data.csv",
-#     sep="|"
-# ).to_dict(
-#     orient="records"
-# )
 
-DATA = [elem for elem in lazy_read(IMPORT_PATH + "data.csv", delimiter="|")]
+
+path = os.path.join(os.path.dirname(__file__), IMPORT_PATH, "data.csv")
+DATA = [elem for elem in lazy_read(path, delimiter="|")]
 
 DATA = [
     elem for elem in DATA
