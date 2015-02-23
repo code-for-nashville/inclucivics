@@ -8,21 +8,33 @@
 	background-color:#3a3c4a;
 }
 
-.navbar-brand {
+.navbar-brand, .navbar-brand:hover {
 	color:#FFF;
 	text-shadow:none;
 }
 
-.navbar-brand:hover {
-	color:#FFF;
-	text-shadow:none;
+.jumbotron img {
+  position: absolute;
+  right: 5px;
+  top: -40px;
+}
+
+.form {
+  margin-bottom: 20px;
 }
 
 .jumbotron {
 	background-color: #FFF;
 	background-image:url(../img/nashville.png);
-	background-size:100% auto;
+	background-size: cover;
 	background-repeat: no-repeat;
+  height: 250px;
+  position: relative;
+  margin-bottom: 130px;
+}
+
+.fields {
+  margin-bottom: 10px;
 }
 
 .filter-container {
@@ -37,6 +49,11 @@
 	height: 32px;
 	width: 190px;
 	font-size: 18px;
+}
+
+.charts {
+  background: red;
+  height: 400px;
 }
 
 #charts-container {
@@ -75,6 +92,47 @@
 	background-position: center center;
 	background-repeat: no-repeat;
 	height:400px;
+}
+
+.wrapper {
+  padding: 0;
+  max-width: 1020px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .jumbotron img {
+    right: 20px;
+  }
+}
+
+@media (max-width: 760px) {
+  .jumbotron img {
+    width: 30%;
+    top: 0;
+  }
+
+  .jumbotron {
+    height: 200px;
+  }
+}
+
+@media (max-width : 780px) {
+  .main-content {
+    margin-top: -90px;
+  }
+}
+
+@media (max-width: 650px) {
+  .jumbotron p {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 420px) {
+  .jumbotron img {
+    top: -45px;
+  }
 }
 
 
