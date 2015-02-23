@@ -57,15 +57,15 @@
 }
 
 #charts-container {
-	min-width: 450px;
-	max-width: 600px;
+	min-width: 350px;
+	max-width: 466.66px;
 	min-height: 400px;
 	margin: 0 auto;
 }
 
 #charts-container2 {
-	min-width: 450px;
-	max-width: 600px;
+	min-width: 350px;
+	max-width: 466.66px;
 	min-height: 400px;
 	margin: 0 auto;
 }
