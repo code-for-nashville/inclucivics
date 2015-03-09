@@ -64,10 +64,12 @@ function reloadCharts() {
         data: request_data,
         success: function (data) {
             var charts = data.attribute;
+            console.log(data.attribute)
 
-            $('#charts-container').html('');
+            $('#charts-container').html('').append("<h3 align='center'>Actual Demographics</h3>");
+            $('#charts-container2').html('').append("<h3 align='center'>Census Predicted</h3>");
             $.each(charts, function (key) {
-                console.log(charts[key].data)
+
                 var elementId = 'chart-' + key;
                 $('#charts-container').append('<div id="' + elementId + '" class="chart">CHART</div>');
                 drawPieChart(elementId, charts[key]);
@@ -82,29 +84,34 @@ function reloadCharts() {
                     "Hawaiian or Pacific Islander": 0.01,
                     "Two or More Races": 0.0231
                 };
+
+                var gender = {
+                    "M": 0.48,
+                    "F": 0.52
+                }
+
                 var sum = charts[key].data.reduce(function (prev, cur) {
                     return prev + cur.y
                 }, 0);
 
-                charts[key].data.map(function (elem) {
-                    elem.y = census[elem.name] * sum
+                if (demographic_type === "ethnicity") {
+                    charts[key].data.map(function (elem) {
+                        elem.y = census[elem.name] * sum
+                        return elem
+                    });
+                }
+
+                if (demographic_type === "gender") {
+                    charts[key].data.map(function (elem) {
+                    elem.y = gender[elem.name] * sum
                     return elem
-                });
+                    });
+                }
+
 
                 var elementId2 = 'chart-2' + key;
                 $('#charts-container2').append('<div id="' + elementId2 + '" class="chart"></div>');
                 drawPieChart(elementId2, charts[key]);
-                console.log(charts[key])
-            });
-
-
-            //var ideal = charts[0].data.map(function(elem) {
-            //    elem.y = census[elem.name] * sum
-            //    return elem
-            //});
-
-            $.each(charts, function (key) {
-
             });
 
         }
@@ -129,7 +136,7 @@ function drawPieChart(elementId, chartData) {
         },
         legend: {
             enabled: true,
-            labelFormat: '<b>{name}</b>: <b>{y}</b>   ({percentage:.1f}%)</b>'
+            labelFormat: '<b>{name}</b>: <b>{y:.1f}</b>   ({percentage:.1f}%)</b>'
         },
         plotOptions: {
             pie: {
