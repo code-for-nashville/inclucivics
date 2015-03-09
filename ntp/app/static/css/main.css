@@ -8,22 +8,31 @@
 	background-color:#374F9A;
 }
 
-
 .jumbotron h1 {
 	color:#489DB8;
 	font-family: Arial, 'sans serif';
+
+}
+
+.jumbotron {
+	margin-right: auto;
+	margin-left: auto;
+	padding-right: 7.5%;
+	padding-left: 7.5%;
 }
 
 .container {
-	width:100%;
+	width:80%;
 }
 
 #graph-container {
+	padding-top: 2cm;
 
 }
 
 .jumbotron a {
 	color: #EF5325;
+	max-width: 1000px;
 }
 
 #ntp {

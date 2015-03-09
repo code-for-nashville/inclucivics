@@ -5,28 +5,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider "virtualbox" do |vb|
     config.vm.box = 'ubuntu/trusty64'
     config.vm.network "forwarded_port", guest: 8080, host: 8080
-    config.vm.network "forwarded_port", guest: 8082, host: 8082
-   #config.vm.network "forwarded_port", guest: 8888, host: 8888
-   #config.vm.network "forwarded_port", guest: 9200, host: 9200
-   #config.vm.network "forwarded_port", guest: 8787, host: 8787
+    config.vm.network "forwarded_port", guest: 5000, host: 5000
     config.ssh.forward_agent = true
     vb.memory = 4096
     vb.cpus = 1
-    config.vm.provision :ansible do |ansible|
-      ansible.extra_vars = {
-        user: "vagrant"
-      }
-    ansible.playbook = ".ansible/playbook.yml"
-    end
-    config.vm.provision "shell", inline: <<-SHELL
-        cd /vagrant
-        sudo python setup.py install
-    SHELL
   end
 
 
   config.vm.provider :aws do |aws, override|
-
 
     aws.access_key_id = ENV['AWS_ACCESS_ID']
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
@@ -60,7 +46,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.ssh.forward_agent = true
     override.ssh.pty = true
     override.ssh.private_key_path = ENV['SSH_KEY_PAIR']
-
+    aws.provision "shell", inline: <<-SHELL
+        cd /vagrant
+        sudo python setup.py install
+    SHELL
   end
+
+  config.vm.provision :ansible do |ansible|
+    ansible.extra_vars = {
+      user: "vagrant"
+    }
+    ansible.playbook = ".ansible/playbook.yml"
+    end
+    config.vm.provision "shell", inline: <<-SHELL
+      cd /vagrant
+      sudo python setup.py install
+   SHELL
 end
 
