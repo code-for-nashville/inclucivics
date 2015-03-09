@@ -14,9 +14,14 @@ $(function () {
 
         $('#graph-container')
             .prepend("<p> " +
-            "The Nashville Transparency Project in partnership with the Human Relation's Commission is proud to present" +
-            " IncluCivics, a simple data visualization tool for tracking the Nashville Metro employee demographics. " +
-            " Simply choose a department and demographic to get started. " +
+            "Thank you for visiting IncluCivics! This platform was born from the IncluCivics report that was produced by the Metro Human Relations Commission in January of 2015. The report analyzed the diversity and equity of Metro Nashville government in regards to its employees. Code for Nashville graciously created this site and maintains it free of charge."
+            +
+            "</p>"
+            +
+            "<p>"
+            +
+            "The platform exists for two reasons The first is to show the community the diversity and equity of Metro government and its departments in real time. The second is to track progress toward ensuring that Metro government is reflective of the community it serves. If you have questions about the report, please contact the Metro Human Relations Commission."
+            +
             "</p>"
         );
 
@@ -77,9 +82,11 @@ function reloadCharts() {
                     "Hawaiian or Pacific Islander": 0.01,
                     "Two or More Races": 0.0231
                 };
-                var sum = charts[key].data.reduce(function(prev, cur) {return prev + cur.y}, 0);
+                var sum = charts[key].data.reduce(function (prev, cur) {
+                    return prev + cur.y
+                }, 0);
 
-                charts[key].data.map(function(elem) {
+                charts[key].data.map(function (elem) {
                     elem.y = census[elem.name] * sum
                     return elem
                 });
@@ -122,7 +129,7 @@ function drawPieChart(elementId, chartData) {
         },
         legend: {
             enabled: true,
-            labelFormat: '<b>{name}</b>: Number of Employees: <b>{y}</b>   ({percentage:.1f}%)</b>'
+            labelFormat: '<b>{name}</b>: <b>{y}</b>   ({percentage:.1f}%)</b>'
         },
         plotOptions: {
             pie: {
