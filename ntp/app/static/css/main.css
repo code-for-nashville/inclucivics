@@ -46,8 +46,16 @@
   top: -40px;
 }
 
+.col-md-2 {
+	padding-top: 1cm;
+}
+
 .form {
   margin-bottom: 20px;
+}
+
+select #department {
+	max-width: 10px;
 }
 
 .jumbotron {
@@ -85,18 +93,27 @@
   height: 400px;
 }
 
+
 #charts-container {
-	min-width: 350px;
-	max-width: 466.66px;
+	min-width: 300px;
+	max-width: 500.66px;
 	min-height: 400px;
 	margin: 0 auto;
 }
 
 #charts-container2 {
-	min-width: 350px;
-	max-width: 466.66px;
+	min-width: 300px;
+	max-width: 500.66px;
 	min-height: 400px;
 	margin: 0 auto;
+}
+
+p {
+	font-size: 14pt;
+	font-family: Arial;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: justify;
 }
 
 #charts-container p {
