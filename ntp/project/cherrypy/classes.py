@@ -3,7 +3,7 @@ class CherryFlask(object):
 
     def __init__(self, port=None, host=None):
 
-        self.port = 5000
+        self.port = 8082
         self.host = "0.0.0.0"
 
         if port:

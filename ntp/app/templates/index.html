@@ -27,7 +27,7 @@ body {
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
-<div class="wrapper">
+
   <nav class="navbar navbar-fixed-top" role="navigation" >
     <div>
       <div class="navbar-header">
@@ -49,7 +49,7 @@ body {
   <section class="jumbotron">
     <div class="header-text col-md-12">
       <h1>IncluCivics</h1>
-      <p>Brought to you by Code for Nashville <br> and the Nashville Transparency Project</p>
+      <p>Brought to you by <a href="http://www.codefornashville.org">Code for Nashville</a><br> and the <a href="#" id="ntp">Nashville Transparency Project</a></p>
       <img src="{{ url_for('static', filename='img/logo.png')}}" /> 
     </div>
   </section>
@@ -65,26 +65,23 @@ body {
         <option value="gender">Sex</option>
       </select>
     </div>
-    <div>
-    <!-- Example row of columns -->
-        <div>
+    <div class="container">
+        <div id="graph-container"></div>
             <div class="col-md-4">
                 <div id="charts-container">
                 </div>
             </div>
-        </div>
-        <div>
-            <div class="col-md-4">
-                <div id="charts-container2">
+            <div>
+                <div class="col-md-4">
+                    <div id="charts-container2">
+                    </div>
                 </div>
             </div>
-        </div>
     </div>
   </section>
   <footer>
     <p><a href="http://www.codefornashville.org">Code for Nashville 2015</a></p>
   </footer>
-</div> <!-- container -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="../static/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
 <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js')}}"></script>

@@ -12,8 +12,8 @@ $(function () {
 
     $(document).ready(function () {
 
-        $('#charts-container')
-            .append("<p> " +
+        $('#graph-container')
+            .prepend("<p> " +
             "The Nashville Transparency Project in partnership with the Human Relation's Commission is proud to present" +
             " IncluCivics, a simple data visualization tool for tracking the Nashville Metro employee demographics. " +
             " Simply choose a department and demographic to get started. " +
@@ -45,9 +45,10 @@ function reloadCharts() {
     var department_name = $('select#department').val();
     var demographic_type = $('select#demographics').val();
 
+
     $('#charts-container').html('');
     $('#charts-container').html('<div class="loading">Loading...</div>');
-    $('#charts-container2').html('');
+    $('#graph-container').empty();
 
 
     var request_data = JSON.stringify({name: department_name, attribute: demographic_type});
@@ -58,6 +59,7 @@ function reloadCharts() {
         data: request_data,
         success: function (data) {
             var charts = data.attribute;
+
             $('#charts-container').html('');
             $.each(charts, function (key) {
                 console.log(charts[key].data)
