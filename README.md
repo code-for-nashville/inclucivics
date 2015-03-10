@@ -4,7 +4,7 @@ INCLUCIVICS
 INCLUVICS is a data visualization app done in partnership with the Human Relations Commission.  The goal is to provide
 transparency into employee demographics at Nashville's Metro Government
 
-### Requirements:
+### Development Requirements:
 * Vagrant >= 1.5.1
 * Ansible >= 1.7.2
 * VirtualBox >= 4.3.18
