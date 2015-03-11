@@ -13,4 +13,4 @@ transparency into employee demographics at Nashville's Metro Government.
 2. Clone repo, download `vagrant up`
 3. `vagrant ssh` will log you into the VM
 4. `cd /vagrant/ntp`
-5. `python run_server.py` will add all the incluvics data and launch the python webserver available on localhost:8081
+5. `sudo python run_server.py` will add all the incluvics data and launch the python webserver available on localhost:8080
