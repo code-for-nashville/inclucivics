@@ -64,54 +64,79 @@ function reloadCharts() {
         data: request_data,
         success: function (data) {
             var charts = data.attribute;
-            console.log(data.attribute)
 
-            $('#charts-container').html('').append("<h3 align='center'>Actual Demographics</h3>");
-            $('#charts-container2').html('').append("<h3 align='center'>Census Predicted</h3>");
-            $.each(charts, function (key) {
+            $('#charts-container').html('').append(
+                "<h3 align='center'>Actual Demographics</h3>"
+            );
+            $('#charts-container2').html('').append(
+                "<h3 align='center'>Census Predicted</h3>"
+            );
+
+            $.each(charts, function (key, item) {
 
                 var elementId = 'chart-' + key;
-                $('#charts-container').append('<div id="' + elementId + '" class="chart">CHART</div>');
-                drawPieChart(elementId, charts[key]);
+                $('#charts-container').append(
+                    '<div id="' + elementId + '" class="chart">CHART</div>'
+                );
 
-                var census = {
-                    "White (Not of Hispanic Origin)": 0.571,
-                    "Black": 0.281,
-                    "Hispanic": 0.099,
-                    "Unknown": 0.001,
-                    "Asian or Pacific Islander": 0.032,
-                    "American Indian/Alaskan Native": 0.005,
-                    "Hawaiian or Pacific Islander": 0.01,
-                    "Two or More Races": 0.0231
+                drawPieChart(elementId, item);
+
+                //Types of charts (ethnicity and gender) corresponds to
+                //the value of $('select#demographics')
+                var chartTypes = {
+                    ethnicity : {
+                        "White (Not of Hispanic Origin)": 0.571,
+                        "Black": 0.281,
+                        "Hispanic": 0.099,
+                        "Unknown": 0.001,
+                        "Asian or Pacific Islander": 0.032,
+                        "American Indian/Alaskan Native": 0.005,
+                        "Hawaiian or Pacific Islander": 0.01,
+                        "Two or More Races": 0.0231
+                    },
+                    gender : {
+                        "M": 0.48,
+                        "F": 0.52
+                    }
                 };
 
-                var gender = {
-                    "M": 0.48,
-                    "F": 0.52
-                }
-
-                var sum = charts[key].data.reduce(function (prev, cur) {
-                    return prev + cur.y
+                var sum = item.data.reduce(function (prev, cur) {
+                    return prev + cur.y;
                 }, 0);
+                
 
-                if (demographic_type === "ethnicity") {
-                    charts[key].data.map(function (elem) {
-                        elem.y = census[elem.name] * sum
-                        return elem
-                    });
-                }
-
-                if (demographic_type === "gender") {
-                    charts[key].data.map(function (elem) {
-                    elem.y = gender[elem.name] * sum
-                    return elem
-                    });
-                }
-
+                //Get names of ethnicities or genders in data
+                var names = item.data.map(function(el){return el.name;});
+                //Create a set of data for all ethnicities/genders
+                //based on the census distributions and the sum
+                //identical to the layout of the JSON's data
+                var comparisonData = $.map(chartTypes[demographic_type], function(val, key) {
+                    return {
+                        name: key,
+                        visible: true,
+                        y: sum*val
+                    };
+                });
+                //Creates the comparison chart that has the correct
+                //type and income level. Also the data gets sorted
+                //according to the order of the original data so
+                //the colors of ethnicities/genders align when they
+                //become a chart.
+                var comparisonChart = {
+                    income_level :  item.income_level,
+                    type : item.type,
+                    data : comparisonData.sort( function (a,b){
+                            a = names.indexOf(a.name);
+                            b = names.indexOf(b.name);
+                            a = a === -1 ? 1000 : a;
+                            b = b === -1 ? 1000 : b;
+                            return a - b;
+                        })
+                };
 
                 var elementId2 = 'chart-2' + key;
                 $('#charts-container2').append('<div id="' + elementId2 + '" class="chart"></div>');
-                drawPieChart(elementId2, charts[key]);
+                drawPieChart(elementId2, comparisonChart);
             });
 
         }
