@@ -2,6 +2,7 @@ from include.rethinkdb.vars import IMPORT_PATH, IMPORT_STRING
 from ntp.project.common.io import rethink_import_data
 
 
+# TODO This file is deprecated I believe
 FILES_TO_IMPORT = [
     dict(
         path=IMPORT_PATH,

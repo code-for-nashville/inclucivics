@@ -41,18 +41,22 @@ class RethinkValidator(RethinkBase):
     def __init__(self):
         RethinkBase.__init__(self)
         self.database = None
-        self.db_list = None
+        self.databases = None
         self.tables = None
         self.db = None
 
     def validate_databases(self, databases):
-        self.db_list = databases
+
+        if not isinstance(databases, list):
+            self.databases = [databases]
+        else:
+            self.databases = databases
+
         existing_databases = self.r.db_list().run()
 
-        for database in self.db_list:
+        for database in self.databases:
             if database not in existing_databases:
                 self.r.db_create(database).run()
-
         return self
 
     def validate_tables(self, database, tables):
@@ -79,4 +83,4 @@ class RethinkValidator(RethinkBase):
                 self.db.table(table).index_create(index).run()
 
 
-RdbInitialize = RethinkValidator()
+#RdbInitialize = RethinkValidator()

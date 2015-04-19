@@ -1,7 +1,12 @@
-from ntp.project.rethinkdb.classes import RdbInitialize
-from vars import INCLUCIVICS_DB, TABLES, INDEXES
+from ntp.project.rethinkdb.classes import RethinkValidator
+from vars import INCLUCIVICS_DB, TABLES, INDEXES, RAW_DB
 
-RdbInitialize.validate_tables(INCLUCIVICS_DB, TABLES)
-RdbInitialize.validate_indexes(INDEXES)
-IncluvicsDb = RdbInitialize.db
+Cleaned = RethinkValidator()
+Cleaned.validate_tables(INCLUCIVICS_DB, TABLES)
+Cleaned.validate_indexes(INDEXES)
+IncluvicsDb = Cleaned.db
+
+Raw = RethinkValidator()
+Raw.validate_databases([RAW_DB])
+RawDb = Raw.r.db(RAW_DB)
 
