@@ -5,24 +5,25 @@ from include.aggregate.functions import update_income_level, update_department_b
 from include.aggregate.vars import INCOME_DISTRIBUTIONS
 
 
-update_income_level(
-    RdbTableRawData,
-    INCOME_DISTRIBUTIONS,
-    CLEAN_SALARY
-)
+def run():
+    update_income_level(
+        RdbTableRawData,
+        INCOME_DISTRIBUTIONS,
+        CLEAN_SALARY
+    )
 
-ALL_DEPARTMENTS = dict(
-    name="All Departments",
-    employees=[
-        elem
-        for
-        elem in
-        RdbTableRawData.run()
-    ]
-)
+    all_departments = dict(
+        name="All Departments",
+        employees=[
+            elem
+            for
+            elem in
+            RdbTableRawData.run()
+        ]
+    )
 
-RdbTableEmployeesByDepartment.insert(ALL_DEPARTMENTS).run()
-RdbTableEmployeesByDepartment.insert(RdbGroupByDepartment, conflict="replace").run()
-update_department_by_attribute(RdbTableEmployeesByDepartment, "ethnicity", ETHNICITY)
-update_department_by_attribute(RdbTableEmployeesByDepartment, "gender", GENDER)
-RdbTableEmployeesByDepartment.replace(lambda row: row.without(EMPLOYEES)).run()
+    RdbTableEmployeesByDepartment.insert(all_departments).run()
+    RdbTableEmployeesByDepartment.insert(RdbGroupByDepartment, conflict="replace").run()
+    update_department_by_attribute(RdbTableEmployeesByDepartment, "ethnicity", ETHNICITY)
+    update_department_by_attribute(RdbTableEmployeesByDepartment, "gender", GENDER)
+    RdbTableEmployeesByDepartment.replace(lambda row: row.without(EMPLOYEES)).run()
