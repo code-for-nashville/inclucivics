@@ -9,4 +9,3 @@ IncluvicsDb = Cleaned.db
 Raw = RethinkValidator()
 Raw.validate_databases([RAW_DB])
 RawDb = Raw.r.db(RAW_DB)
-

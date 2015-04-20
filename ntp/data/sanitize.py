@@ -2,7 +2,7 @@ import os
 from include.sanitize.functions import lazy_read
 from include.rethinkdb.vars import IMPORT_PATH
 from include.sanitize.vars import DIRTY_SALARY, CLEAN_SALARY, GENDER, DEPARTMENT, ETHNICITY
-from include.rethinkdb.init_db import IncluvicsDb, RawDb
+from include.rethinkdb.init_db import RawDb
 
 
 def run():
@@ -13,6 +13,8 @@ def run():
         filename = full_name.split(".")[0]
         if filename not in RawDb.table_list().run():
             RawDb.table_create(filename).run()
+            RawDb.table(filename).index_create(CLEAN_SALARY).run()
+
             insert_table = RawDb.table(filename)
 
             path = os.path.join(os.path.dirname(__file__), IMPORT_PATH, full_name)
@@ -56,6 +58,6 @@ def run():
             ]
 
             # This is where new data needs to be inserted.  We are going to want to have raw data for each time stamp
+            insert_table.index_wait().run()
             insert_table.insert(to_insert).run()
 
-run()
