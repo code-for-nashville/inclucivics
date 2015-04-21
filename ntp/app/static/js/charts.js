@@ -101,22 +101,20 @@ function reloadCharts() {
                 };
 
                 var sum = item.data.reduce(function (prev, cur) {
-                    return prev + cur.y;
+                    return prev + cur[1];
                 }, 0);
                 
 
                 //Get names of ethnicities or genders in data
-                var names = item.data.map(function(el){return el.name;});
+                var names = item.data.map(function(el){return el[0];});
                 //Create a set of data for all ethnicities/genders
                 //based on the census distributions and the sum
                 //identical to the layout of the JSON's data
-                var comparisonData = $.map(chartTypes[demographic_type], function(val, key) {
-                    return {
-                        name: key,
-                        visible: true,
-                        y: sum*val
-                    };
-                });
+                var comparisonData = [];
+                var demos = chartTypes[demographic_type];
+                for (var k in demos){
+                    comparisonData.push([k, sum*demos[k]]);
+                }
                 //Creates the comparison chart that has the correct
                 //type and income level. Also the data gets sorted
                 //according to the order of the original data so
@@ -126,8 +124,8 @@ function reloadCharts() {
                     income_level :  item.income_level,
                     type : item.type,
                     data : comparisonData.sort( function (a,b){
-                            a = names.indexOf(a.name);
-                            b = names.indexOf(b.name);
+                            a = names.indexOf(a[0]);
+                            b = names.indexOf(b[0]);
                             a = a === -1 ? 1000 : a;
                             b = b === -1 ? 1000 : b;
                             return a - b;
