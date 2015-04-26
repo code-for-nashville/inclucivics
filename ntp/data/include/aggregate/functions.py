@@ -3,19 +3,28 @@ from ..rethinkdb.init_db import RawDb
 from ..sanitize.vars import DEPARTMENT, NAME, EMPLOYEES
 
 
-def most_recent():
-    out = [elem for elem in RawDb.table_list().run()]
+def most_recent(DbObject):
+    out = [elem for elem in DbObject.table_list().run()]
 
     if out:
-        return RawDb.table(out[-1])
+        return DbObject.table(out[-1])
+    from sys import exit
+    exit()
+
+
+def tbl_dict(DbObject):
+    out = [elem for elem in DbObject.table_list().run()]
+
+    if out:
+        return {tbl_name: DbObject.table(tbl_name) for tbl_name in out}
     from sys import exit
     print "No imported data found."
     exit()
 
 
-def rdb_group_by_department():
+def rdb_group_by_department(TblObject):
 
-    return most_recent() \
+    return TblObject \
         .group(DEPARTMENT) \
         .ungroup() \
         .merge(

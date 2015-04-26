@@ -6,3 +6,5 @@ def table_check():
     clean.run()
     agg.run()
 
+table_check()
+

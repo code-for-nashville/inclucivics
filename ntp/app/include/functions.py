@@ -1,11 +1,11 @@
-from ntp.data.include.rethinkdb.tables import RdbTableEmployeesByDepartment
+from ntp.data.include.rethinkdb.tables import RdbMostRecent
 
 
 def rdb_get_data_by_department(department, key_index):
 
         output = [
             elem for elem in
-            RdbTableEmployeesByDepartment
+            RdbMostRecent
             .get_all(
                 department,
                 index=key_index
@@ -19,7 +19,7 @@ def rdb_get_department_names(department_key):
 
     output = [
         elem for elem in
-        RdbTableEmployeesByDepartment
+        RdbMostRecent
         .map(
             lambda row: row[department_key]
         )

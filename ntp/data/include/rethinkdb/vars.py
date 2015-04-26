@@ -1,6 +1,7 @@
 from ..sanitize.vars import CLEAN_SALARY, NAME
 
 INCLUCIVICS_DB = "INCLUCIVICS"
+PARSED_DB = "parsed"
 RAW_DB = "raw"
 
 TABLE_RAW = "raw_data"

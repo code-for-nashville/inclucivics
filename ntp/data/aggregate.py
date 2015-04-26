@@ -1,31 +1,45 @@
-from include.rethinkdb.tables import RdbTableEmployeesByDepartment, RdbTableRawData
+from include.rethinkdb.vars import NAME
+from include.rethinkdb.init_db import RawDb, ParsedDb
 from include.sanitize.vars import CLEAN_SALARY, ETHNICITY, GENDER, EMPLOYEES
-from include.aggregate.functions import update_income_level, update_department_by_attribute, most_recent, rdb_group_by_department
 from include.aggregate.vars import INCOME_DISTRIBUTIONS
+from include.aggregate.functions import (
+    update_income_level, update_department_by_attribute, rdb_group_by_department, tbl_dict
+)
 
 
 def run():
 
-    if not RdbTableEmployeesByDepartment.count():
-        RdbTableEmployeesByDepartment.delete().run()
+    raw_tables = tbl_dict(RawDb)
+    parsed_tables = ParsedDb.table_list().run()
 
-    update_income_level(
-        most_recent(),
-        INCOME_DISTRIBUTIONS,
-        CLEAN_SALARY
-    )
+    for tbl_name in raw_tables:
+        if tbl_name not in parsed_tables:
 
-    data = [elem for elem in most_recent().run()]
+            ParsedDb.table_create(tbl_name).run()
+            ParsedDb.table(tbl_name).index_create(NAME).run()
+            ParsedDb.table(tbl_name).index_wait().run()
 
-    all_departments = dict(
-        name="All Departments",
-        employees=data
-    )
+            CurrentParsedTableObject = ParsedDb.table(tbl_name)
+            CurrentRawTableObject = raw_tables[tbl_name]
 
-    for group in [all_departments, rdb_group_by_department()]:
-        RdbTableEmployeesByDepartment.insert(group, conflict="update").run()
+            update_income_level(
+                CurrentRawTableObject,
+                INCOME_DISTRIBUTIONS,
+                CLEAN_SALARY
+            )
 
-    for pair in [("ethnicity", ETHNICITY), ("gender", GENDER)]:
-        update_department_by_attribute(RdbTableEmployeesByDepartment, pair[0], pair[1])
+            data = [elem for elem in CurrentRawTableObject.run()]
 
-    RdbTableEmployeesByDepartment.replace(lambda row: row.without(EMPLOYEES)).run()
+            all_departments = dict(
+                name="All Departments",
+                employees=data
+            )
+
+            for group in [all_departments, rdb_group_by_department(CurrentRawTableObject)]:
+                CurrentParsedTableObject.insert(group, conflict="update").run()
+
+            for pair in [("ethnicity", ETHNICITY), ("gender", GENDER)]:
+                update_department_by_attribute(CurrentParsedTableObject, pair[0], pair[1])
+
+            CurrentParsedTableObject.replace(lambda row: row.without(EMPLOYEES)).run()
+#run()
