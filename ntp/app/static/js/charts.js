@@ -1,5 +1,15 @@
 $.getJSON("/api/departments", function (response) {
     var departments = $("#department");
+    var deps = response.departments;
+    //Put all dept's at the top
+    deps.sort(function(a,b){
+        if (a === 'All Departments')
+            return -1;
+        if (b === 'All Departments')
+            return 1;
+        return a - b;
+    });
+
 
     $.each(response.departments, function (val, text) {
         departments.append($("<option></option>").val(text).html(text));
@@ -10,28 +20,20 @@ $.getJSON("/api/departments", function (response) {
 
 $(function () {
 
-    $(document).ready(function () {
-
-        $('#graph-container')
-            .prepend("<p> " +
-            "Thank you for visiting IncluCivics! This platform was born from the IncluCivics report that was produced by the Metro Human Relations Commission in January of 2015. The report analyzed the diversity and equity of Metro Nashville government in regards to its employees. Code for Nashville graciously created this site and maintains it free of charge."
-            +
-            "</p>"
-            +
-            "<p>"
-            +
-            "The platform exists for two reasons The first is to show the community the diversity and equity of Metro government and its departments in real time. The second is to track progress toward ensuring that Metro government is reflective of the community it serves. If you have questions about the report, please contact the Metro Human Relations Commission."
-            +
-            "</p>"
-        );
+    $('#graph-container')
+        .prepend("<p> " +
+        "Thank you for visiting IncluCivics! This platform was born from the IncluCivics report that was produced by the Metro Human Relations Commission in January of 2015. The report analyzed the diversity and equity of Metro Nashville government in regards to its employees. Code for Nashville graciously created this site and maintains it free of charge." +
+        "</p>" +
+        "<p>" +
+        "The platform exists for two reasons The first is to show the community the diversity and equity of Metro government and its departments in real time. The second is to track progress toward ensuring that Metro government is reflective of the community it serves. If you have questions about the report, please contact the Metro Human Relations Commission." +
+        "</p>"
+    );
 
 
-        $('select#department, select#demographics').change(function () {
-
-            reloadCharts();
-        });
-
+    $('select#department, select#demographics').change(function () {
+        reloadCharts();
     });
+
 
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
@@ -73,11 +75,23 @@ function reloadCharts() {
             );
 
             $.each(charts, function (key, item) {
+                var sortOrder = ('White (Not of Hispanic Origin),Black,Hispanic,Unknown,'+
+                                'Asian or Pacific Islander,American Indian/Alaskan Native,'+
+                                'Hawaiian or Pacific Islander,Two or More Races,F,M').split(',');
 
                 var elementId = 'chart-' + key;
                 $('#charts-container').append(
                     '<div id="' + elementId + '" class="chart">CHART</div>'
                 );
+                item.data.sort(function (a,b) { 
+                    console.log( sortOrder.indexOf(a[0]) - sortOrder.indexOf(b[0]) );
+                    return sortOrder.indexOf(a[0]) - sortOrder.indexOf(b[0]); 
+                });
+                //Hacky way to maintain order of charts if the
+                //chart contains only male employees
+                if (item.data.length===1 && item.data[0][0]==='M'){
+                    item.data.unshift(['F', 0]);
+                }
 
                 drawPieChart(elementId, item);
 
@@ -94,16 +108,10 @@ function reloadCharts() {
                         "Hawaiian or Pacific Islander": 0.01,
                         "Two or More Races": 0.0231
                     },
-                    gender : {
-                        "M": 0.48,
-                        "F": 0.52
-                    }
+                    gender : {"M": 0.48, "F": 0.52}
                 };
 
-                var sum = item.data.reduce(function (prev, cur) {
-                    return prev + cur[1];
-                }, 0);
-                
+                var sum = item.data.reduce(function (a, b) { return a + b[1]; }, 0);
 
                 //Get names of ethnicities or genders in data
                 var names = item.data.map(function(el){return el[0];});
