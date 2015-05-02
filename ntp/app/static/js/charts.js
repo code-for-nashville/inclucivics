@@ -11,9 +11,13 @@ $.getJSON("/api/departments", function (response) {
     });
 
 
-    $.each(response.departments, function (val, text) {
+    $.each(deps, function (val, text) {
         departments.append($("<option></option>").val(text).html(text));
     });
+    $('<option>').addClass('select-option')
+    .val('')
+    .html('--Select a department--')
+    .prependTo(departments);
 
 });
 
@@ -31,6 +35,7 @@ $(function () {
 
 
     $('select#department, select#demographics').change(function () {
+        $('.select-option').remove();
         reloadCharts();
     });
 
