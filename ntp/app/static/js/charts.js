@@ -24,7 +24,7 @@ $.getJSON("/api/departments", function (response) {
 
 $(function () {
 
-    $('#graph-container')
+    $('#about-message-container')
         .prepend("<p> " +
         "Thank you for visiting IncluCivics! This platform was born from the IncluCivics report that was produced by the Metro Human Relations Commission in January of 2015. The report analyzed the diversity and equity of Metro Nashville government in regards to its employees. Code for Nashville graciously created this site and maintains it free of charge." +
         "</p>" +
@@ -33,6 +33,26 @@ $(function () {
         "</p>"
     );
 
+
+    var diversityScoresPerQuarterAndIncome = {
+            series: [
+                {
+                    name: 'High Income ($66,000+)',
+                    data: [99, 94, 81, 80, 79],
+                    color: '#EF5325'
+                }, {
+                    name: 'Middle Income ($33,000 - $66,000)',
+                    data: [80, 70, 90, 85, 75],
+                    color: '#AB509E'
+                }, {
+                    name: 'Low Income (Less than $33,000)',
+                    data: [50, 40, 60, 71, 50],
+                    color: '#ACAE4E'
+                }
+            ]
+        };
+
+    drawLineGraph('graph-container', diversityScoresPerQuarterAndIncome)
 
     $('select#department, select#demographics').change(function () {
         $('.select-option').remove();
@@ -61,7 +81,8 @@ function reloadCharts() {
     $('#charts-container').html('');
     $('#charts-container').html('<div class="loading">Loading...</div>');
     $('#graph-container').empty();
-
+    // Remove about message when you reload charts
+    $('#about-message-container').empty();
 
     var request_data = JSON.stringify({name: department_name, attribute: demographic_type});
     $.ajax({
@@ -189,5 +210,54 @@ function drawPieChart(elementId, chartData) {
         },
         series: [chartData]
     });
+}
 
+function drawLineGraph(elementId, chartData)
+{
+    var graphContainer = $('#' + elementId);
+
+    graphContainer.highcharts({
+        chart: {
+            backgroundColor: null,
+            style: {
+                color: '#FFFFFF'
+            }
+        },
+        title: {
+            text: 'Metro Nashville Employment Diversity Health',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: Nashville Metro',
+            x: -20,
+            color: '#FFFFFF'
+        },
+        // This needs to be refactored to read this from input ala chartData.xAxis
+        xAxis: {
+            categories: ['2014 Q1', '2014 Q2', '2014 Q3', '2014 Q4', '2015 Q1']
+        },
+        yAxis: {
+            title: {
+                text: 'Diversity Score'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#000000'
+            }],
+            min: 0,
+            max: 100
+        },
+        tooltip: {
+            valueSuffix: '%'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        // Series is of form {name: "Line Name", data: ["positionally", "relevant", fields]}
+        series: chartData.series
+    });
 }
