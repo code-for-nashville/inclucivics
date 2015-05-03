@@ -6,5 +6,4 @@ model_object = {
 
 
 def model(title, data):
-
     pass

@@ -1,4 +1,44 @@
 import rethinkdb as r
+from ..rethinkdb.init_db import RawDb
+from ..sanitize.vars import DEPARTMENT, NAME, EMPLOYEES
+
+
+def most_recent(DbObject):
+    out = [elem for elem in DbObject.table_list().run()]
+
+    if out:
+        return DbObject.table(out[-1])
+    from sys import exit
+    exit()
+
+
+def tbl_dict(DbObject):
+    out = [elem for elem in DbObject.table_list().run()]
+
+    if out:
+        return {tbl_name: DbObject.table(tbl_name) for tbl_name in out}
+    from sys import exit
+    print "No imported data found."
+    exit()
+
+
+def rdb_group_by_department(TblObject):
+
+    return TblObject \
+        .group(DEPARTMENT) \
+        .ungroup() \
+        .merge(
+        {
+            NAME: r.row["group"],
+            EMPLOYEES: r.row["reduction"]
+        }
+    ) \
+        .without(
+        [
+            "group",
+            "reduction"
+        ]
+    )
 
 
 def update_income_level(table_object, income_distributions, index):
