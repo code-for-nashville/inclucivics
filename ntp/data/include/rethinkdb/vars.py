@@ -14,3 +14,4 @@ TABLES = [
 
 #IMPORT_STRING = "%s.%s" % (INCLUCIVICS_DB, TABLE_RAW)
 IMPORT_PATH = "files/input/"
+

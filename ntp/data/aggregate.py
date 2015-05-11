@@ -56,19 +56,3 @@ def run():
                     bracket.update({"axis": tbl_name, "demographic": key})
                     RdbChiSquare.insert(bracket).run()
 
-
-#
-# aggs = aggregates(ParsedDb.table("20150419"))
-#
-# from pprint import pprint
-# pprint(chi_parser(expected_and_observed(aggs, EXPECTED, KEYS), KEYS))
-#
-# names = RdbChiSquare.map(lambda row: row["name"]).distinct().run()
-# names = [elem for elem in RdbChiSquare.run()]
-# print names
-#
-# for key in KEYS:
-#     for name in names:
-#         print merge_json_like(RdbChiSquare.get_all([key, name], index="eth_income")).run()
-#
-
