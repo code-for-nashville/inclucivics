@@ -1,4 +1,4 @@
-from ntp.data.include.rethinkdb.tables import RdbMostRecent
+from ntp.data.include.rethinkdb.tables import RdbMostRecent, RdbChiMerged
 
 
 def rdb_get_data_by_department(department, key_index):
@@ -29,3 +29,6 @@ def rdb_get_department_names(department_key):
 
     return output
 
+
+def rdb_get_temporal_values():
+    return RdbChiMerged.get("ethnicity").run()

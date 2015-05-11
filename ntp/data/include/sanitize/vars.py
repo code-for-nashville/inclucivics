@@ -8,3 +8,4 @@ GENDER = "Gender"
 
 NAME = "name"
 EMPLOYEES = "employees"
+DEMOGRAPHIC = "demographic"

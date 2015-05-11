@@ -1,27 +1,16 @@
-from ..sanitize.vars import CLEAN_SALARY, NAME
+from ..sanitize.vars import NAME, DEMOGRAPHIC
 
-INCLUCIVICS_DB = "INCLUCIVICS"
+INCLUCIVICS_DB = "inclucivics"
 PARSED_DB = "parsed"
 RAW_DB = "raw"
 
-TABLE_RAW = "raw_data"
-TABLE_GROUPED = "department_employees"
+TEMPORAL_DATA = "chi_raw"
+CHI_GRAPHS = "chi_merged"
 
 TABLES = [
-    TABLE_RAW,
-    TABLE_GROUPED
+    TEMPORAL_DATA,
+    CHI_GRAPHS
 ]
 
-IMPORT_STRING = "%s.%s" % (INCLUCIVICS_DB, TABLE_RAW)
+#IMPORT_STRING = "%s.%s" % (INCLUCIVICS_DB, TABLE_RAW)
 IMPORT_PATH = "files/input/"
-
-INDEXES = [
-    dict(
-        table=TABLE_RAW,
-        index=CLEAN_SALARY
-    ),
-    dict(
-        table=TABLE_GROUPED,
-        index=NAME
-    )
-]

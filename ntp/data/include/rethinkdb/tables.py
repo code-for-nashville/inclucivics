@@ -1,8 +1,15 @@
 from init_db import ParsedDb
-from ..aggregate.functions import most_recent
-from vars import TABLE_RAW, TABLE_GROUPED
+from functions import most_recent
+from init_db import ChiSqDb
+from vars import TEMPORAL_DATA, CHI_GRAPHS
+from ..sanitize.vars import NAME, DEMOGRAPHIC
+import rethinkdb as r
 
-#RdbTableRawData = IncluvicsDb.table(TABLE_RAW)
-#RdbTableEmployeesByDepartment = IncluvicsDb.table(TABLE_GROUPED)
 
 RdbMostRecent = most_recent(ParsedDb)
+RdbChiSquare = ChiSqDb.table(TEMPORAL_DATA)
+RdbChiMerged = ChiSqDb.table(CHI_GRAPHS)
+
+if "eth_income" not in RdbChiSquare.index_list().run():
+    RdbChiSquare.index_create("eth_income", [r.row[DEMOGRAPHIC], r.row[NAME]]).run()
+    RdbChiSquare.index_wait("eth_income").run()

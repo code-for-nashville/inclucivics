@@ -18,5 +18,3 @@ from functions import most_recent
 #         ]
 #     )
 
-
-

@@ -52,7 +52,19 @@ $(function () {
             ]
         };
 
-    drawLineGraph('graph-container', diversityScoresPerQuarterAndIncome)
+
+     $.ajax({
+            type: "GET",
+            url: "/api/temporal",
+            contentType: "application/json",
+            data: {},
+            success: function (data) {
+                drawLineGraph('graph-container', {series: data.temporal.series}, data.temporal.axis);
+                console.log({series: data.temporal.series});
+            }
+        }
+    )
+
 
     $('select#department, select#demographics').change(function () {
         $('.select-option').remove();
@@ -212,7 +224,7 @@ function drawPieChart(elementId, chartData) {
     });
 }
 
-function drawLineGraph(elementId, chartData)
+function drawLineGraph(elementId, chartData, axes)
 {
     var graphContainer = $('#' + elementId);
 
@@ -234,7 +246,7 @@ function drawLineGraph(elementId, chartData)
         },
         // This needs to be refactored to read this from input ala chartData.xAxis
         xAxis: {
-            categories: ['2014 Q1', '2014 Q2', '2014 Q3', '2014 Q4', '2015 Q1']
+            categories: axes
         },
         yAxis: {
             title: {
@@ -245,8 +257,8 @@ function drawLineGraph(elementId, chartData)
                 width: 1,
                 color: '#000000'
             }],
-            min: 0,
-            max: 100
+            min: -1,
+            max: 1
         },
         tooltip: {
             valueSuffix: '%'
