@@ -32,7 +32,7 @@ def expected_and_observed(aggregations, expected, keys):
 
 
 def chi_parser(aggs, keys):
-    return {key: [{"data": elem["chi_sq"][1], "name": elem["income_level"]} for elem in aggs[key]] for key in keys}
+    return {key: [{"data": elem["chi_sq"][0], "name": elem["income_level"]} for elem in aggs[key]] for key in keys}
 
 
 def group_by_department(TblObject):

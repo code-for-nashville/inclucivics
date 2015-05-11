@@ -257,8 +257,8 @@ function drawLineGraph(elementId, chartData, axes)
                 width: 1,
                 color: '#000000'
             }],
-            min: -1,
-            max: 1
+            min: 0,
+            max: 1000
         },
         tooltip: {
             valueSuffix: '%'
