@@ -3,6 +3,7 @@ from include.sanitize.functions import lazy_read
 from include.rethinkdb.vars import IMPORT_PATH
 from include.sanitize.vars import DIRTY_SALARY, CLEAN_SALARY, GENDER, DEPARTMENT, ETHNICITY
 from include.rethinkdb.init_db import RawDb
+from ntp.project.common.helpers import filter_str
 
 
 def run():
@@ -37,15 +38,23 @@ def run():
                 ]
 
             for document in data:
-                if isinstance(document[DIRTY_SALARY], str):
-                    document[CLEAN_SALARY] = int(
-                        document[DIRTY_SALARY]
-                        .replace(",", "")
-                        .split(".")[0]
-                    )
-                    del document[DIRTY_SALARY]
-                elif isinstance(document[DIRTY_SALARY], float):
-                    del document[DIRTY_SALARY]
+                if isinstance(document[DIRTY_SALARY], str) and document[DIRTY_SALARY]:
+                    try:
+                        document[CLEAN_SALARY] = int(
+                            filter_str(
+                                document[DIRTY_SALARY]
+                                .replace(",", "")
+                                .split(".")[0],
+                                replace="",
+                                method="isdigit"
+
+                            )
+                        )
+                    except ValueError:
+                       continue
+
+
+
 
             to_insert = [
                 {
@@ -56,9 +65,11 @@ def run():
                 }
                 for elem
                 in data
+                if CLEAN_SALARY in elem
             ]
 
             # This is where new data needs to be inserted.  We are going to want to have raw data for each time stamp
             new_table.index_wait().run()
             new_table.insert(to_insert).run()
 
+#run()

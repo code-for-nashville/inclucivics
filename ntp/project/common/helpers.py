@@ -1,5 +1,5 @@
 from copy import deepcopy
-
+from operator import methodcaller
 
 def unique_list(list_obj):
     """
@@ -69,33 +69,14 @@ def unpackCount(list_object, key):
         return "Input object needs to be a list of dictionaries all containing the same key.  The value must be either a list of str/unicode"
 
 
-def filterText(elem, replace=" ", case="lower", type_='alpha', truncate=False, length=0):
-
-    if type_ == 'alphaNum':    
-        derp = "".join([c if c.isalnum() else replace for c in elem])
-        if truncate == True:
-            derp = [elem for elem in derp if len(elem)>length]
-        if case != "lower":
-            return derp.upper()
-        return derp.lower()
-    
-    elif type_ == 'alpha':
-
-        derp = "".join([c if c.isalpha() else replace for c in elem])
-        if truncate == True:
-            derp = [elem for elem in derp if len(elem)>length]
-        if case != "lower":
-            return derp.upper()
-        return derp.lower()
-    
-    elif type_ == 'numeric':
-
-        derp = "".join([c if c.isnumeric() else replace for c in elem])
-        if truncate == True:
-            derp = [elem for elem in derp if len(elem)>length]
-        if case != "lower":
-            return derp.upper()
-        return derp.lower()
+def filter_str(string, replace="", method="isalnum"):
+    """
+    :param string: string to be filtered
+    :param replace: value to replace with, defaults to empty
+    :param method: Valid filter_methods: "isalpha", "isalnum", "isdigit"
+    :return: filtered string.
+    """
+    return "".join([char if methodcaller(method)(char) else replace for char in string])
 
 
 def concat_values(original, new, uniq=False, skip_fields=[], to_string=False):
