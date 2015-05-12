@@ -34,36 +34,52 @@ $(function () {
     );
 
 
-    var diversityScoresPerQuarterAndIncome = {
-            series: [
-                {
-                    name: 'High Income ($66,000+)',
-                    data: [99, 94, 81, 80, 79],
-                    color: '#EF5325'
-                }, {
-                    name: 'Middle Income ($33,000 - $66,000)',
-                    data: [80, 70, 90, 85, 75],
-                    color: '#AB509E'
-                }, {
-                    name: 'Low Income (Less than $33,000)',
-                    data: [50, 40, 60, 71, 50],
-                    color: '#ACAE4E'
-                }
-            ]
+    var overall_time = {
+            series: [{'color': '#EF5325',
+              'data': [0.7071847189060126, 0.7022729817489642, 0.7019874944171505],
+              'name': 'White (Not of Hispanic Origin)'},
+             {'color': '#AB509E',
+              'data': [0.2605817234642935, 0.2641361549658493, 0.26429209468512727],
+              'name': 'Black'},
+             {'color': '#ACAE4E',
+              'data': [0.01812459301063599, 0.018922852983988356, 0.019205002233139794],
+              'name': 'Hispanic'},
+             {'color': '#ACAE4E',
+              'data': [0.005317994356414152, 0.0050386294927779645, 0.004912907548012505],
+              'name': 'Unknown'},
+             {'color': '#ACAE4E',
+              'data': [0.007271543303668331, 0.007725898555592879, 0.007815989280928986],
+              'name': 'Asian or Pacific Islander'},
+             {'color': '#ACAE4E',
+              'data': [0.001302365964836119, 0.001455604075691412, 0.0013398838767306833],
+              'name': 'American Indian/Alaskan Native'},
+             {'color': '#ACAE4E',
+              'data': [0.00010853049706967658,
+               0.00011196954428395476,
+               0.00011165698972755694],
+              'name': 'Hawaiian or Pacific Islander'},
+             {'color': '#ACAE4E',
+              'data': [0.00010853049706967658,
+               0.0003359086328518643,
+               0.00033497096918267083],
+              'name': 'Two or More Races'}],
+            time: ["2014 - December", "2015 - March", "2015 - April"]
         };
 
 
-     $.ajax({
-            type: "GET",
-            url: "/api/temporal",
-            contentType: "application/json",
-            data: {},
-            success: function (data) {
-                drawLineGraph('graph-container', {series: data.temporal.series}, data.temporal.axis);
-                console.log({series: data.temporal.series});
-            }
-        }
-    )
+    // $.ajax({
+    //        type: "GET",
+    //        url: "/api/temporal",
+    //        contentType: "application/json",
+    //        data: {},
+    //        success: function (data) {
+    //            drawLineGraph('graph-container', {series: data.temporal.series}, data.temporal.axis);
+    //            console.log({series: data.temporal.series});
+    //        }
+    //    }
+    //)
+
+    drawLineGraph('graph-container', {series: overall_time.series}, overall_time.time);
 
 
     $('select#department, select#demographics').change(function () {
@@ -228,7 +244,7 @@ function drawLineGraph(elementId, chartData, axes)
 {
     var graphContainer = $('#' + elementId);
 
-    graphContainer.highcharts({
+    graphContainer.append().highcharts({
         chart: {
             backgroundColor: null,
             style: {
@@ -250,7 +266,7 @@ function drawLineGraph(elementId, chartData, axes)
         },
         yAxis: {
             title: {
-                text: 'Diversity Score'
+                text: 'Proportion of Total Metro Employees'
             },
             plotLines: [{
                 value: 0,
@@ -258,7 +274,7 @@ function drawLineGraph(elementId, chartData, axes)
                 color: '#000000'
             }],
             min: 0,
-            max: 1000
+            max: 1
         },
         tooltip: {
             valueSuffix: '%'
