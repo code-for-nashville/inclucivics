@@ -21,6 +21,14 @@ $.getJSON("/api/departments", function (response) {
 
 });
 
+$.getJSON("static/js/graphs.json", function(graphs) {
+    $.each(graphs, function(graph) {
+        var ent = graphs[graph]
+        drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
+        console.log(ent)
+    })
+
+});
 
 $(function () {
 
@@ -34,37 +42,38 @@ $(function () {
     );
 
 
-    var overall_time = {
-            series: [{'color': '#EF5325',
-              'data': [0.7071847189060126, 0.7022729817489642, 0.7019874944171505],
-              'name': 'White (Not of Hispanic Origin)'},
-             {'color': '#AB509E',
-              'data': [0.2605817234642935, 0.2641361549658493, 0.26429209468512727],
-              'name': 'Black'},
-             {'color': '#ACAE4E',
-              'data': [0.01812459301063599, 0.018922852983988356, 0.019205002233139794],
-              'name': 'Hispanic'},
-             {'color': '#ACAE4E',
-              'data': [0.005317994356414152, 0.0050386294927779645, 0.004912907548012505],
-              'name': 'Unknown'},
-             {'color': '#ACAE4E',
-              'data': [0.007271543303668331, 0.007725898555592879, 0.007815989280928986],
-              'name': 'Asian or Pacific Islander'},
-             {'color': '#ACAE4E',
-              'data': [0.001302365964836119, 0.001455604075691412, 0.0013398838767306833],
-              'name': 'American Indian/Alaskan Native'},
-             {'color': '#ACAE4E',
-              'data': [0.00010853049706967658,
-               0.00011196954428395476,
-               0.00011165698972755694],
-              'name': 'Hawaiian or Pacific Islander'},
-             {'color': '#ACAE4E',
-              'data': [0.00010853049706967658,
-               0.0003359086328518643,
-               0.00033497096918267083],
-              'name': 'Two or More Races'}],
-            time: ["2014 - December", "2015 - March", "2015 - April"]
-        };
+
+    //var overall_time = {
+    //        series: [{'color': '#EF5325',
+    //          'data': [0.7071847189060126, 0.7022729817489642, 0.7019874944171505],
+    //          'name': 'White (Not of Hispanic Origin)'},
+    //         {'color': '#AB509E',
+    //          'data': [0.2605817234642935, 0.2641361549658493, 0.26429209468512727],
+    //          'name': 'Black'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.01812459301063599, 0.018922852983988356, 0.019205002233139794],
+    //          'name': 'Hispanic'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.005317994356414152, 0.0050386294927779645, 0.004912907548012505],
+    //          'name': 'Unknown'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.007271543303668331, 0.007725898555592879, 0.007815989280928986],
+    //          'name': 'Asian or Pacific Islander'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.001302365964836119, 0.001455604075691412, 0.0013398838767306833],
+    //          'name': 'American Indian/Alaskan Native'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.00010853049706967658,
+    //           0.00011196954428395476,
+    //           0.00011165698972755694],
+    //          'name': 'Hawaiian or Pacific Islander'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.00010853049706967658,
+    //           0.0003359086328518643,
+    //           0.00033497096918267083],
+    //          'name': 'Two or More Races'}],
+    //        time: ["2014 - December", "2015 - March", "2015 - April"]
+    //    };
 
 
     // $.ajax({
@@ -79,7 +88,10 @@ $(function () {
     //    }
     //)
 
-    drawLineGraph('graph-container', {series: overall_time.series}, overall_time.time);
+    //drawLineGraph('graph-container', {series: overall_time.series}, overall_time.time);
+    //drawLineGraph('graph-container1', {series: overall_time.series}, overall_time.time);
+    //drawLineGraph('graph-container2', {series: overall_time.series}, overall_time.time);
+    //drawLineGraph('graph-container3', {series: overall_time.series}, overall_time.time);
 
 
     $('select#department, select#demographics').change(function () {
@@ -108,7 +120,8 @@ function reloadCharts() {
 
     $('#charts-container').html('');
     $('#charts-container').html('<div class="loading">Loading...</div>');
-    $('#graph-container').empty();
+    $('#graph').empty();
+
     // Remove about message when you reload charts
     $('#about-message-container').empty();
 
@@ -240,11 +253,10 @@ function drawPieChart(elementId, chartData) {
     });
 }
 
-function drawLineGraph(elementId, chartData, axes)
+function drawLineGraph(elementId, chartData, axes, title)
 {
-    var graphContainer = $('#' + elementId);
 
-    graphContainer.append().highcharts({
+     $('<div>').attr('id', elementId).highcharts({
         chart: {
             backgroundColor: null,
             style: {
@@ -252,7 +264,7 @@ function drawLineGraph(elementId, chartData, axes)
             }
         },
         title: {
-            text: 'Metro Nashville Employment Diversity Health',
+            text: title,
             x: -20 //center
         },
         subtitle: {
@@ -287,5 +299,5 @@ function drawLineGraph(elementId, chartData, axes)
         },
         // Series is of form {name: "Line Name", data: ["positionally", "relevant", fields]}
         series: chartData.series
-    });
+    }).appendTo('#graph');
 }
