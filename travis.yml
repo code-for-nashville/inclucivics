@@ -1,0 +1,7 @@
+language: python
+python:
+  - "2.7"
+# command to install dependencies
+install: "sudo python setup.py install"
+# we don't have any tests to run (beyond starting the server and not sure that would be kosher). Setting script to true skips the test step
+script: true

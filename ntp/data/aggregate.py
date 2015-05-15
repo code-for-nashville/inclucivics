@@ -6,7 +6,7 @@ from include.sanitize.vars import CLEAN_SALARY, ETHNICITY, GENDER, EMPLOYEES
 from include.aggregate.vars import INCOME_DISTRIBUTIONS, EXPECTED, KEYS
 from include.aggregate.functions import (
     update_income_level, update_department_by_attribute,
-    group_by_department, expected_and_observed, chi_parser
+    group_by_department
 )
 
 
@@ -46,6 +46,7 @@ def run():
 
             CurrentParsedTableObject.replace(lambda row: row.without(EMPLOYEES)).run()
 
+'''
             aggs = aggregates(CurrentParsedTableObject)
             chi_data = expected_and_observed(aggs, EXPECTED, KEYS)
             chi_parsed = chi_parser(chi_data, KEYS)
@@ -55,3 +56,4 @@ def run():
                     bracket.update({"axis": tbl_name, "demographic": key})
                     RdbChiSquare.insert(bracket).run()
 
+'''
