@@ -1,5 +1,6 @@
 INCLUCIVICS
 ==========
+![Travis CI Build Status](https://travis-ci.org/code-for-nashville/hrc-employment-diversity-report.svg?branch=master)
 
 INCLUVICS is a data visualization app done in partnership with the Human Relations Commission.  The goal is to provide
 transparency into employee demographics at Nashville's Metro Government.
