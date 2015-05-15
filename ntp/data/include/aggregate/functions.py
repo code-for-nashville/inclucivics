@@ -1,11 +1,10 @@
 import rethinkdb as r
 from ..sanitize.vars import DEPARTMENT, NAME, EMPLOYEES
-from scipy.stats import chisquare
 from copy import deepcopy
 
 eth_iter = lambda tuple_array: [elem[0] for elem in tuple_array]
 
-
+'''
 def expected_and_observed(aggregations, expected, keys):
     aggs = deepcopy(aggregations)
 
@@ -34,6 +33,7 @@ def expected_and_observed(aggregations, expected, keys):
 def chi_parser(aggs, keys):
     return {key: [{"data": elem["chi_sq"][0], "name": elem["income_level"]} for elem in aggs[key]] for key in keys}
 
+'''
 
 def group_by_department(TblObject):
 
