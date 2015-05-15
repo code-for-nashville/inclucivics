@@ -20,3 +20,5 @@ transparency into employee demographics at Nashville's Metro Government.
 2. Create a tag with `git tag v#.#`. Replace the #'s with version numbers that are greater (+1) than the largest tag shown on github.
 3. Push the newly created tag with `git push --tags`.
 4. Wait and have a :coffee:
+
+
