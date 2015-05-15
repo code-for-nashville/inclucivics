@@ -1,15 +1,31 @@
 INCOME_KEY = "income_level"
 #
-INCOME_DISTRIBUTIONS = {'Lower Income Range (Less than $33,000': dict(
+INCOME_DISTRIBUTIONS = {'Lower Income Range (Less than $33,000)': dict(
     lower=None,
     upper=33000
-), 'Middle Income Range ($33,000 and $66,000': dict(
+), 'Middle Income Range ($33,000 and $66,000)': dict(
     lower=33000,
     upper=66000
-), 'Upper Income Range (Greater than $66,000': dict(
+), 'Upper Income Range (Greater than $66,000)': dict(
     lower=66000,
     upper=None
 )}
+
+EXPECTED = {
+    "ethnicity": {
+        "White (Not of Hispanic Origin)": 0.571,
+        "Black": 0.281,
+        "Hispanic": 0.099,
+        #"Unknown": 0.001,
+        #"Asian or Pacific Islander": 0.032,
+        #"American Indian/Alaskan Native": 0.005,
+        #"Hawaiian or Pacific Islander": 0.01,
+        #"Two or More Races": 0.0231
+    },
+    "gender": {"M": 0.48, "F": 0.52}
+}
+
+KEYS = ["ethnicity", "gender"]
 
 #
 # INCOME_DISTRIBUTIONS = {

@@ -21,10 +21,18 @@ $.getJSON("/api/departments", function (response) {
 
 });
 
+$.getJSON("static/js/graphs.json", function(graphs) {
+    $.each(graphs, function(graph) {
+        var ent = graphs[graph]
+        drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
+        console.log(ent)
+    })
+
+});
 
 $(function () {
 
-    $('#graph-container')
+    $('#about-message-container')
         .prepend("<p> " +
         "Thank you for visiting IncluCivics! This platform was born from the IncluCivics report that was produced by the Metro Human Relations Commission in January of 2015. The report analyzed the diversity and equity of Metro Nashville government in regards to its employees. Code for Nashville graciously created this site and maintains it free of charge." +
         "</p>" +
@@ -32,6 +40,58 @@ $(function () {
         "The platform exists for two reasons The first is to show the community the diversity and equity of Metro government and its departments in real time. The second is to track progress toward ensuring that Metro government is reflective of the community it serves. If you have questions about the report, please contact the Metro Human Relations Commission." +
         "</p>"
     );
+
+
+
+    //var overall_time = {
+    //        series: [{'color': '#EF5325',
+    //          'data': [0.7071847189060126, 0.7022729817489642, 0.7019874944171505],
+    //          'name': 'White (Not of Hispanic Origin)'},
+    //         {'color': '#AB509E',
+    //          'data': [0.2605817234642935, 0.2641361549658493, 0.26429209468512727],
+    //          'name': 'Black'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.01812459301063599, 0.018922852983988356, 0.019205002233139794],
+    //          'name': 'Hispanic'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.005317994356414152, 0.0050386294927779645, 0.004912907548012505],
+    //          'name': 'Unknown'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.007271543303668331, 0.007725898555592879, 0.007815989280928986],
+    //          'name': 'Asian or Pacific Islander'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.001302365964836119, 0.001455604075691412, 0.0013398838767306833],
+    //          'name': 'American Indian/Alaskan Native'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.00010853049706967658,
+    //           0.00011196954428395476,
+    //           0.00011165698972755694],
+    //          'name': 'Hawaiian or Pacific Islander'},
+    //         {'color': '#ACAE4E',
+    //          'data': [0.00010853049706967658,
+    //           0.0003359086328518643,
+    //           0.00033497096918267083],
+    //          'name': 'Two or More Races'}],
+    //        time: ["2014 - December", "2015 - March", "2015 - April"]
+    //    };
+
+
+    // $.ajax({
+    //        type: "GET",
+    //        url: "/api/temporal",
+    //        contentType: "application/json",
+    //        data: {},
+    //        success: function (data) {
+    //            drawLineGraph('graph-container', {series: data.temporal.series}, data.temporal.axis);
+    //            console.log({series: data.temporal.series});
+    //        }
+    //    }
+    //)
+
+    //drawLineGraph('graph-container', {series: overall_time.series}, overall_time.time);
+    //drawLineGraph('graph-container1', {series: overall_time.series}, overall_time.time);
+    //drawLineGraph('graph-container2', {series: overall_time.series}, overall_time.time);
+    //drawLineGraph('graph-container3', {series: overall_time.series}, overall_time.time);
 
 
     $('select#department, select#demographics').change(function () {
@@ -60,8 +120,10 @@ function reloadCharts() {
 
     $('#charts-container').html('');
     $('#charts-container').html('<div class="loading">Loading...</div>');
-    $('#graph-container').empty();
+    $('#graph').empty();
 
+    // Remove about message when you reload charts
+    $('#about-message-container').empty();
 
     var request_data = JSON.stringify({name: department_name, attribute: demographic_type});
     $.ajax({
@@ -189,5 +251,53 @@ function drawPieChart(elementId, chartData) {
         },
         series: [chartData]
     });
+}
 
+function drawLineGraph(elementId, chartData, axes, title)
+{
+
+     $('<div>').attr('id', elementId).highcharts({
+        chart: {
+            backgroundColor: null,
+            style: {
+                color: '#FFFFFF'
+            }
+        },
+        title: {
+            text: title,
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: Nashville Metro',
+            x: -20,
+            color: '#FFFFFF'
+        },
+        // This needs to be refactored to read this from input ala chartData.xAxis
+        xAxis: {
+            categories: axes
+        },
+        yAxis: {
+            title: {
+                text: 'Proportion of Total Metro Employees'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#000000'
+            }],
+            min: 0,
+            max: 1
+        },
+        tooltip: {
+            valueSuffix: '%'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        // Series is of form {name: "Line Name", data: ["positionally", "relevant", fields]}
+        series: chartData.series
+    }).appendTo('#graph');
 }
