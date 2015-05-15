@@ -5,7 +5,6 @@ from vars import TEMPORAL_DATA, CHI_GRAPHS
 from ..sanitize.vars import NAME, DEMOGRAPHIC
 import rethinkdb as r
 
-
 RdbMostRecent = most_recent(ParsedDb)
 RdbChiSquare = ChiSqDb.table(TEMPORAL_DATA)
 RdbChiMerged = ChiSqDb.table(CHI_GRAPHS)

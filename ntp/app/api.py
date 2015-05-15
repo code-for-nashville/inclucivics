@@ -39,3 +39,4 @@ def temporal():
     response = rdb_get_temporal_values()
 
     return jsonify({"temporal": response})
+
