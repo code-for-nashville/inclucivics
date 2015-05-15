@@ -18,25 +18,20 @@ def data():
             NAME
         )
         response = output[attribute]
-
         return jsonify({"attribute": response})
 
     if request.method == "GET":
-
         return jsonify({"status": "good"})
 
 @app.route('/api/departments', methods=["GET"])
 def departments():
-
     response = sorted(rdb_get_department_names(NAME))
-
     return jsonify({"departments": response})
 
 
 @app.route('/api/temporal', methods=["GET"])
 def temporal():
-
     response = rdb_get_temporal_values()
-
     return jsonify({"temporal": response})
+
 
