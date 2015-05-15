@@ -1,4 +1,3 @@
-from ntp.project.common.helpers import merge_json_like, sortDict
 from include.rethinkdb.vars import NAME
 from include.rethinkdb.init_db import RawDb, ParsedDb
 from include.rethinkdb.tables import RdbChiSquare, RdbChiMerged
