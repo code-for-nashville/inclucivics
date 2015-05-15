@@ -30,5 +30,5 @@ def rdb_get_department_names(department_key):
     return output
 
 
-def rdb_get_temporal_values():
-    return RdbChiMerged.get("ethnicity").run()
+# def rdb_get_temporal_values():
+#     return RdbChiMerged.get("ethnicity").run()

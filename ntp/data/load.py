@@ -6,6 +6,6 @@ import chi
 def table_check():
     clean.run()
     agg.run()
-    chi.run()
+    #chi.run()
 
 
