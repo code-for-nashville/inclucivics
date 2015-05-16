@@ -3,7 +3,7 @@ from include.sanitize.functions import lazy_read
 from include.rethinkdb.vars import IMPORT_PATH
 from include.sanitize.vars import DIRTY_SALARY, CLEAN_SALARY, GENDER, DEPARTMENT, ETHNICITY
 from include.rethinkdb.init_db import RawDb
-from ntp.project.common.helpers import filter_str
+from project.common.helpers import filter_str
 
 
 def run():
