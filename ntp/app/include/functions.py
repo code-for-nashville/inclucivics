@@ -1,4 +1,4 @@
-from ntp.data.include.rethinkdb.tables import RdbMostRecent, RdbChiMerged
+from data.include.rethinkdb.tables import RdbMostRecent, RdbChiMerged
 
 
 def rdb_get_data_by_department(department, key_index):

@@ -1,4 +1,4 @@
-from ntp.project.rethinkdb.classes import RethinkValidator
+from project.rethinkdb.classes import RethinkValidator
 from vars import PARSED_DB, INCLUCIVICS_DB, TABLES, RAW_DB
 
 Parsed = RethinkValidator()
