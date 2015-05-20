@@ -18,31 +18,10 @@ $.getJSON("/api/departments", function (response) {
     .val('')
     .html('--Select a department--')
     .prependTo(departments);
-
 });
 
-$.getJSON("static/js/graphs.json", function(graphs) {
-    $.each(graphs, function(graph) {
-        var ent = graphs[graph]
-        drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
-        console.log(ent)
-    })
-
-});
-
+// Highcharts options 
 $(function () {
-
-    $('#about-message-container')
-        .prepend("<p> " +
-        "Thank you for visiting IncluCivics! This platform was born from the IncluCivics report that was produced by the Metro Human Relations Commission in January of 2015. The report analyzed the diversity and equity of Metro Nashville government in regards to its employees. Code for Nashville graciously created this site and maintains it free of charge." +
-        "</p>" +
-        "<p>" +
-        "The platform exists for two reasons The first is to show the community the diversity and equity of Metro government and its departments in real time. The second is to track progress toward ensuring that Metro government is reflective of the community it serves. If you have questions about the report, please contact the Metro Human Relations Commission." +
-        "</p>"
-    );
-
-
-
     //var overall_time = {
     //        series: [{'color': '#EF5325',
     //          'data': [0.7071847189060126, 0.7022729817489642, 0.7019874944171505],
@@ -93,13 +72,21 @@ $(function () {
     //drawLineGraph('graph-container2', {series: overall_time.series}, overall_time.time);
     //drawLineGraph('graph-container3', {series: overall_time.series}, overall_time.time);
 
+    // Load "About" page and line charts
+    aboutPage();
 
+    // Reload aboutPage by clicking home page link
+    $('#home-link').click(function() {
+        aboutPage();
+    })
+
+    // Setup handler to reload pie graphs when Departments or Demographics dropdown changes
     $('select#department, select#demographics').change(function () {
         $('.select-option').remove();
         reloadCharts();
     });
 
-
+    // Get shade of blue for Highcharts colors
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
             base = Highcharts.getOptions().colors[0],
@@ -110,8 +97,47 @@ $(function () {
         }
         return colors;
     }());
-
 });
+
+// Remove pie chart content and replace with a blurb about what
+// Metro and Code for Nashville are doing and our line graphs
+function aboutPage()
+{
+    $.getJSON("static/js/graphs.json", function(graphs) {
+        $.each(graphs, function(graph) {
+            var ent = graphs[graph]
+            drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
+            console.log(ent)
+        })
+    });
+
+    // Clear graph content and about page if there
+    $('#charts-container').empty()
+    $('#charts-container2').empty()
+
+    $('#graph').empty();
+    $('#about-message-container').empty();
+
+    $('#about-message-container')
+        .prepend(
+            "<p>" +
+            "In January 2015, the Metro Human Relations Commission (MHRC) released the IncluCivics Report, " +
+            "analyzing the demographic makeup of 50 Metro Nashville departments. The data in the original " +
+            "report was provided by Metro Human Resources (Metro HR) in August 2014. Since then, Metro HR has " +
+            " provided more recent data (captured April 1, 2015) and has announced that updated data will be " +
+            "released quarterly. The original IncluCivics Report, and a recent and more robust Data Update are " +
+            "at <a href='https://www.nashville.gov/Human-Relations-Commission/IncluCivics.aspx'>https://www.nashville.gov/Human-Relations-Commission/IncluCivics.aspx</a>." +
+            "</p>" +
+            "<p>" +
+            "This platform, graciously created and maintained free of charge by Code for Nashville, exists for " +
+            "two reasons. First, it is imperative to establish a baseline from which to assess our collective " +
+            "efforts at attaining a more diverse workforce in the future. Second, to further encourage " +
+            "transparency and public education, this platform will capture the demographic data provided " +
+            "quarterly by Metro HR, render it in user-friendly charts and graphs, and will track changes " +
+            "in the data over time. The raw data used on this platform is available to the public and can be " +
+            "found at <a href='https://data.nashville.gov/Metro-Government/General-Government-Employees-Demographics/4ibi-mxs4'>https://data.nashville.gov/Metro-Government/General-Government-Employees-Demographics/4ibi-mxs4</a>" +
+            "</p>");
+}
 
 function reloadCharts() {
     var department_name = $('select#department').val();
