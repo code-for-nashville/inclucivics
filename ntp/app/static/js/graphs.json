@@ -77,8 +77,8 @@
 "series": [
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -90,8 +90,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -103,8 +103,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -116,8 +116,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -129,8 +129,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -142,8 +142,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -155,8 +155,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -168,8 +168,8 @@
 }
 ], 
 "time": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "title": "Middle Income Range ($33,000 and $66,000)"
@@ -178,8 +178,8 @@
 "series": [
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -191,8 +191,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -204,8 +204,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -217,8 +217,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -230,8 +230,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -243,7 +243,7 @@
 }, 
 {
 "date": [
-"2015 - March", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -254,8 +254,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -267,8 +267,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -280,8 +280,8 @@
 }
 ], 
 "time": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "title": "Lower Income Range (Less than $33,000)"
@@ -290,8 +290,8 @@
 "series": [
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -303,8 +303,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -316,8 +316,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -329,8 +329,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -342,8 +342,8 @@
 }, 
 {
 "date": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "data": [
@@ -355,8 +355,8 @@
 }
 ], 
 "time": [
-"2014 - December", 
-"2015 - March", 
+"2014 - August", 
+"2015 - January", 
 "2015 - April"
 ], 
 "title": "Upper Income Range (Greater than $66,000)"
