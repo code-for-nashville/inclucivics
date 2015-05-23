@@ -161,7 +161,7 @@ function reloadCharts() {
             var charts = data.attribute;
 
             $('#charts-container').html('').append(
-                "<h3 align='center'>Actual Demographics</h3>"
+                "<h3 align='center'>Metro Demographics</h3>"
             );
             $('#charts-container2').html('').append(
                 "<h3 align='center'>Census Predicted</h3>"
