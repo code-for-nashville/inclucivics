@@ -1,6 +1,5 @@
 from include.rethinkdb.vars import NAME
 from include.rethinkdb.init_db import RawDb, ParsedDb
-from include.rethinkdb.tables import RdbChiSquare, RdbChiMerged
 from include.rethinkdb.functions import aggregates, tbl_dict
 from include.sanitize.vars import CLEAN_SALARY, ETHNICITY, GENDER, EMPLOYEES
 from include.aggregate.vars import INCOME_DISTRIBUTIONS, EXPECTED, KEYS
@@ -46,14 +45,3 @@ def run():
 
             CurrentParsedTableObject.replace(lambda row: row.without(EMPLOYEES)).run()
 
-'''
-            aggs = aggregates(CurrentParsedTableObject)
-            chi_data = expected_and_observed(aggs, EXPECTED, KEYS)
-            chi_parsed = chi_parser(chi_data, KEYS)
-
-            for key in KEYS:
-                for bracket in chi_parsed[key]:
-                    bracket.update({"axis": tbl_name, "demographic": key})
-                    RdbChiSquare.insert(bracket).run()
-
-'''
