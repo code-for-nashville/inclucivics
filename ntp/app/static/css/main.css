@@ -10,7 +10,7 @@ body {
 }
 
 p {
-	font-size: 16pt;
+	font-size: 14pt;
 	font-family: Arial;
 	margin-right: auto;
 	margin-left: auto;
@@ -92,7 +92,8 @@ p {
 
 #line-graphs {
 	padding-top: 2cm;
-	width: 100%
+	width: 100%;
+	min-width: 600px;
 }
 
 #main-content h4 {
