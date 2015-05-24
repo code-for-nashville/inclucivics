@@ -14,63 +14,10 @@ $.getJSON("/api/departments", function (response) {
     $.each(deps, function (val, text) {
         departments.append($("<option></option>").val(text).html(text));
     });
-    $('<option>').addClass('select-option')
-    .val('')
-    .html('--Select a department--')
-    .prependTo(departments);
 });
 
 // Highcharts options 
 $(function () {
-    //var overall_time = {
-    //        series: [{'color': '#EF5325',
-    //          'data': [0.7071847189060126, 0.7022729817489642, 0.7019874944171505],
-    //          'name': 'White (Not of Hispanic Origin)'},
-    //         {'color': '#AB509E',
-    //          'data': [0.2605817234642935, 0.2641361549658493, 0.26429209468512727],
-    //          'name': 'Black'},
-    //         {'color': '#ACAE4E',
-    //          'data': [0.01812459301063599, 0.018922852983988356, 0.019205002233139794],
-    //          'name': 'Hispanic'},
-    //         {'color': '#ACAE4E',
-    //          'data': [0.005317994356414152, 0.0050386294927779645, 0.004912907548012505],
-    //          'name': 'Unknown'},
-    //         {'color': '#ACAE4E',
-    //          'data': [0.007271543303668331, 0.007725898555592879, 0.007815989280928986],
-    //          'name': 'Asian or Pacific Islander'},
-    //         {'color': '#ACAE4E',
-    //          'data': [0.001302365964836119, 0.001455604075691412, 0.0013398838767306833],
-    //          'name': 'American Indian/Alaskan Native'},
-    //         {'color': '#ACAE4E',
-    //          'data': [0.00010853049706967658,
-    //           0.00011196954428395476,
-    //           0.00011165698972755694],
-    //          'name': 'Hawaiian or Pacific Islander'},
-    //         {'color': '#ACAE4E',
-    //          'data': [0.00010853049706967658,
-    //           0.0003359086328518643,
-    //           0.00033497096918267083],
-    //          'name': 'Two or More Races'}],
-    //        time: ["2014 - December", "2015 - March", "2015 - April"]
-    //    };
-
-
-    // $.ajax({
-    //        type: "GET",
-    //        url: "/api/temporal",
-    //        contentType: "application/json",
-    //        data: {},
-    //        success: function (data) {
-    //            drawLineGraph('graph-container', {series: data.temporal.series}, data.temporal.axis);
-    //            console.log({series: data.temporal.series});
-    //        }
-    //    }
-    //)
-
-    //drawLineGraph('graph-container', {series: overall_time.series}, overall_time.time);
-    //drawLineGraph('graph-container1', {series: overall_time.series}, overall_time.time);
-    //drawLineGraph('graph-container2', {series: overall_time.series}, overall_time.time);
-    //drawLineGraph('graph-container3', {series: overall_time.series}, overall_time.time);
 
     // Load "About" page and line charts
     aboutPage();
@@ -112,13 +59,12 @@ function aboutPage()
     });
 
     // Clear graph content and about page if there
-    $('#charts-container').empty()
-    $('#charts-container2').empty()
+    $('#metro-pie-charts').empty()
+    $('#census-pie-charts').empty()
 
-    $('#graph').empty();
-    $('#about-message-container').empty();
+    $('#about-message').empty();
 
-    $('#about-message-container')
+    $('#about-message')
         .prepend(
             "<p>" +
             "In January 2015, the Metro Human Relations Commission (MHRC) released the IncluCivics Report, " +
@@ -143,13 +89,12 @@ function reloadCharts() {
     var department_name = $('select#department').val();
     var demographic_type = $('select#demographics').val();
 
+    $('#metro-pie-charts').html('');
+    $('#metro-pie-charts').html('<div class="loading">Loading...</div>');
 
-    $('#charts-container').html('');
-    $('#charts-container').html('<div class="loading">Loading...</div>');
-    $('#graph').empty();
-
-    // Remove about message when you reload charts
-    $('#about-message-container').empty();
+    // Remove about message and line graphs when you reload charts
+    $('#line-graphs').empty();
+    $('#about-message').empty();
 
     var request_data = JSON.stringify({name: department_name, attribute: demographic_type});
     $.ajax({
@@ -160,10 +105,10 @@ function reloadCharts() {
         success: function (data) {
             var charts = data.attribute;
 
-            $('#charts-container').html('').append(
+            $('#metro-pie-charts').html('').append(
                 "<h3 align='center'>Metro Demographics</h3>"
             );
-            $('#charts-container2').html('').append(
+            $('#census-pie-charts').html('').append(
                 "<h3 align='center'>Census Predicted</h3>"
             );
 
@@ -173,8 +118,8 @@ function reloadCharts() {
                                 'Hawaiian or Pacific Islander,Two or More Races,F,M').split(',');
 
                 var elementId = 'chart-' + key;
-                $('#charts-container').append(
-                    '<div id="' + elementId + '" class="chart">CHART</div>'
+                $('#metro-pie-charts').append(
+                    '<div id="' + elementId + '" class="charts">CHART</div>'
                 );
                 item.data.sort(function (a,b) { 
                     console.log( sortOrder.indexOf(a[0]) - sortOrder.indexOf(b[0]) );
@@ -236,7 +181,7 @@ function reloadCharts() {
                 var comparisonChartTitle = '';
                 
                 var elementId2 = 'chart-2' + key;
-                $('#charts-container2').append('<div id="' + elementId2 + '" class="chart"></div>');
+                $('#census-pie-charts').append('<div id="' + elementId2 + '" class="chart"></div>');
                 drawPieChart(elementId2, comparisonChart, comparisonChartTitle);
             });
 
@@ -283,7 +228,6 @@ function drawPieChart(elementId, chartData, title) {
 
 function drawLineGraph(elementId, chartData, axes, title)
 {
-
      $('<div>').attr('id', elementId).highcharts({
         chart: {
             backgroundColor: null,
@@ -327,5 +271,5 @@ function drawLineGraph(elementId, chartData, axes, title)
         },
         // Series is of form {name: "Line Name", data: ["positionally", "relevant", fields]}
         series: chartData.series
-    }).appendTo('#graph');
+    }).appendTo('#line-graphs');
 }
