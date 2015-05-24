@@ -186,7 +186,7 @@ function reloadCharts() {
                     item.data.unshift(['F', 0]);
                 }
 
-                drawPieChart(elementId, item);
+                drawPieChart(elementId, item, item.income_level);
 
                 //Types of charts (ethnicity and gender) corresponds to
                 //the value of $('select#demographics')
@@ -233,16 +233,18 @@ function reloadCharts() {
                         })
                 };
 
+                var comparisonChartTitle = '';
+                
                 var elementId2 = 'chart-2' + key;
                 $('#charts-container2').append('<div id="' + elementId2 + '" class="chart"></div>');
-                drawPieChart(elementId2, comparisonChart);
+                drawPieChart(elementId2, comparisonChart, comparisonChartTitle);
             });
 
         }
     });
 };
 
-function drawPieChart(elementId, chartData) {
+function drawPieChart(elementId, chartData, title) {
     $('#' + elementId).highcharts({
         chart: {
             plotBackgroundColor: null,
@@ -253,7 +255,7 @@ function drawPieChart(elementId, chartData) {
             enabled: false
         },
         title: {
-            text: chartData.income_level
+            text: title
         },
         tooltip: {
             pointFormat: '{name}: <b>{point.percentage:.1f}%</b>'
