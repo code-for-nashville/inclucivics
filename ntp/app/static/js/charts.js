@@ -187,6 +187,7 @@ function reloadCharts() {
 
         }
     });
+    $(document).trigger("ChartView",[ department_name , demographic_type ]);
 };
 
 function drawPieChart(elementId, chartData, title) {
