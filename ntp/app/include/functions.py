@@ -1,4 +1,9 @@
 from data.include.rethinkdb.tables import RdbMostRecent, RdbChiMerged
+import rethinkdb as r
+
+
+def rdb_conn():
+    return r.connect()
 
 
 def rdb_get_data_by_department(department, key_index):
@@ -9,7 +14,7 @@ def rdb_get_data_by_department(department, key_index):
             .get_all(
                 department,
                 index=key_index
-            ).run()
+            ).run(rdb_conn())
         ]
 
         return output[0]
@@ -24,7 +29,7 @@ def rdb_get_department_names(department_key):
             lambda row: row[department_key]
         )
         .distinct()
-        .run()
+        .run(rdb_conn())
     ]
 
     return output
