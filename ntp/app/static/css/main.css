@@ -79,6 +79,10 @@ footer {
 	text-shadow:none;
 }
 
+.jumbotron-title:hover {
+  color: #489DB8;
+}
+
 .pie-charts p {
 	font-size: 16pt;
 	font-family: Arial;
