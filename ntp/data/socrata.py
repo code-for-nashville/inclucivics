@@ -22,8 +22,29 @@ def sanitize(doc, sanitize_key):
 
     temp = row[sanitize_key].split(".")[0] if "." in row[sanitize_key] else row[sanitize_key]
 
-    row[sanitize_key] = "".join(char for char in temp if char.isalnum())
-    assert isinstance(row[sanitize_key], (unicode, str)) and all(char.isalnum() for char in row[sanitize_key])
+    row[sanitize_key] = int("".join(char for char in temp if char.isalnum()))
+    assert isinstance(row[sanitize_key], int)
+    return row
+
+
+def income_level(doc, salary_key):
+    """
+    Creates qualitative descriptions of salaries based on income ranges.  Requires sanitize annual_salary value
+    """
+
+    row = doc.copy()
+    key = "income_level"
+    lower = "Lower Income Range (Less than $33,000)"
+    middle = "Middle Income Range ($33,000 and $66,000)"
+    upper = "Upper Income Range (Greater than $66,000)"
+
+    if row[salary_key] < 33000:
+        row[key] = lower
+    
+    elif 33000 <= row[salary_key] < 66000:
+        row[key] = middle
+    else:
+        row[key] = upper
 
     return row
 
@@ -32,14 +53,23 @@ def main():
     """
     Primary import controller.  Most state is handled here
     """
+
     api_endpoint  = "https://data.nashville.gov/resource/4ibi-mxs4.json?$limit=50000"
-    demographics = [sanitize(row, "annual_sanitize_key") for row in fetch_data(api_endpoint)]
+    demographics = [income_level(sanitize(row, "annual_salary"), "annual_salary") for row in fetch_data(api_endpoint)]
     grouped = groupby("current_dept_description", demographics) 
     assert isinstance(grouped, dict)
   
-    double_grouped =  {key: groupby("ethnic_code_description", grouped[key]) for key in grouped}
-    assert all(isinstance(double_grouped[key], dict) for key in double_grouped)
+    double_grouped =  [{
+        "name": key,
+        "ethnicity": groupby("ethnic_code_description", grouped[key]),
+        "gender": groupby("gender", grouped[key])
+        } for key in grouped] 
+      
+
+    assert all(isinstance(key, dict) for key in double_grouped)
+
     return double_grouped
+
 
 if __name__ == "__main__":
     main()
