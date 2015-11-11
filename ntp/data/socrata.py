@@ -1,7 +1,18 @@
 import requests
 from pprint import pprint
 from toolz.itertoolz import groupby
+import time
 
+def get_last_update():
+    epoch_converted = lambda epoch_time: time.strftime('%Y-%m-%d', time.localtime(epoch_time))
+    endpoint = "https://data.nashville.gov/api/views/4ibi-mxs4"
+    response = requests.get(endpoint)
+    demographics_object = response.json()
+    epoch_timestamp = demographics_object.get("rowsUpdatedAt")
+
+    if epoch_timestamp:
+        return epoch_converted(epoch_timestamp)
+    print "No timestamp found"
 
 def fetch_data(url):
     """
@@ -58,6 +69,7 @@ def main():
     demographics = [income_level(sanitize(row, "annual_salary"), "annual_salary") for row in fetch_data(api_endpoint)]
     grouped = groupby("current_dept_description", demographics) 
     assert isinstance(grouped, dict)
+    assert grouped
   
     double_grouped =  [{
         "name": key,
@@ -72,7 +84,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-    
-
+    print get_last_update()
 
