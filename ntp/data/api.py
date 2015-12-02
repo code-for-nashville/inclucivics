@@ -4,10 +4,11 @@ Primary python API for interacting with the data from the open data portal.  The
 import requests
 from init_db import rdb_data, rdb_timestamps
 from pprint import pprint
-from toolz.itertoolz import groupby
+from toolz.itertoolz import groupby, concat
 import time
 import rethinkdb as r
 import datetime
+from collections import Counter
 
 
 def should_update(epoch_date):
@@ -17,8 +18,7 @@ def should_update(epoch_date):
     downloads = [elem for elem in rdb_timestamps.run(r.connect())]
 
     if downloads:
-            sort(downloads, lambda key: key["date"], reverse=True)[0]
-        )
+        sorted(downloads, lambda key: key["date"], reverse=True)[0]
         if epoch_date - most_recent < 0:
             return False
     return True 
@@ -88,6 +88,24 @@ def return_sanitized():
     return demographics
 
 
+def flatten(list_of_lists):
+    return [inner for inner in outer for inner in outer]
+
+
+def filter_grouped(grouby_dict, keep_fields):
+    return {
+        key: dict(Counter(list(concat([
+           [ 
+               elem[second_key] 
+                for second_key in elem
+                if second_key in keep_fields
+           ] 
+            for elem in grouby_dict[key]
+        ]))).most_common())
+        for key in grouby_dict
+    }
+
+
 def group_all(sanitized_data):
     """
     Handle all the required data manipulations in memory.  Should simply map to the required objects for the front end.
@@ -95,11 +113,11 @@ def group_all(sanitized_data):
     grouped = groupby("current_dept_description", sanitized_data) 
     assert isinstance(grouped, dict)
     assert grouped
-  
+
     double_grouped =  [{
         "name": key,
-        "ethnicity": groupby("ethnic_code_description", grouped[key]),
-        "gender": groupby("gender", grouped[key])
+        "ethnicity": filter_grouped(groupby("ethnic_code_description", grouped[key]), ["income_level"]),
+        "gender": filter_grouped(groupby("gender", grouped[key]), ["income_level"])
         } for key in grouped] 
       
     assert all(isinstance(key, dict) for key in double_grouped)
@@ -107,4 +125,5 @@ def group_all(sanitized_data):
     return double_grouped
 
 if __name__ == "__main__":
-    print datetime.datetime.fromtimestamp(check_for_update())
+    from pprint import pprint
+    pprint(group_all(return_sanitized()))
