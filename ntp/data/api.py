@@ -116,8 +116,8 @@ def group_all(sanitized_data):
 
     double_grouped =  [{
         "name": key,
-        "ethnicity": filter_grouped(groupby("ethnic_code_description", grouped[key]), ["income_level"]),
-        "gender": filter_grouped(groupby("gender", grouped[key]), ["income_level"])
+        "ethnicity": filter_grouped(groupby("income_level", grouped[key]), ["ethnic_code_description"]),
+        "gender": filter_grouped(groupby("income_level", grouped[key]), ["gender"])
         } for key in grouped] 
       
     assert all(isinstance(key, dict) for key in double_grouped)
