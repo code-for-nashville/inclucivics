@@ -88,11 +88,30 @@ def return_sanitized():
     return demographics
 
 
-def flatten(list_of_lists):
-    return [inner for inner in outer for inner in outer]
-
 
 def filter_grouped(grouby_dict, keep_fields):
+    """
+    Filter out the values returned by toolz.itertoolz.groupby to only the desired dictionary keys. 
+    i.e. "keep_fields"
+
+    This is iterating through a fairly nested object that looks like:
+
+    {
+        key1: [
+            {sub_key: val},
+            ...
+        ],
+        key2: [
+            {sub_key: val},
+            ...
+        ]
+    }
+
+    Within the nested list comprehension we extract only the values associated with the keep_fields keys, concatenate
+    the resulting list_of_lists, apply a Counter() count, and finally convert that to a dictionary.
+
+    Basically data jujitsu
+    """
     return {
         key: dict(Counter(list(concat([
            [ 
