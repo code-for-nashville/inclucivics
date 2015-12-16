@@ -1,6 +1,7 @@
-from ntp.data.api import return_sanitized, filter_grouped, group_all 
+from ntp.data.api import return_sanitized, filter_grouped, group_all, format_for_insert
 from pprint import pprint
 from time import sleep
+
 
 def test_return_sanitized():
     """
@@ -13,11 +14,11 @@ def test_return_sanitized():
     assert all("annual_salary" in elem for elem in data)
     return data
 
+
 def test_group_all():
     """
     Ensure the major data manipulation is occurring as expected.
     """
-    # Sleep for a few seconds so as to not upset the API request limit
     sanitized = test_return_sanitized()
     grouped = group_all(sanitized)
 
@@ -27,3 +28,21 @@ def test_group_all():
     departments = [elem["name"] for elem in grouped]
     assert len(departments) == len(set(departments))
     return grouped
+
+def test_format_for_insert():
+    """
+    Ensure our demographics come out as there are supposed to.
+    """
+    grouped = test_group_all()
+    formatted = format_for_insert(grouped)
+    assert formatted
+    assert isinstance(formatted, list)
+    assert all(isinstance(elem, dict) for elem in formatted)
+
+    for doc in formatted:
+        for key in ["ethnicity", "gender"]:
+            assert isinstance(doc[key], list)
+            for datum in doc[key]:
+                for key in ["data", "title"]:
+                    assert key in datum
+    return formatted                    
