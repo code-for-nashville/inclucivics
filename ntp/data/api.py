@@ -5,6 +5,7 @@ import requests
 from init_db import rdb_data, rdb_timestamps
 from pprint import pprint
 from toolz.itertoolz import groupby, concat
+from toolz.dicttoolz import valmap  
 import time
 import rethinkdb as r
 import datetime
@@ -143,3 +144,36 @@ def group_all(sanitized_data):
 
     return double_grouped
 
+
+def format_for_insert(sanitized_data):
+    """
+    Convert the double nested dictionary structure into json-like values for each demographic
+
+    The schema prior to this stage is
+
+    {"<demographic>": {<income_level> : <count_dict>}}
+
+    and the desired schema is going to be something like
+    {"<demographic>": [{"title": <income_level>, "counts": <count_dict>}]}
+
+    """
+    
+    def to_json_like(dictionary, key_name, value_name):
+        """
+        convert a dictionary into json_like
+        """
+        json_like = [{key_name: elem[0], value_name: [list(tupl) for tupl in elem[1].items()]} for elem in dictionary.items()]
+        return json_like
+        
+    def valmap_if(dictionary, key_name, value_name):
+        """
+        Apply to_json_like to values within the data that are lists. 
+        """
+        return {
+            key: to_json_like(dictionary[key], key_name, value_name) if isinstance(dictionary[key], dict) else dictionary[key] 
+            for key in dictionary
+        }
+
+    formatted = [valmap_if(item, "title", "data") for item in sanitized_data]
+
+    return formatted 
