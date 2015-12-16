@@ -143,6 +143,3 @@ def group_all(sanitized_data):
 
     return double_grouped
 
-if __name__ == "__main__":
-    from pprint import pprint
-    pprint(group_all(return_sanitized()))
