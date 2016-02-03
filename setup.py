@@ -8,8 +8,8 @@ setup(
         'ntp.app', 
         'ntp.data' 
     ],
-    install_requires=['rethinkdb', 'flask', 'cherrypy', 'paste', 
-        "celery"],
+    install_requires=['rethinkdb', 'flask', 'cherrypy', 'paste', "celery", "requests", "nose"], 
+
     url='https://github.com/code-for-nashville/hrc-employment-diversity-report',
     license='',
     author='neolytics',

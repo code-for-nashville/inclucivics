@@ -1,0 +1,15 @@
+box: python:2.7 
+services:
+    - rethinkdb
+    - rabbitmq
+build:
+  steps:
+    - pip-install:
+        requirements_file: ""
+        packages_list: "nose"
+    - script:
+        name: installation 
+        code: python setup.py install 
+    - script:
+        name: Run backend api tests
+        code: nosetests -v ntp/data/tests/*.py 
