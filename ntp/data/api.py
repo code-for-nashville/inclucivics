@@ -154,8 +154,8 @@ def format_for_insert(sanitized_data):
     {"<demographic>": {<income_level> : <count_dict>}}
 
     and the desired schema is going to be something like
-    {"<demographic>": [{"title": <income_level>, "counts": <count_dict>}]}
-
+    {"<demographic>": [{<key_name>: <income_level>, <val_name>:  <counts>}]}
+    
     """
     
     def to_json_like(dictionary, key_name, value_name):
