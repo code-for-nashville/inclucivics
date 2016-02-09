@@ -1,8 +1,0 @@
-language: python
-python:
-  - "2.7"
-# command to install dependencies
-install: "sudo python setup.py install"
-# We skip this step for now - until we have real tests to run
-script:	 true
-
