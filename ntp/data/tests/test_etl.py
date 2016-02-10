@@ -1,4 +1,5 @@
-from ntp.data.api import return_sanitized, filter_grouped, group_all, format_for_insert
+from ntp.data.etl import return_sanitized, filter_grouped, group_all, format_for_insert
+from ntp.data.api import retrieve_data
 from pprint import pprint
 from time import sleep
 
@@ -7,7 +8,7 @@ def test_return_sanitized():
     """
     Runs full retrieval of data from ODP to grouping step.
     """
-    data = return_sanitized()
+    data = return_sanitized(retrieve_data())
     assert data
     assert isinstance(data, list)
     assert all(isinstance(elem, dict) for elem in data)
