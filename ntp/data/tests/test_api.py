@@ -1,6 +1,10 @@
 from ntp.data import api
 
 
+#def test_false():
+#    assert False
+
+
 def test_check_for_update():
     """
     Confirm we are able to retrieve a timestamp from the ODP
@@ -43,4 +47,5 @@ def test_ntp_last_updated():
     assert len(str(timestamp)) >= 10
     return int(timestamp)
 
-
+#if __name__ == "__main__":
+#    test_ntp_last_updated()

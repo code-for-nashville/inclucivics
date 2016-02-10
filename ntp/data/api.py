@@ -2,7 +2,7 @@
 Primary python API for interacting with the data from the open data portal.  There's a lot of cases in here that need to be tested.
 """
 import requests
-from init_db import rdb_data, rdb_timestamps
+#from init_db import rdb_data, rdb_timestamps
 from pprint import pprint
 from toolz.itertoolz import groupby, concat
 from toolz.dicttoolz import valmap  

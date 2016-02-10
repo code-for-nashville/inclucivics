@@ -1,15 +1,19 @@
 box: python:2.7 
+#box: ubuntu
+
 services:
     - rethinkdb
     - rabbitmq
 build:
   steps:
-    - pip-install:
-        requirements_file: ""
-        packages_list: "nose"
     - script:
         name: installation 
         code: python setup.py install 
     - script:
+        name: Start celery wercker
+        code: echo Starting Celery; nohup celery -A ntp.data.tasks worker --loglevel=info --beat & 
+    - script:
         name: Run backend api tests
-        code: nosetests -v ntp/data/tests/*.py 
+        code: nosetests -v ntp/data/tests/test*.py --with-coverage --cover-package=ntp.data; python ntp/data/tests/test_api.py
+
+    
