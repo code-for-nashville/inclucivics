@@ -1,3 +1,15 @@
+$(document).ready(function () {
+    $("#about").on("click", function (ev) {
+        var $about = $("#about-message")
+
+        var contentHeight = $("#about-content").height();
+        var containerHeight = $about.height();
+
+        if (containerHeight > 1) $about.animate({height: 0}, 300)
+        else $about.animate({height: contentHeight}, 300);
+    })
+});
+
 $.getJSON("/api/departments", function (response) {
     var departments = $("#department")
       , $demographicSel = $("#demographics");
@@ -76,28 +88,6 @@ function aboutPage()
     // Clear graph content and about page if there
     $('#metro-pie-charts').empty()
     $('#census-pie-charts').empty()
-
-    $('#about-message').empty();
-
-    $('#about-message')
-        .prepend(
-            "<p>" +
-            "In January 2015, the Metro Human Relations Commission (MHRC) released the IncluCivics Report, " +
-            "analyzing the demographic makeup of 50 Metro Nashville departments. The data in the original " +
-            "report was provided by Metro Human Resources (Metro HR) in August 2014. Since then, Metro HR has " +
-            " provided more recent data (captured April 1, 2015) and has announced that updated data will be " +
-            "released quarterly. The original IncluCivics Report, and a recent and more robust Data Update are " +
-            "available by clicking <a href='https://www.nashville.gov/Human-Relations-Commission/IncluCivics.aspx'>here</a>." +
-            "</p>" +
-            "<p>" +
-            "This platform, graciously created and maintained free of charge by Code for Nashville, exists for " +
-            "two reasons. First, it is imperative to establish a baseline from which to assess our collective " +
-            "efforts at attaining a more diverse workforce in the future. Second, to further encourage " +
-            "transparency and public education, this platform will capture the demographic data provided " +
-            "quarterly by Metro HR, render it in user-friendly charts and graphs, and will track changes " +
-            "in the data over time. The raw data used on this platform is available to the public and can be " +
-            "found <a href='https://data.nashville.gov/Metro-Government/General-Government-Employees-Demographics/4ibi-mxs4'>here</a>." +
-            "</p>");
 }
 
 function reloadCharts() {
