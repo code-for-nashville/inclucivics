@@ -33,12 +33,42 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="/" id="home-link">IncluCivics</a>
+
+        <style> #about-link { color: #fff; } #about-link.active { background-color: #fff; color: #374f9a; } </style>
+        <a id="about-link" style="float: left; height: 50px; padding: 15px 15px; font-size: 14px; line-height: 20px;" data-target="#about-message">About This Project</a>
+
       </div>
       <div id="navbar" class="navbar-collapse collapse">
 
       </div><!--/.navbar-collapse -->
     </div>
   </nav>
+
+  <div style="width: 85%; margin-left: auto; margin-right: auto; position: relative;">
+      <section style="max-width: 1000px; position: absolute; z-index: 10;">
+          <div id="about-message" style="height: 0; overflow: hidden;">
+              <div id="about-message-content" style="background-color: #374F9A; color: #fff; padding: 1rem;">
+                  <p>
+                  In January 2015, the Metro Human Relations Commission MHRC released the IncluCivics Report,  
+                  analyzing the demographic makeup of 50 Metro Nashville departments. The data in the original  
+                  report was provided by Metro Human Resources Metro HR in August 2014. Since then, Metro HR has  
+                  provided more recent data captured April 1, 2015 and has announced that updated data will be  
+                  released quarterly. The original IncluCivics Report, and a recent and more robust Data Update are  
+                  available by clicking <a href='https://www.nashville.gov/Human-Relations-Commission/IncluCivics.aspx'>here</a>. 
+                  </p>
+                  <p>
+                  This platform, graciously created and maintained free of charge by Code for Nashville, exists for  
+                  two reasons. First, it is imperative to establish a baseline from which to assess our collective  
+                  efforts at attaining a more diverse workforce in the future. Second, to further encourage  
+                  transparency and public education, this platform will capture the demographic data provided  
+                  quarterly by Metro HR, render it in user-friendly charts and graphs, and will track changes  
+                  in the data over time. The raw data used on this platform is available to the public and can be  
+                  found <a href='https://data.nashville.gov/Metro-Government/General-Government-Employees-Demographics/4ibi-mxs4'>here</a>. 
+                  </p>
+              </div>
+          </div>
+      </section>
+  </div>
 
   <section class="jumbotron">
     <div class="header-text col-md-12">
@@ -49,39 +79,63 @@
   </section>
 
   <section id="main" class="container">
-    <div class="row">
-      <div id="graph-filters" class="col-xs-12">
+      <div class="row">
+          <div id="graph-filters" class="col-xs-12">
+              <h3> Select a department, then select the demographic you're interested in. </h3>
+              <div class="" style="display: flex; justify-content: space-between;">
+                  <div class="" style="flex: 0 0 60%; margin-right: 1rem;">
+                      <h4>Departments:</h4>
+                      <select id="department">
+                          <option value="" class="select-option">--Select--</option>
+                      </select>
+                  </div>
 
-        <div class="" style="display: flex; justify-content: space-between; padding: 0 1rem 0 1rem;">
-            <div class="" style="flex: 0 0 60%; margin-right: 1rem;">
-                <h4>Department</h4>
-                <select id="department">
-                  <option value="" class="select-option">--Select--</option>
-                </select>
-            </div>
+                  <div class="" style="flex: 0 0 40%;">
+                      <h4>Demographics:</h4>
+                      <select id="demographics">
+                          <option value="" class="select-option">--Select--</option>
+                          <option value="ethnicity">Race/Ethnicity</option>
+                          <option value="gender">Sex</option>
+                      </select>
+                  </div>
+              </div>
+          </div>
+      </div> <!-- /row -->
 
-            <div class="" style="flex: 0 0 40%;">
-                <h4>Demographics:</h4>
-                <select id="demographics">
-                  <option value="" class="select-option">--Select--</option>
-                  <option value="ethnicity">Race/Ethnicity</option>
-                  <option value="gender">Sex</option>
-                </select>
-            </div>
-        </div>
+      <div class="row">
+          <div id="main-content" class="col-xs-12">
 
-      </div>
-      <div id="main-content" class="col-xs-12">
-        <div id="about-message" class="col-xs-12"></div>
-        <div id="line-graphs" class="col-xs-12"></div>
-        <div id="metro-pie-charts" class="col-md-6 pie-charts"></div>
-        <div id="census-pie-charts" class="col-md-6 pie-charts"></div>
-      </div>
-    </div>
+              <section style="padding: 3rem 0;">
+                  <h3> View your report. </h3>
+
+                  <div id="reporting-tabs">
+                      <a id="demo-summary-link" data-target="#demo-summary">Summary of Demographics Over Time</a>
+                      <a id="metro-pies-link" data-target="#reports">Your Report</a>
+                  </div>
+
+                  <div style="clear: both;"></div>
+
+                  <div id="demo-summary" class="open" style="height: auto; overflow: hidden;">
+                      <div id="demo-summary-content">
+                          <div id="line-graphs" class="col-xs-12"></div>
+                      </div>
+                  </div>
+
+                  <div id="reports" class="closed" style="height: 0; overflow: hidden;">
+                      <div id="reports-content">
+                          <div id="metro-pie-charts" class="col-md-6 pie-charts"></div>
+                          <div id="census-pie-charts" class="col-md-6 pie-charts"></div>
+                      </div>
+                  </div>
+              </section>
+          </div>
+      </div> <!-- /row -->
   </section>
+
   <footer>
     <p><a href="http://www.codefornashville.org">Code for Nashville 2015</a></p>
   </footer>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="../static/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
 
