@@ -1,48 +1,46 @@
-from ntp.data.api import return_sanitized, filter_grouped, group_all, format_for_insert
-from pprint import pprint
-from time import sleep
+from ntp.data import api
 
 
-def test_return_sanitized():
+def test_check_for_update():
     """
-    Runs full retrieval of data from ODP to grouping step.
+    Confirm we are able to retrieve a timestamp from the ODP
     """
-    data = return_sanitized()
-    assert data
-    assert isinstance(data, list)
-    assert all(isinstance(elem, dict) for elem in data)
-    assert all("annual_salary" in elem for elem in data)
-    return data
+    timestamp = api.check_for_update()
+    assert timestamp
+    assert isinstance(timestamp, int)
+    assert int(timestamp)
+    assert len(str(timestamp)) >= 10
+    return int(timestamp)
 
 
-def test_group_all():
+def test_should_update():
     """
-    Ensure the major data manipulation is occurring as expected.
+    Ensure that we get appropriate boolean values for whether or not we should update
+    based on the timestamp coming from the ODP
     """
-    sanitized = test_return_sanitized()
-    grouped = group_all(sanitized)
 
-    for key in ["name", "ethnicity", "gender"]:
-        assert all(key in elem for elem in grouped)
+    epoch = 0
+    post_2038 = 111111111111111111111111111
+    timestamp = test_check_for_update()
 
-    departments = [elem["name"] for elem in grouped]
-    assert len(departments) == len(set(departments))
-    return grouped
+    assert not api.should_update(post_2038, timestamp)
+    assert api.should_update(epoch, timestamp)
+    return 11111111111
 
-def test_format_for_insert():
+
+def test_ntp_last_updated():
     """
-    Ensure our demographics come out as there are supposed to.
+    Ensure that we are getting the correct last updated timestamp for
+    Inclucivics if there is one.
     """
-    grouped = test_group_all()
-    formatted = format_for_insert(grouped)
-    assert formatted
-    assert isinstance(formatted, list)
-    assert all(isinstance(elem, dict) for elem in formatted)
 
-    for doc in formatted:
-        for key in ["ethnicity", "gender"]:
-            assert isinstance(doc[key], list)
-            for datum in doc[key]:
-                for key in ["data", "title"]:
-                    assert key in datum
-    return formatted                    
+    timestamp = api.ntp_last_update()
+    assert timestamp
+    print timestamp
+    print type(timestamp)
+    assert isinstance(timestamp, int)
+    assert int(timestamp)
+    assert len(str(timestamp)) >= 10
+    return int(timestamp)
+
+
