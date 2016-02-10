@@ -12,7 +12,9 @@
 
 <link rel="stylesheet" href="../static/css/bootstrap.min.css">
 <link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/selectize.css') }}">
 <link rel="stylesheet" href="../static/css/main.css">
+
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="{{ url_for('static', filename='js/vendor/modernizr-2.6.2-respond-1.1.0.min.js')}}"></script>
 </head>
@@ -49,16 +51,25 @@
   <section id="main" class="container">
     <div class="row">
       <div id="graph-filters" class="col-xs-12">
-        <h4>Department</h4>
-        <select id="department">
-          <option value="" class="select-option">--Select--</option>
-        </select>
-        <h4>Demographics:</h4>
-        <select id="demographics">
-          <option value="" class="select-option">--Select--</option>
-          <option value="ethnicity">Race/Ethnicity</option>
-          <option value="gender">Sex</option>
-        </select>
+
+        <div class="" style="display: flex; justify-content: space-between; padding: 0 1rem 0 1rem;">
+            <div class="" style="flex: 0 0 60%; margin-right: 1rem;">
+                <h4>Department</h4>
+                <select id="department">
+                  <option value="" class="select-option">--Select--</option>
+                </select>
+            </div>
+
+            <div class="" style="flex: 0 0 40%;">
+                <h4>Demographics:</h4>
+                <select id="demographics">
+                  <option value="" class="select-option">--Select--</option>
+                  <option value="ethnicity">Race/Ethnicity</option>
+                  <option value="gender">Sex</option>
+                </select>
+            </div>
+        </div>
+
       </div>
       <div id="main-content" class="col-xs-12">
         <div id="about-message" class="col-xs-12"></div>
@@ -73,6 +84,9 @@
   </footer>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="../static/js/vendor/jquery-1.11.1.min.js"><\/script>')</script>
+
+<script src="{{ url_for('static', filename='js/vendor/selectize.js') }}"></script>
+
 <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js')}}"></script>
 <script src="{{ url_for('static', filename='js/analytics.js')}}"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
