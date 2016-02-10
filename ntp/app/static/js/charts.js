@@ -1,6 +1,9 @@
 $.getJSON("/api/departments", function (response) {
-    var departments = $("#department");
+    var departments = $("#department")
+      , $demographicSel = $("#demographics");
+
     var deps = response.departments;
+
     //Put all dept's at the top
     deps.sort(function(a,b){
         if (a === 'All Departments')
@@ -10,10 +13,22 @@ $.getJSON("/api/departments", function (response) {
         return a - b;
     });
 
-
-    $.each(deps, function (val, text) {
-        departments.append($("<option></option>").val(text).html(text));
+    var depsPrepped = deps.map(function (dept) {
+        return {
+            text: dept,
+            value: dept
+        }
     });
+
+    departments.selectize({
+        options: depsPrepped,
+    });
+
+    $demographicSel.selectize();
+
+    //$.each(deps, function (val, text) {
+        //departments.append($("<option></option>").val(text).html(text));
+    //});
 });
 
 // Highcharts options 
