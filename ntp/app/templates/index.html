@@ -70,27 +70,27 @@
       </section>
   </div>
 
-  <section class="jumbotron">
-    <div class="header-text col-md-12">
-      <a href="/" class="jumbotron-title"><h1>IncluCivics</h1></a>
-      <p>Brought to you by <a href="http://www.codefornashville.org">Code for Nashville</a>
-      <a href="/"><img src="{{ url_for('static', filename='img/logo.png')}}" /></a> 
-    </div>
-  </section>
+  <!--<section class="jumbotron">-->
+    <!--<div class="header-text col-md-12">-->
+      <!--<a href="/" class="jumbotron-title"><h1>IncluCivics</h1></a>-->
+      <!--<p>Brought to you by <a href="http://www.codefornashville.org">Code for Nashville</a>-->
+      <!--<a href="/"><img src="{{ url_for('static', filename='img/logo.png')}}" /></a> -->
+    <!--</div>-->
+  <!--</section>-->
 
   <section id="main" class="container">
       <div class="row">
           <div id="graph-filters" class="col-xs-12">
               <h3> Select a department, then select the demographic you're interested in. </h3>
-              <div class="" style="display: flex; justify-content: space-between;">
-                  <div class="" style="flex: 0 0 60%; margin-right: 1rem;">
+              <div class="" style="display: flex;">
+                  <div class="" style="flex: 0 0 400px; margin-right: 1rem;">
                       <h4>Departments:</h4>
                       <select id="department">
                           <option value="" class="select-option">--Select--</option>
                       </select>
                   </div>
 
-                  <div class="" style="flex: 0 0 40%;">
+                  <div class="" style="flex: 0 0 150px;">
                       <h4>Demographics:</h4>
                       <select id="demographics">
                           <option value="" class="select-option">--Select--</option>
@@ -104,36 +104,33 @@
 
       <div class="row">
           <div id="main-content" class="col-xs-12">
+              <h3> View your report. </h3>
 
-              <section style="padding: 3rem 0;">
-                  <h3> View your report. </h3>
+              <div id="reporting-tabs" class="tabs">
+                  <a id="demo-summary-link" class="tab" data-target="#demo-summary">Summary of Demographics Over Time</a>
+                  <a id="metro-pies-link" class="tab" data-target="#reports">Your Report</a>
+              </div>
 
-                  <div id="reporting-tabs">
-                      <a id="demo-summary-link" data-target="#demo-summary">Summary of Demographics Over Time</a>
-                      <a id="metro-pies-link" data-target="#reports">Your Report</a>
+              <div style="clear: both;"></div>
+
+              <div class="tabs-content">
+                  <div id="demo-summary" class="content tab-content active" style="height: auto; overflow: hidden;">
+                      <div id="line-graphs" class="col-xs-12"></div>
                   </div>
 
-                  <div style="clear: both;"></div>
-
-                  <div id="demo-summary" class="open" style="height: auto; overflow: hidden;">
-                      <div id="demo-summary-content">
-                          <div id="line-graphs" class="col-xs-12"></div>
-                      </div>
+                  <div id="reports"  class="content tab-content" style="height: 0; overflow: hidden;">
+                      <div id="metro-pie-charts" class="col-md-6 pie-charts"></div>
+                      <div id="census-pie-charts" class="col-md-6 pie-charts"></div>
                   </div>
-
-                  <div id="reports" class="closed" style="height: 0; overflow: hidden;">
-                      <div id="reports-content">
-                          <div id="metro-pie-charts" class="col-md-6 pie-charts"></div>
-                          <div id="census-pie-charts" class="col-md-6 pie-charts"></div>
-                      </div>
-                  </div>
-              </section>
+              </div>
           </div>
       </div> <!-- /row -->
   </section>
 
   <footer>
-    <p><a href="http://www.codefornashville.org">Code for Nashville 2015</a></p>
+    <div class="container">
+        <p><a href="http://www.codefornashville.org">Code for Nashville 2015</a></p>
+    </div>
   </footer>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -144,6 +141,7 @@
 <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js')}}"></script>
 <script src="{{ url_for('static', filename='js/analytics.js')}}"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script src="{{ url_for('static', filename='js/main.js')}}"></script>
 <script src= "{{ url_for('static', filename='js/charts.js') }}"></script>

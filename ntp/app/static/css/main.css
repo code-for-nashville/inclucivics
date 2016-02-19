@@ -1,60 +1,49 @@
-
-
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
 
 body {
-    padding-top: 50px;
-    padding-bottom: 20px;   
-}
-
-p {
-    font-size: 14pt;
     font-family: Arial;
-    margin-right: auto;
-    margin-left: auto;
-    text-align: justify;
-    margin-bottom: 25px;
+    font-size: 14px;
+    padding-top: 50px;
 }
 
-footer {
-    margin: 0 auto;
-    width: 85%;
-}
+/*.jumbotron {*/
+    /*margin-right: auto;*/
+    /*margin-left: auto;*/
+    /*padding-right: 7.5%;*/
+    /*padding-left: 7.5%;*/
 
-.jumbotron {
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: 7.5%;
-    padding-left: 7.5%;
+    /*background-color: #FFF;*/
+    /*background-image:url(../img/nashville.png);*/
+    /*background-size: cover;*/
+    /*background-repeat: no-repeat;*/
 
-    background-color: #FFF;
-    background-image:url(../img/nashville.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    
-    height: 250px;
-    width: 100%;
-    position: relative;
-}
+    /*height: 250px;*/
+    /*width: 100%;*/
+    /*position: relative;*/
+/*}*/
 
-.jumbotron a {
-    color: #EF5325;
-    max-width: 1000px;
-}
+/*.jumbotron a {*/
+    /*color: #EF5325;*/
+    /*max-width: 1000px;*/
+/*}*/
 
-.jumbotron h1 {
-    color:#489DB8;
-    font-family: Arial, 'sans serif';
+/*.jumbotron h1 {*/
+    /*color:#489DB8;*/
+    /*font-family: Arial, 'sans serif';*/
 
-}
+/*}*/
 
-.jumbotron img {
-  position: absolute;
-  right: 5px;
-  top: -20px;
-}
+/*.jumbotron img {*/
+  /*position: absolute;*/
+  /*right: 5px;*/
+  /*top: -20px;*/
+/*}*/
+
+/*.jumbotron-title:hover {*/
+  /*color: #489DB8;*/
+/*}*/
 
 .loading {
     padding:20px;
@@ -70,17 +59,9 @@ footer {
     padding-left: 7.5%;
 }
 
-.navbar-brand {
-    padding-left: 0;
-}
-
 .navbar-brand, .navbar-brand:hover {
     color:#FFF;
     text-shadow:none;
-}
-
-.jumbotron-title:hover {
-  color: #489DB8;
 }
 
 .pie-charts p {
@@ -90,10 +71,6 @@ footer {
     margin-right: auto;
     margin-left: auto;
     text-align: justify;
-}
-
-.header-text {
-    padding: 0;
 }
 
 #graph-filters {
@@ -109,8 +86,11 @@ footer {
     color: white;
 }
 
+.content {
+    padding-top: 2rem;
+}
+
 #line-graphs {
-    padding-top: 2cm;
     width: 100%;
     min-width: 600px;
 }
@@ -132,51 +112,30 @@ footer {
     color:#AB509E;
 }
 
-@media (max-width: 991px) {
-  .jumbotron img {
-    width: 35%;
-  }
+.tabs {
+    border-bottom: 1px solid grey;
 }
 
-@media (max-width: 760px) {
-  .jumbotron img {
-    width: 25%;
-    top: -25px;
-  }
-
-  .jumbotron {
-    height: 200px;
-  }
+.tabs .tab {
+    border: 1px solid grey;
+    padding: 0.5rem 1rem;
+    border-bottom: none;
+    display: inline-block;
 }
 
-@media (max-width : 780px) {
-  #main {
-    /* Hack to get the content to ignore the 'Metro Humans Relations Commision' image
-    hanging out of the nav */
-  }
+.tabs .tab.active {
+    background-color: grey;
+    color: #fff;
 }
 
-@media (max-width: 650px) {
-  .jumbotron p {
-    font-size: 1em;
-  }
+.tabs .tab:last-child {
+
 }
 
-@media (max-width: 480px) {
-  .jumbotron img {
-    top: -35px;
-    right: -5px;
-  }
+.tabs-content .tab-content {
+   display: none;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+.tabs-content .tab-content.active {
+  display: block;
+}

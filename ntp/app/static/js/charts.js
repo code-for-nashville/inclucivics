@@ -2,58 +2,36 @@ $(document).ready(function () {
     var duration = 300
       , demoSummHeight = 1876; // TODO line graph container isn't coming back to original height
 
-    $("#about-link").on("click", function (ev) {
-        var $link = $(ev.target)
-          , $cont = $( $link.data("target") )
-          , height = $cont.find($link.data("target") + "-content").height()
-          , duration = 150;
+    var $tabs = $("#reporting-tabs a");
+    var $tabContents = $tabs.map(function (_i, tab) {
+        var targetId = $(tab).data("target");
+        return $(targetId);
+    });
 
-        if ($cont.hasClass("closed")) {
-            $cont.removeClass("closed").animate({ height: height }, duration);
-            $link.addClass("active");
-        } else {
-            $cont.addClass("closed").animate({ height: 0 }, duration);
-            $link.removeClass("active");
-        }
-    })
+    $("#reporting-tabs").on("click", "a", function (ev) {
+        var $tab = $(ev.target);
+        var targetId = $tab.data("target");
 
-    $("#reporting-tabs").on("click", "a", handleTabs);
+        //$tabs.each(function (_i, tab) {
+            //var $xTab = $(tab);
 
-    function handleTabs (ev) {
-        var $links = $(ev.delegateTarget).find("a") // TODO is this reliable?
-          , $containers = $links.map(function (_i, link) {
-                var target = $(link).data("target");
-                return $(target);
-            });
+            //if ($tab.data("target") === $xTab.data("target"))
+                //$tab.addClass("active");
+            //else
+                //$tab.removeClass("active");
+        //});
 
-        var $link = $(ev.target) // a#about-message-link.data("target", "about-message")
-          , $linkTarget = $( $link.data("target") ) //div#about-message
-          , $content   = $( $link.data("target") + "-content" ); // div#about-message-content
+        $tabContents.each(function (_i, content) {
+            var $con = $(content);
 
-        // TODO BOOOOO see above
-        var contentHeight   = $linkTarget.attr("id") === "demo-summary" ? demoSummHeight : $content.height();
+            // TODO duurr
+            if ("#" + $con.attr("id") === targetId)
+                $con.addClass("active");
+            else
+                $con.removeClass("active");
+        });
 
-        for (var i = 0; i < $containers.length; i++) {
-            var $container = $containers[i];
-
-            // if we are the focus
-            if ($linkTarget.attr("id") === $container.attr("id")) {
-
-                // if we are closed, open up
-                if ($container.hasClass("closed")) {
-                    $container.removeClass("closed").animate({ height: contentHeight }, duration);
-
-                // if we are open, close
-                } else if (!$container.hasClass("closed")) {
-                    $container.addClass("closed").animate({height: 0 }, duration);
-                }
-
-            // if we are not the focus, we close
-            } else {
-                $container.addClass("closed").animate({ height: 0 }, duration);
-            }
-        }
-    }
+    });
 
     $.getJSON("/api/departments", function (response) {
         var departments = $("#department")
