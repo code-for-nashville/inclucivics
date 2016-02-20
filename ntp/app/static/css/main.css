@@ -2,48 +2,15 @@
    Author's custom styles
    ========================================================================== */
 
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: Arial;
     font-size: 14px;
     padding-top: 50px;
 }
-
-/*.jumbotron {*/
-    /*margin-right: auto;*/
-    /*margin-left: auto;*/
-    /*padding-right: 7.5%;*/
-    /*padding-left: 7.5%;*/
-
-    /*background-color: #FFF;*/
-    /*background-image:url(../img/nashville.png);*/
-    /*background-size: cover;*/
-    /*background-repeat: no-repeat;*/
-
-    /*height: 250px;*/
-    /*width: 100%;*/
-    /*position: relative;*/
-/*}*/
-
-/*.jumbotron a {*/
-    /*color: #EF5325;*/
-    /*max-width: 1000px;*/
-/*}*/
-
-/*.jumbotron h1 {*/
-    /*color:#489DB8;*/
-    /*font-family: Arial, 'sans serif';*/
-
-/*}*/
-
-/*.jumbotron img {*/
-  /*position: absolute;*/
-  /*right: 5px;*/
-  /*top: -20px;*/
-/*}*/
-
-/*.jumbotron-title:hover {*/
-  /*color: #489DB8;*/
-/*}*/
 
 .loading {
     padding:20px;
@@ -66,7 +33,6 @@ body {
 
 .pie-charts p {
     font-size: 16pt;
-    font-family: Arial;
     margin-top: 0.8in;
     margin-right: auto;
     margin-left: auto;
@@ -88,6 +54,23 @@ body {
 
 .content {
     padding-top: 2rem;
+}
+
+footer {
+    background-color: ;
+}
+
+.sticky-footer-wrap {
+    min-height: 100%;
+    margin-bottom: -100px; /* footer height */
+}
+.sticky-footer-wrap:after {
+    content: "";
+    display: "block";
+}
+
+.sticky-footer, .sticky-footer-wrap:after {
+    height: 100px;
 }
 
 #line-graphs {
