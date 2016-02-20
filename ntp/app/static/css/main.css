@@ -12,6 +12,40 @@ body {
     padding-top: 50px;
 }
 
+#about-slide-down {
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+#about-slide-down .about-wrap {
+    position: absolute;
+    z-index: 10;
+}
+
+#about-slide-down .about-wrap .message {
+    height: 0;
+    overflow: hidden;
+    transition: height 300ms ease;
+}
+
+#about-slide-down .about-wrap .message .message-content {
+    letter-spacing: 1px;
+    font-size: 20px;
+    background-color: #5567A2;
+    padding: 0 1rem 0 1rem;
+    color: #E0E0E0;
+}
+
+#about-slide-down .about-wrap .message .message-content a {
+    color: #B3E126;
+}
+
+#about-slide-down .about-wrap .message .message-content p {
+    padding: 1rem 0 1rem;
+}
+
 .loading {
     padding:20px;
     text-align: center;
@@ -60,17 +94,9 @@ body {
     text-align: justify;
 }
 
-#graph-filters {
-    padding-bottom: 2em;
-}
-
-#graph-filters select {
-    height: 32px;
-    font-size: 18px;
-}
-
 .content {
     padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 footer {
@@ -100,11 +126,6 @@ footer a {
 #line-graphs {
     width: 100%;
     min-width: 600px;
-}
-
-.container {
-    padding: 0;
-    max-width: 1200px;
 }
 
 #about-message {

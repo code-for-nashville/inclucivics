@@ -23,8 +23,8 @@
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-  <nav class="navbar navbar-fixed-top" role="navigation" >
-    <div>
+  <nav class="navbar navbar-inclucivics navbar-fixed-top" role="navigation" >
+    <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
           <span class="sr-only">Toggle navigation</span>
@@ -32,22 +32,18 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/" id="home-link">IncluCivics</a>
-
-        <style> #about-link { color: #fff; } #about-link.active { background-color: #fff; color: #374f9a; } </style>
-        <a id="about-link" style="float: left; height: 50px; padding: 15px 15px; font-size: 14px; line-height: 20px;" data-target="#about-message">About This Project</a>
 
       </div>
-      <div id="navbar" class="navbar-collapse collapse">
 
-      </div><!--/.navbar-collapse -->
+      <a class="navbar-brand" href="/" id="home-link">IncluCivics</a>
+      <a id="about-link" style="float: left; height: 50px; padding: 15px 15px; line-height: 20px;" data-target="#about-message">About This Project</a>
     </div>
   </nav>
 
-  <div style="width: 85%; margin-left: auto; margin-right: auto; position: relative;">
-      <section style="max-width: 1000px; position: absolute; z-index: 10;">
-          <div id="about-message" style="height: 0; overflow: hidden;">
-              <div id="about-message-content" style="background-color: #374F9A; color: #fff; padding: 1rem;">
+  <div id="about-slide-down">
+      <div class="about-wrap">
+          <div id="about-message" class="message" style="">
+              <div id="about-message-content" class="message-content" style="">
                   <p>
                   In January 2015, the Metro Human Relations Commission MHRC released the IncluCivics Report,  
                   analyzing the demographic makeup of 50 Metro Nashville departments. The data in the original  
@@ -67,32 +63,37 @@
                   </p>
               </div>
           </div>
-      </section>
+      </div>
   </div>
 
-  <!--<section class="jumbotron">-->
-    <!--<div class="header-text col-md-12">-->
-      <!--<a href="/" class="jumbotron-title"><h1>IncluCivics</h1></a>-->
-      <!--<p>Brought to you by <a href="http://www.codefornashville.org">Code for Nashville</a>-->
-      <!--<a href="/"><img src="{{ url_for('static', filename='img/logo.png')}}" /></a> -->
-    <!--</div>-->
-  <!--</section>-->
+  <section class="content container">
+    <div style="display: flex; justify-content: space-between;">
+          <p style="flex: 0 0 auto; padding-top: 2rem;">
+              Brought to you by <a href="http://www.codefornashville.org" target="_blank">Code for Nashville</a>
+              <br>
+              and the <a href="/">Nashville Transparency Project</a>
+          </p>
+          <img src="/static/img/logo.png" class="logo" style="flex: 0 0 auto; width: 120px; height: 120px; display: block;" />
+      </div>
+  </section>
 
-  <section id="main" class="container">
+  <section id="main" class="sticky-footer-wrap container">
       <div class="row">
-          <div id="graph-filters" class="col-xs-12">
+          <div id="graph-filters" class="col-xs-12 content">
               <h3> Select a department, then select the demographic you're interested in. </h3>
               <div class="" style="display: flex;">
                   <div class="" style="flex: 0 0 400px; margin-right: 1rem;">
                       <h4>Departments:</h4>
-                      <select id="department">
+
+                      <select id="department" class="select department-select">
                           <option value="" class="select-option">--Select--</option>
                       </select>
                   </div>
 
                   <div class="" style="flex: 0 0 150px;">
                       <h4>Demographics:</h4>
-                      <select id="demographics">
+
+                      <select id="demographics" class="select demo-select">
                           <option value="" class="select-option">--Select--</option>
                           <option value="ethnicity">Race/Ethnicity</option>
                           <option value="gender">Sex</option>
@@ -127,9 +128,11 @@
       </div> <!-- /row -->
   </section>
 
-  <footer>
+  <footer class="sticky-footer">
     <div class="container">
-        <p><a href="http://www.codefornashville.org">Code for Nashville 2015</a></p>
+        <p>
+            <a href="http://www.codefornashville.org">Code for Nashville 2015</a>
+        </p>
     </div>
   </footer>
 

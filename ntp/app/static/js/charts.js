@@ -1,38 +1,4 @@
 $(document).ready(function () {
-    var duration = 300
-      , demoSummHeight = 1876; // TODO line graph container isn't coming back to original height
-
-    var $tabs = $("#reporting-tabs a");
-    var $tabContents = $tabs.map(function (_i, tab) {
-        var targetId = $(tab).data("target");
-        return $(targetId);
-    });
-
-    $("#reporting-tabs").on("click", "a", function (ev) {
-        var $tab = $(ev.target);
-        var targetId = $tab.data("target");
-
-        //$tabs.each(function (_i, tab) {
-            //var $xTab = $(tab);
-
-            //if ($tab.data("target") === $xTab.data("target"))
-                //$tab.addClass("active");
-            //else
-                //$tab.removeClass("active");
-        //});
-
-        $tabContents.each(function (_i, content) {
-            var $con = $(content);
-
-            // TODO duurr
-            if ("#" + $con.attr("id") === targetId)
-                $con.addClass("active");
-            else
-                $con.removeClass("active");
-        });
-
-    });
-
     $.getJSON("/api/departments", function (response) {
         var departments = $("#department")
           , $demographicSel = $("#demographics");
