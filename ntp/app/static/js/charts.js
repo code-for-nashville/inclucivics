@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    var app = {};
+
     $.getJSON("/api/departments", function (response) {
         var departments = $("#department")
           , $demographicSel = $("#demographics");
@@ -39,7 +41,7 @@ $(document).ready(function () {
         aboutPage();
 
         // Reload aboutPage by clicking home page link
-        $('#home-link').click(function() {
+        $('#demo-summary-link').click(function() {
             aboutPage();
         })
 
@@ -66,13 +68,25 @@ $(document).ready(function () {
     // Metro and Code for Nashville are doing and our line graphs
     function aboutPage()
     {
-        $.getJSON("static/js/graphs.json", function(graphs) {
-            $.each(graphs, function(graph) {
-                var ent = graphs[graph]
+        // did we already download that?
+        if (app.graphs === void 0) {
+            $.getJSON("static/js/graphs.json", function(graphs) {
+                app.graphs = graphs;
+
+                // key iteration
+                $.each(app.graphs, function(graph) {
+                    var ent = app.graphs[graph]
+                    drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
+                })
+            });
+
+        } else {
+            // key iteration
+            $.each(app.graphs, function(graph) {
+                var ent = app.graphs[graph]
                 drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
-                console.log(ent)
             })
-        });
+        }
 
         // Clear graph content and about page if there
         $('#metro-pie-charts').empty()
@@ -83,13 +97,19 @@ $(document).ready(function () {
         var department_name = $('select#department').val();
         var demographic_type = $('select#demographics').val();
 
-        $('#metro-pie-charts').html('');
-        $('#metro-pie-charts').html('<div class="loading">Loading...</div>');
+        if (!(department_name && demographic_type))
+            return // no op
+
+        $metroPies = $("#metro-pie-charts");
+
+        $metroPies.html('');
+        $metroPies.html('<div class="loading">Loading...</div>');
 
         // Remove about message and line graphs when you reload charts
         $('#line-graphs').empty();
 
         var request_data = JSON.stringify({name: department_name, attribute: demographic_type});
+
         $.ajax({
             type: "POST",
             url: "/api/data",
@@ -97,6 +117,7 @@ $(document).ready(function () {
             data: request_data,
             success: function (data) {
                 var charts = data.attribute;
+                $("#metro-pies-link").trigger("click");
 
                 $('#metro-pie-charts').html('').append(
                     "<h3 align='center'>Metro Demographics</h3>"
