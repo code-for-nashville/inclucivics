@@ -89,8 +89,8 @@ $(document).ready(function () {
         }
 
         // Clear graph content and about page if there
-        $('#metro-pie-charts').empty()
-        $('#census-pie-charts').empty()
+        //$('#metro-pie-charts').empty()
+        //$('#census-pie-charts').empty()
     }
 
     function reloadCharts() {
