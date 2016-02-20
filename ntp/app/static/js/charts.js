@@ -25,16 +25,11 @@ $(document).ready(function () {
             options: depsPrepped,
         });
 
-
         $demographicSel.selectize();
 
         departments[0].selectize.on("change", function (item) {
             $demographicSel[0].selectize.addItem("ethnicity");
         });
-
-        //$.each(deps, function (val, text) {
-            //departments.append($("<option></option>").val(text).html(text));
-        //});
     });
 
     // Highcharts options
