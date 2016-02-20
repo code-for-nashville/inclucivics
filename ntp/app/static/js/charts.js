@@ -47,7 +47,7 @@ $(document).ready(function () {
 
         // Setup handler to reload pie graphs when Departments or Demographics dropdown changes
         $('select#department, select#demographics').change(function () {
-            $('.select-option').remove();
+            //$('.select-option').remove();
             reloadCharts();
         });
 
@@ -80,8 +80,10 @@ $(document).ready(function () {
                 })
             });
 
-        } else {
+       } else {
             // key iteration
+            $("#line-graphs").empty();
+
             $.each(app.graphs, function(graph) {
                 var ent = app.graphs[graph]
                 drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
@@ -242,6 +244,7 @@ $(document).ready(function () {
     }
 
     function drawLineGraph(elementId, chartData, axes, title) {
+
         chartData.series.forEach(function (member) {
             member.data.forEach(function (datum, _i, data) {
                 // mutate array members
