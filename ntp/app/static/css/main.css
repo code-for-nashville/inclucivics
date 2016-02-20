@@ -7,8 +7,8 @@ html, body {
 }
 
 body {
-    font-family: Arial;
-    font-size: 14px;
+    font-family: "Helvetica Nue", "Helvetica", sans-serif;
+    font-size: 16px;
     padding-top: 50px;
 }
 
@@ -22,13 +22,34 @@ body {
 }
 
 .navbar {
-    background-color:#374F9A;
-    padding-left: 7.5%;
+    background-color: #5567A2;
+}
+
+.navbar-brand {
+    font-size: 24px;
 }
 
 .navbar-brand, .navbar-brand:hover {
-    color:#FFF;
-    text-shadow:none;
+    color: #FFF;
+    text-shadow: none;
+}
+
+.navbar-inclucivics {
+    color: #fefefe;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.navbar-inclucivics a {
+    color: #fefefe;
+}
+
+/*TODO integrate this properly*/
+#about-link { color: #fefefe; }
+
+#about-link.active {
+    background-color: #5567A2;
+    color: #5567A2;
 }
 
 .pie-charts p {
@@ -48,16 +69,19 @@ body {
     font-size: 18px;
 }
 
-#home-link:visited {
-    color: white;
-}
-
 .content {
     padding-top: 2rem;
 }
 
 footer {
-    background-color: ;
+    margin-top: 4rem;
+    background-color: #5567A2;
+    color: #fefefe;
+    padding-top: 1rem;
+}
+
+footer a {
+    color: #fefefe;
 }
 
 .sticky-footer-wrap {
