@@ -26,18 +26,18 @@ $(document).on("ready", function (ev) {
         return $(targetId);
     });
 
-    $("#reporting-tabs").on("click", "a", function (ev) {
+    $("#reporting-tabs a").on("click", function (ev) {
         var $tab = $(ev.target);
         var targetId = $tab.data("target");
 
-        //$tabs.each(function (_i, tab) {
-            //var $xTab = $(tab);
+        $tabs.each(function (_i, tab) {
+            var $xTab = $(tab);
 
-            //if ($tab.data("target") === $xTab.data("target"))
-                //$tab.addClass("active");
-            //else
-                //$tab.removeClass("active");
-        //});
+            if ($tab.data("target") === $xTab.data("target"))
+                $xTab.addClass("active");
+            else
+                $xTab.removeClass("active");
+        });
 
         $tabContents.each(function (_i, content) {
             var $con = $(content);
