@@ -146,10 +146,11 @@ footer a {
 
 .tabs .tab {
     border: 1px solid grey;
-    padding: 0.5rem 1rem;
+    padding: 1rem 2rem;
     border-bottom: 1px solid transparent;
     margin-bottom: -1px;
     display: inline-block;
+    margin-right: 0.5rem;
 }
 
 .tabs .tab.active {
