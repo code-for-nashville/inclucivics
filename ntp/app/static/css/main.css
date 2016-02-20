@@ -147,13 +147,13 @@ footer a {
 .tabs .tab {
     border: 1px solid grey;
     padding: 0.5rem 1rem;
-    border-bottom: none;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
     display: inline-block;
 }
 
 .tabs .tab.active {
-    background-color: grey;
-    color: #fff;
+    border-bottom: 1px solid #fff;
 }
 
 .tabs .tab:last-child {
