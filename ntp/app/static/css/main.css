@@ -168,3 +168,8 @@ footer a {
 .tabs-content .tab-content.active {
   display: block;
 }
+
+.graph-table {
+    margin-top: 4rem;
+    /*background-color: rgb(223, 223, 223);*/
+}

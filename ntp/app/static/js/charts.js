@@ -73,21 +73,29 @@ $(document).ready(function () {
             $.getJSON("static/js/graphs.json", function(graphs) {
                 app.graphs = graphs;
 
+                // mutate once to turn 0.75(...) to 75.(...)
+                app.graphs.forEach(function (graph) {
+                    graph.series.forEach(function (member) {
+                        member.data.forEach(function (datum, _i, data) {
+                            // mutate array members
+                            data[_i] = (datum * 100);
+                        });
+                    });
+                });
+
                 // key iteration
-                $.each(app.graphs, function(graph) {
-                    var ent = app.graphs[graph]
-                    drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
-                })
+                app.graphs.forEach(function (graph) {
+                    drawLineGraph(graph.title, {series: graph.series}, graph.time, graph.title);
+                });
             });
 
-       } else {
+        } else {
             // key iteration
             $("#line-graphs").empty();
 
-            $.each(app.graphs, function(graph) {
-                var ent = app.graphs[graph]
-                drawLineGraph(ent.title, {series: ent.series}, ent.time, ent.title);
-            })
+            app.graphs.forEach(function (graph) {
+                drawLineGraph(graph.title, {series: graph.series}, graph.time, graph.title);
+            });
         }
 
         // Clear graph content and about page if there
@@ -245,67 +253,185 @@ $(document).ready(function () {
 
     function drawLineGraph(elementId, chartData, axes, title) {
 
-        chartData.series.forEach(function (member) {
-            member.data.forEach(function (datum, _i, data) {
-                // mutate array members
-                data[_i] = (datum * 100).toFixed(2);
-            });
-        });
-
-        $('<div>').attr('id', elementId).css({
+        var cssProps = {
             border: "1px solid black",
             marginTop: "2rem",
-            marginBottom: "1rem",
-            padding: "10px"
-        }).highcharts({
-            chart: {
-                backgroundColor: null,
-                style: {
-                    color: '#FFFFFF'
-                }
-            },
-            title: {
-                text: title,
-                x: -20 //center
-            },
-            subtitle: {
-                text: 'Source: Nashville Metro',
-                x: -20,
-                color: '#FFFFFF'
-            },
-            // This needs to be refactored to read this from input ala chartData.xAxis
-            xAxis: {
-                categories: axes
-            },
-            yAxis: {
-                title: {
-                    text: 'Proportion of Total Metro Employees'
+            marginBottom: "2rem",
+            padding: "20px"
+        }
+
+        $table = $("<table />").addClass("graph-table table").appendTo("#line-graphs");
+        $head = $("<thead />");
+        $head.appendTo($table);
+        $tRow = $("<tr />");
+        $tRow.appendTo($head);
+
+        $("<th />").text(title).appendTo($tRow);
+        $("<td />").text("Percentage of employees by demographic").appendTo($tRow);
+        $("<td />").text("Change").appendTo($tRow);
+
+        chartData.series.forEach(function (member, _i) {
+            var $row = $("<tr />")
+            var $sparkContainer = $('<td />').attr('id', elementId + "-spark-" + _i).css({
+            });
+
+            $sparkContainer.highcharts("SparkLine", {
+                series: [ member ],
+                exporting: {
+                    enabled: false
                 },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#000000'
-                }],
-                labels: {
-                    formatter: function () {
-                        return this.value + " %";
+                chart: {
+                    style: {
+                        marginTop: 5
                     }
                 },
-                min: 0,
-                max: 100
-            },
-            tooltip: {
-                valueSuffix: '%'
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'middle',
-                borderWidth: 0
-            },
-            // Series is of form {name: "Line Name", data: ["positionally", "relevant", fields]}
-            series: chartData.series
-        }).appendTo('#line-graphs');
+                tooltip: {
+                    formatter: function () {
+                        var name = axes[this.points[0].series._i];
+                        var val = "" + this.y;
+                        var _i = val.indexOf(".")
+
+                        // do we have enough digits?
+                        return val.slice(0 , _i + 4) + "% - " + name;
+                    }
+                }
+            });
+
+            var $bullet = $("<td />").attr("id", elementId + "-bullet-" + _i).css({
+            });
+
+            $bullet.highcharts("Chart", {
+                //title: { text: member.name, style: { fontSize: "8px" }},
+                title: null,
+                credits: { enabled: false },
+                exporting: { enabled: false },
+                legend: { enabled: false },
+                tooltip: {
+                    formatter: function () {
+                        var val = "" + this.y;
+                        var _i = val.indexOf(".")
+
+                        // do we have enough digits?
+                        return val.slice(0 , _i + 4) + "%";
+                    }
+                },
+                xAxis: {
+                    tickLength: 0,
+                    //categories: [member.name],
+                    //align: "right",
+                    labels: { enabled: false }
+                },
+                yAxis: {
+                    endOnTick: true,
+                    startOnTick: true,
+                    min: 0,
+                    max: 100,
+                    minPadding: 0,
+                    maxPadding: 0,
+                    type: "linear",
+                    tickInterval: 25,
+                    breaks: [
+                        {from: 0.001, to: 0.01 },
+                        {}
+                    ],
+                    tickWidth: 0,
+                    tickLength: 0,
+                    tickHeight: 2,
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        y: 12,
+                        style: { fontSize: "10px" },
+                        formatter: function () {
+                            if (this.isLast) return this.value + "%"
+                            else return this.value;
+                        }
+                    },
+                    plotBands: [
+                        {from: 0, to: 100, color: "rgba(200, 200, 200, 0.7)" },
+                    ],
+                },
+                plotOptions: {
+                    bar: {
+                        //color: "black",
+                        borderWidth: 0
+                    }
+                },
+                chart: {
+                    type: "bar",
+                    //width: 600,
+                    height: 50
+                },
+                series: [{
+                    data: [member.data[member.data.length - 1]],
+                    name: member.name
+                }]
+            });
+
+            var $title = $("<td />").attr("id", elementId + "-title-" + _i).text(member.name);
+
+            $title.appendTo($row);
+            $bullet.appendTo($row);
+            $sparkContainer.appendTo($row);
+            $row.appendTo($table);
+        });
+
+        //$('<div>').attr('id', elementId).css(cssProps).highcharts({
+            //chart: {
+                //backgroundColor: null,
+                //style: {
+                    //color: '#FFFFFF'
+                //}
+            //},
+            //title: {
+                //text: title,
+                //x: -20 //center
+            //},
+            //subtitle: {
+                //text: 'Source: Nashville Metro',
+                //x: -20,
+                //color: '#FFFFFF'
+            //},
+            //// This needs to be refactored to read this from input ala chartData.xAxis
+            //xAxis: {
+                //categories: axes
+            //},
+            //yAxis: {
+                //title: {
+                    //text: 'Proportion of Total Metro Employees'
+                //},
+                //plotLines: [{
+                    //value: 0,
+                    //width: 1,
+                    //color: '#000000'
+                //}],
+                //labels: {
+                    //formatter: function () {
+                        //return this.value + " %";
+                    //}
+                //},
+                //min: 0,
+                //max: 100
+            //},
+            //tooltip: {
+                //formatter: function () {
+                    //var val = "" + this.y;
+                    //var _i = val.indexOf(".")
+
+                    //// do we have enough digits?
+                    //return val.slice(0 , _i + 4) + "%";
+                //}
+            //},
+            //legend: {
+                //layout: 'vertical',
+                //align: 'right',
+                //verticalAlign: 'middle',
+                //borderWidth: 0
+            //},
+            //// Series is of form {name: "Line Name", data: ["positionally", "relevant", fields]}
+            //series: chartData.series
+        //}).appendTo('#line-graphs');
     }
 });
 
