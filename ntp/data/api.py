@@ -2,8 +2,8 @@
 Primary python API for interacting with the data from the open data portal.  There's a lot of cases in here that need to be tested.
 """
 import requests
-#from init_db import rdb_data, rdb_timestamps
 from pprint import pprint
+from ntp.data.init_db import rdb_timestamps, r
 from toolz.itertoolz import groupby, concat
 from toolz.dicttoolz import valmap  
 import time
@@ -49,5 +49,10 @@ def ntp_last_update():
     """
     Get the last updated value of Inclucivics Data
     """
+    last_updated = [elem for elem in rdb_timestamps.run(r.connect())]
 
-    return int(1111111111111111) 
+    if last_updated:
+        return sorted(last_updated, key=lambda k: k.get("id"), reverse=True)
+
+    # Zero is the initial condition, i.e., no timestamps inserted
+    return 0
