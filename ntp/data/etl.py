@@ -49,7 +49,6 @@ def return_sanitized(data):
     return demographics
 
 
-
 def filter_grouped(grouby_dict, keep_fields):
     """
     Filter out the values returned by toolz.itertoolz.groupby to only the desired dictionary keys. 
@@ -137,3 +136,18 @@ def format_for_insert(sanitized_data):
     formatted = [valmap_if(item, "title", "data") for item in sanitized_data]
 
     return formatted 
+
+
+
+def prepare_static_data(sanitized_data):
+    """
+    Perform all aggregation operations in incoming data from open data portal
+    """
+    return format_for_insert(group_all(sanitized_data))
+
+
+def prepare_temporal_data(sanitized_data):
+    """
+    Handle all data manipulations needed to create temporal data graphs
+    """
+    return sanitized_data 
