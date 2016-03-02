@@ -39,13 +39,15 @@ def test_ntp_last_updated():
     """
 
     timestamp = api.ntp_last_update()
-    assert timestamp
-    print timestamp
-    print type(timestamp)
-    assert isinstance(timestamp, int)
-    assert int(timestamp)
-    assert len(str(timestamp)) >= 10
-    return int(timestamp)
 
-#if __name__ == "__main__":
-#    test_ntp_last_updated()
+    if timestamp:
+        assert timestamp
+        print timestamp
+        print type(timestamp)
+        assert isinstance(timestamp, int)
+        assert int(timestamp)
+        assert len(str(timestamp)) >= 10
+        return int(timestamp)
+
+    else:
+        assert isinstance(timestamp, int)
