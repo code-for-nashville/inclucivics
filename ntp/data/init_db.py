@@ -6,15 +6,17 @@ db_name = "hrc"
 
 # Tables
 
-dates = "dates"
-data = "data"
+timestamps = "timestamps"
+static = "static"
+temporal = "temporal"
 
 db = r.db(db_name)
-rdb_data = db.table(data)
-rdb_timestamps = db.table(dates)
+rdb_static = db.table(static)
+rdb_temporal = db.table(temporal)
+rdb_timestamps = db.table(timestamps)
 
 init_db = RethinkValidator()
 init_db.validate_databases(db_name)
-init_db.validate_tables(db_name, [dates, data])
+init_db.validate_tables(db_name, [static, temporal, timestamps])
 
 
