@@ -14,6 +14,6 @@ build:
         code: echo Starting Celery; nohup celery -A ntp.data.tasks worker --loglevel=info --beat & 
     - script:
         name: Run backend api tests
-        code: nosetests -v ntp/data/tests/test*.py --with-coverage --cover-package=ntp.data; python ntp/data/tests/test_api.py
+        code: nosetests -v ntp/data/tests --with-coverage --cover-package=ntp.data
 
     

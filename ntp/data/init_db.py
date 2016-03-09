@@ -1,12 +1,12 @@
 import rethinkdb as r
 from ntp.data import config
 
-class RethinkBase(object):
 
-    def __init__(self, server=None, port=None):
+class RethinkValidator(object):
 
-        self.server = "localhost"
-        self.port = 28015
+    def __init__(self, server="localhost", port=28015):
+        self.server = server 
+        self.port = port 
         self.r = None
 
         try:
@@ -33,10 +33,6 @@ class RethinkBase(object):
             exit()
 
 
-class RethinkValidator(RethinkBase):
-
-    def __init__(self):
-        RethinkBase.__init__(self)
         self.database = None
         self.databases = None
         self.tables = None
@@ -94,7 +90,7 @@ rdb_static = db.table(static)
 rdb_temporal = db.table(temporal)
 rdb_timestamps = db.table(timestamps)
 
-init_db = RethinkValidator(host=config.RETHINK_HOST, port=config.RETHINK_PORT)
+init_db = RethinkValidator(server=config.RETHINK_HOST, port=config.RETHINK_PORT)
 init_db.validate_databases(db_name)
 init_db.validate_tables(db_name, [static, temporal, timestamps])
 

@@ -3,6 +3,7 @@ from pprint import pprint
 from ntp.data.init_db import rdb_timestamps, r
 from ntp.data import etl, api
 
+
 def create_timestamps(new_timestamp):
     """
     Insert a new timestamp value into rethinkdb
