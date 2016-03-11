@@ -79,37 +79,12 @@
 
   <section id="main" class="sticky-footer-wrap container">
       <div class="row">
-          <div id="graph-filters" class="col-xs-12 content">
-              <h3> Select a department, then select the demographic you're interested in. </h3>
-              <div class="" style="display: flex;">
-                  <div class="" style="flex: 0 0 400px; margin-right: 1rem;">
-                      <h4>Departments:</h4>
-
-                      <select id="department" class="select department-select">
-                          <option value="" class="select-option">--Select--</option>
-                      </select>
-                  </div>
-
-                  <div class="" style="flex: 0 0 150px;">
-                      <h4>Demographics:</h4>
-
-                      <select id="demographics" class="select demo-select">
-                          <option value="" class="select-option">--Select--</option>
-                          <option value="ethnicity">Race/Ethnicity</option>
-                          <option value="gender">Sex</option>
-                      </select>
-                  </div>
-              </div>
-          </div>
-      </div> <!-- /row -->
-
-      <div class="row">
           <div id="main-content" class="col-xs-12">
-              <h3> View your report. </h3>
+              <h3 style="margin-top: 0; margin-bottom: 3rem;"> View the summary data or generate a custom report. </h3>
 
               <div id="reporting-tabs" class="tabs">
                   <a id="demo-summary-link" class="tab active" data-target="#demo-summary">Summary of Demographics Over Time</a>
-                  <a id="metro-pies-link" class="tab" data-target="#reports">Your Report</a>
+                  <a id="metro-pies-link" class="tab" data-target="#reports">Custom Report</a>
               </div>
 
               <div style="clear: both;"></div>
@@ -120,6 +95,29 @@
                   </div>
 
                   <div id="reports"  class="content tab-content" style="">
+
+                      <div id="graph-filters" class="col-xs-12 content">
+                          <h3> Select a department, then select the demographic you're interested in. </h3>
+                          <div class="" style="display: flex;">
+                              <div class="" style="flex: 0 0 400px; margin-right: 1rem;">
+                                  <h4>Departments:</h4>
+
+                                  <select id="department" class="select department-select">
+                                      <option value="" class="select-option">--Select--</option>
+                                  </select>
+                              </div>
+
+                              <div class="" style="flex: 0 0 150px;">
+                                  <h4>Demographics:</h4>
+
+                                  <select id="demographics" class="select demo-select">
+                                      <option value="" class="select-option">--Select--</option>
+                                      <option value="ethnicity">Race/Ethnicity</option>
+                                      <option value="gender">Sex</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
                       <div id="metro-pie-charts" class="col-md-6 pie-charts"></div>
                       <div id="census-pie-charts" class="col-md-6 pie-charts"></div>
                   </div>
