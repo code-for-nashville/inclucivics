@@ -1,182 +1,175 @@
-
-
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
 
+html, body {
+    height: 100%;
+}
+
 body {
-	padding-top: 50px;
-  	padding-bottom: 20px;	
+    font-family: "Helvetica Nue", "Helvetica", sans-serif;
+    font-size: 16px;
+    padding-top: 50px;
 }
 
-p {
-	font-size: 14pt;
-	font-family: Arial;
-	margin-right: auto;
-	margin-left: auto;
-	text-align: justify;
-	margin-bottom: 25px;
+#about-slide-down {
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
 }
 
-footer {
-	margin: 0 auto;
-	width: 85%;
+#about-slide-down .about-wrap {
+    position: absolute;
+    z-index: 10;
 }
 
-.jumbotron {
-	margin-right: auto;
-	margin-left: auto;
-	padding-right: 7.5%;
-	padding-left: 7.5%;
-
-	background-color: #FFF;
-	background-image:url(../img/nashville.png);
-	background-size: cover;
-	background-repeat: no-repeat;
-	
-	height: 250px;
-	width: 100%;
-	position: relative;
+#about-slide-down .about-wrap .message {
+    height: 0;
+    overflow: hidden;
+    transition: height 300ms ease;
 }
 
-.jumbotron a {
-	color: #EF5325;
-	max-width: 1000px;
+#about-slide-down .about-wrap .message .message-content {
+    letter-spacing: 1px;
+    font-size: 20px;
+    background-color: #5567A2;
+    padding: 0 1rem 0 1rem;
+    color: #E0E0E0;
 }
 
-.jumbotron h1 {
-	color:#489DB8;
-	font-family: Arial, 'sans serif';
-
+#about-slide-down .about-wrap .message .message-content a {
+    color: #B3E126;
 }
 
-.jumbotron img {
-  position: absolute;
-  right: 5px;
-  top: -20px;
+#about-slide-down .about-wrap .message .message-content p {
+    padding: 1rem 0 1rem;
 }
 
 .loading {
-	padding:20px;
-	text-align: center;
-	background-image:url(../img/ajax-loader.gif);
-	background-position: center center;
-	background-repeat: no-repeat;
-	height:400px;
+    padding:20px;
+    text-align: center;
+    background-image:url(../img/ajax-loader.gif);
+    background-position: center center;
+    background-repeat: no-repeat;
+    height:400px;
 }
 
 .navbar {
-	background-color:#374F9A;
-	padding-left: 7.5%;
+    background-color: #5567A2;
 }
 
 .navbar-brand {
-	padding-left: 0;
+    font-size: 24px;
 }
 
 .navbar-brand, .navbar-brand:hover {
-	color:#FFF;
-	text-shadow:none;
+    color: #FFF;
+    text-shadow: none;
 }
 
-.jumbotron-title:hover {
-  color: #489DB8;
+.navbar-inclucivics {
+    color: #fefefe;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.navbar-inclucivics a {
+    color: #fefefe;
+}
+
+/*TODO integrate this properly*/
+#about-link { color: #fefefe; }
+
+#about-link.active {
+    background-color: #5567A2;
+    color: #5567A2;
 }
 
 .pie-charts p {
-	font-size: 16pt;
-	font-family: Arial;
-	margin-top: 0.8in;
-	margin-right: auto;
-	margin-left: auto;
-	text-align: justify;
+    font-size: 16pt;
+    margin-top: 0.8in;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: justify;
 }
 
-.header-text {
-	padding: 0;
+.content {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
-#graph-filters {
-	padding-bottom: 2em;
+footer {
+    margin-top: 4rem;
+    background-color: #5567A2;
+    color: #fefefe;
+    padding-top: 1rem;
 }
 
-#graph-filters select {
-	height: 32px;
-	font-size: 18px;
+footer a {
+    color: #fefefe;
 }
 
-#home-link:visited {
-	color: white;
+.sticky-footer-wrap {
+    min-height: 100%;
+    margin-bottom: -100px; /* footer height */
+}
+.sticky-footer-wrap:after {
+    content: "";
+    display: "block";
+}
+
+.sticky-footer, .sticky-footer-wrap:after {
+    height: 100px;
 }
 
 #line-graphs {
-	padding-top: 2cm;
-	width: 100%;
-	min-width: 600px;
-}
-
-.container {
-	padding: 0;
-	width: 85%;
+    width: 100%;
+    min-width: 600px;
 }
 
 #about-message {
-	padding: 0;
+    padding: 0;
 }
 
 #main-content h4 {
-	color:#374F9A;
+    color:#374F9A;
 }
 
 #ntp {
-	color:#AB509E;
+    color:#AB509E;
 }
 
-@media (max-width: 991px) {
-  .jumbotron img {
-    width: 35%;
-  }
+.tabs {
+    border-bottom: 1px solid grey;
 }
 
-@media (max-width: 760px) {
-  .jumbotron img {
-    width: 25%;
-    top: -25px;
-  }
-
-  .jumbotron {
-    height: 200px;
-  }
+.tabs .tab {
+    border: 1px solid grey;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    display: inline-block;
+    margin-right: 0.5rem;
 }
 
-@media (max-width : 780px) {
-  #main {
-  	/* Hack to get the content to ignore the 'Metro Humans Relations Commision' image
-  	hanging out of the nav */
-  }
+.tabs .tab.active {
+    border-bottom: 1px solid #fff;
 }
 
-@media (max-width: 650px) {
-  .jumbotron p {
-    font-size: 1em;
-  }
+.tabs .tab:last-child {
+
 }
 
-@media (max-width: 480px) {
-  .jumbotron img {
-    top: -35px;
-    right: -5px;
-  }
+.tabs-content .tab-content {
+   display: none;
 }
 
+.tabs-content .tab-content.active {
+  display: block;
+}
 
-
-
-
-
-
-
-
-
-
-
+.graph-table {
+    margin-top: 4rem;
+    /*background-color: rgb(223, 223, 223);*/
+}
