@@ -1,5 +1,4 @@
-from toolz.itertoolz import groupby, concat
-from toolz.dicttoolz import valmap  
+from toolz.itertoolz import groupby
 from collections import Counter
 
 
@@ -49,10 +48,9 @@ def return_sanitized(data):
     return demographics
 
 
-def filter_grouped(grouby_dict, keep_fields):
+def count_by_key(grouby_dict, key_to_count):
     """
-    Filter out the values returned by toolz.itertoolz.groupby to only the desired dictionary keys. 
-    i.e. "keep_fields"
+    Replace each element with a dict mapping a key to it's counts, per group in the value returned by toolz.itertoolz.groupby
 
     This is iterating through a fairly nested object that looks like:
 
@@ -67,21 +65,21 @@ def filter_grouped(grouby_dict, keep_fields):
         ]
     }
 
-    Within the nested list comprehension we extract only the values associated with the keep_fields keys, concatenate
-    the resulting list_of_lists, apply a Counter() count, and finally convert that to a dictionary.
+    The tricky part of this is that dict can be initialized with a list of tuples, for each tuple the first element
+    becomes the key, and the second the value. Counter.most_common returns a list of tuples with the first element
+    being the element being counted, and the second it's count.
 
     Basically data jujitsu
     """
+
     return {
-        key: dict(Counter(list(concat([
-           [ 
-               elem[second_key] 
-                for second_key in elem
-                if second_key in keep_fields
-           ] 
-            for elem in grouby_dict[key]
-        ]))).most_common())
-        for key in grouby_dict
+        key: dict(
+            Counter(
+                elem[key_to_count]
+                for elem in elems
+            ).most_common()
+        )
+        for key, elems in grouby_dict.iteritems()
     }
 
 
@@ -89,16 +87,19 @@ def group_all(sanitized_data):
     """
     Handle all the required data manipulations in memory.  Should simply map to the required objects for the front end.
     """
-    grouped = groupby("current_dept_description", sanitized_data) 
+    grouped = groupby("current_dept_description", sanitized_data)
     assert isinstance(grouped, dict)
     assert grouped
 
-    double_grouped =  [{
-        "name": key,
-        "ethnicity": filter_grouped(groupby("income_level", grouped[key]), ["ethnic_code_description"]),
-        "gender": filter_grouped(groupby("income_level", grouped[key]), ["gender"])
-        } for key in grouped] 
-      
+    double_grouped = [
+        {
+            "name": key,
+            "ethnicity": count_by_key(groupby("income_level", grouped[key]), "ethnic_code_description"),
+            "gender": count_by_key(groupby("income_level", grouped[key]), "gender")
+        }
+        for key in grouped
+    ]
+
     assert all(isinstance(key, dict) for key in double_grouped)
 
     return double_grouped
