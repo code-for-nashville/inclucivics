@@ -1,4 +1,4 @@
-from ntp.data.etl import return_sanitized, filter_grouped, group_all, format_for_insert
+from ntp.data.etl import return_sanitized, group_all, prepare_temporal_data, format_for_insert
 from ntp.data.api import retrieve_data
 from pprint import pprint
 from time import sleep
@@ -30,6 +30,7 @@ def test_group_all():
     assert len(departments) == len(set(departments))
     return grouped
 
+
 def test_format_for_insert():
     """
     Ensure our demographics come out as there are supposed to.
@@ -46,4 +47,10 @@ def test_format_for_insert():
             for datum in doc[key]:
                 for key in ["data", "title"]:
                     assert key in datum
-    return formatted                    
+    return formatted
+
+
+def test_prepare_temporal_data():
+    sanitized_data = return_sanitized(retrieve_data())
+    temporalized = prepare_temporal_data(sanitized_data, 1451487633)
+    assert isinstance(temporalized, list)

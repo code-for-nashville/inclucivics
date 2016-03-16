@@ -1,6 +1,7 @@
 from toolz.itertoolz import groupby, concat
 from toolz.dicttoolz import valmap  
 from collections import Counter
+from datetime import datetime
 
 
 def sanitize(doc, sanitize_key):
@@ -146,8 +147,33 @@ def prepare_static_data(sanitized_data):
     return format_for_insert(group_all(sanitized_data))
 
 
-def prepare_temporal_data(sanitized_data):
+def prepare_temporal_data(sanitized_data, timestamp):
     """
     Handle all data manipulations needed to create temporal data graphs
     """
-    return sanitized_data 
+    updated_datetime = datetime.fromtimestamp(timestamp)
+
+    # e.g. "2015 - August"
+    LABEL_FORMAT_STRING = "%Y - %B"
+    date_label = updated_datetime.strftime(LABEL_FORMAT_STRING)
+
+    # {"<income_level>": [...rows]} to
+    # {"series": [{"data": <percent>, "name": "<ethnicity"}], "title": "<income_level>", "time": "<timestamp>"}
+    result = []
+    grouped_by_income = groupby("income_level", sanitized_data)
+    for income_level, values in grouped_by_income.iteritems():
+        total_at_income_level = len(values)
+        grouped_by_ethnicity = groupby("ethnic_code_description", values)
+        result.append({
+            "series": [
+                {
+                    "data": float(len(employees)) / total_at_income_level,
+                    "name": ethnicity,
+                }
+                for ethnicity, employees in grouped_by_ethnicity.iteritems()
+            ],
+            "time": date_label,
+            "title": income_level
+        })
+
+    return result
