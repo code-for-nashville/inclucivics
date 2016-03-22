@@ -1,14 +1,19 @@
 from ntp.data.etl import return_sanitized, group_all, prepare_temporal_data, format_for_insert
-from ntp.data.api import retrieve_data
-from pprint import pprint
-from time import sleep
+import json
+from os import path
+
+
+def _retreive_test_data():
+    """Reads in a file of real data downloaded and included in the project"""
+    with open(path.join(path.dirname(__file__), '..', '..', 'files', 'input', '20151230.json')) as f:
+        return json.load(f)
 
 
 def test_return_sanitized():
     """
     Runs full retrieval of data from ODP to grouping step.
     """
-    data = return_sanitized(retrieve_data())
+    data = return_sanitized(_retreive_test_data())
     assert data
     assert isinstance(data, list)
     assert all(isinstance(elem, dict) for elem in data)
@@ -51,6 +56,6 @@ def test_format_for_insert():
 
 
 def test_prepare_temporal_data():
-    sanitized_data = return_sanitized(retrieve_data())
+    sanitized_data = return_sanitized(_retreive_test_data())
     temporalized = prepare_temporal_data(sanitized_data, 1451487633)
     assert isinstance(temporalized, list)
