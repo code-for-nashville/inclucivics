@@ -2,23 +2,18 @@
 Primary python API for interacting with the data from the open data portal.  There's a lot of cases in here that need to be tested.
 """
 import requests
-from pprint import pprint
-from ntp.data.init_db import rdb_timestamps, r
-from toolz.itertoolz import groupby, concat
-from toolz.dicttoolz import valmap  
-import time
 import rethinkdb as r
-import datetime
-from collections import Counter
+
+from ..app.include.functions import rdb_conn, LEGACY_DATABASE_NAME
 
 
-def should_update(ntp_last_updated, odp_last_updated):
+def should_update(inclucivics_last_updated, odp_last_updated):
     """
     Check rethinkdb for a record of imported datasets.
     """
-    if int(odp_last_updated) > int(ntp_last_updated):
-        return True 
-    return False 
+    if int(odp_last_updated) > int(inclucivics_last_updated):
+        return True
+    return False
 
 
 def check_for_update():
@@ -45,11 +40,11 @@ def retrieve_data():
     return data
 
 
-def ntp_last_update():
+def inclucivics_last_update():
     """
     Get the last updated value of Inclucivics Data
     """
-    last_updated = [elem for elem in rdb_timestamps.run(r.connect())]
+    last_updated = [elem for elem in r.db(LEGACY_DATABASE_NAME).table('timestamps').run(rdb_conn())]
 
     if last_updated:
         return sorted(last_updated, key=lambda k: k.get("id"), reverse=True)

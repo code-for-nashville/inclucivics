@@ -32,13 +32,13 @@ def test_should_update():
     return 11111111111
 
 
-def test_ntp_last_updated():
+def test_inclucivics_last_updated():
     """
     Ensure that we are getting the correct last updated timestamp for
     Inclucivics if there is one.
     """
 
-    timestamp = api.ntp_last_update()
+    timestamp = api.inclucivics_last_update()
 
     if timestamp:
         assert timestamp
