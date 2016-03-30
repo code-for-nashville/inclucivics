@@ -10,9 +10,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.memory = 1024
     vb.cpus = 1
   end
-    config.vm.provision "shell", inline: <<-SHELL
-      cd /vagrant
-      sudo python setup.py install
-   SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+    # Add NTP_DEBUG=1 if not already there - by default run locally in development mode
+    grep NTP_DEBUG /home/vagrant/.bashrc || echo "export NTP_DEBUG=1" >> /home/vagrant/.bashrc
+    cd /vagrant
+    sudo python setup.py install
+  SHELL
 end
-
