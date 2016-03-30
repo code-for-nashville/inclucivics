@@ -1,5 +1,7 @@
-from data.include.rethinkdb.tables import RdbMostRecent, RdbChiMerged
 import rethinkdb as r
+
+DATABASE_NAME = 'inclucivics'
+TABLE_NAME = 'static'
 
 
 def rdb_conn():
@@ -10,7 +12,7 @@ def rdb_get_data_by_department(department, key_index):
 
         output = [
             elem for elem in
-            RdbMostRecent
+            r(TABLE_NAME)
             .get_all(
                 department,
                 index=key_index
@@ -24,7 +26,7 @@ def rdb_get_department_names(department_key):
 
     output = [
         elem for elem in
-        RdbMostRecent
+        r(TABLE_NAME)
         .map(
             lambda row: row[department_key]
         )
@@ -33,7 +35,3 @@ def rdb_get_department_names(department_key):
     ]
 
     return output
-
-
-# def rdb_get_temporal_values():
-#     return RdbChiMerged.get("ethnicity").run()
