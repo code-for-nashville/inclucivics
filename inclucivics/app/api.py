@@ -7,7 +7,6 @@ DEPARTMENT_NAME_KEY = "name"
 
 @app.route('/api/data', methods=["GET", "POST"])
 def data():
-
     if request.method == "POST":
         request_params = request.json.keys()
         if "attribute" not in request_params or DEPARTMENT_NAME_KEY not in request_params:
