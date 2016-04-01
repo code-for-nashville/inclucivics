@@ -4,8 +4,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider "virtualbox" do |vb|
     config.vm.box = 'jstaples/base'
-    config.vm.network "forwarded_port", guest: 8080, host: 8081
-    config.vm.network "forwarded_port", guest: 80, host: 8082
+    config.vm.network "forwarded_port", guest: 8080, host: 8080
+    config.vm.network "forwarded_port", guest: 80, host: 8000
     config.ssh.forward_agent = true
     vb.memory = 1024
     vb.cpus = 1
