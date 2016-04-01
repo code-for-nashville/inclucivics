@@ -1,13 +1,9 @@
 import rethinkdb as r
-
-INCLUCIVCS_DB_NAME = 'inclucivics'
-GOVERNMENT_EMPLOYEE_TABLE_NAME = 'government_employees'
-SERVER = 'localhost'
-PORT = 28015
+from ..data import DB_NAME, GOVERNMENT_EMPLOYEE_TABLE_NAME
 
 
 def rdb_conn():
-    return r.connect(SERVER, PORT)
+    return r.connect('localhost', 28015)
 
 
 def rdb_get_data_by_department(department, key_index, timestamp=None):
@@ -17,7 +13,7 @@ def rdb_get_data_by_department(department, key_index, timestamp=None):
 
     output = [
         elem for elem in
-        r.db(INCLUCIVCS_DB_NAME)
+        r.db(DB_NAME)
         .table(GOVERNMENT_EMPLOYEE_TABLE_NAME)
         .get_all(
             department,
@@ -31,7 +27,7 @@ def rdb_get_data_by_department(department, key_index, timestamp=None):
 def rdb_get_department_names(department_key):
     output = [
         elem for elem in
-        r.db(INCLUCIVCS_DB_NAME)
+        r.db(DB_NAME)
         .table(GOVERNMENT_EMPLOYEE_TABLE_NAME)
         .map(
             lambda row: row[department_key]

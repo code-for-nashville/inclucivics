@@ -61,9 +61,10 @@ def prepare_for_insert(data, timestamp):
         sanitize_salary(row)
         add_income_level(row)
         if row.get('date_started'):
-            row['date_started'] = datetime.stptime(row['date_started'], '%m/%d/%Y').replace(tzinfo=central_tz)
+            format_string = '%Y-%m-%dT%H:%M:%S' if 'T' in row['date_started'] else '%m/%d/%Y'
+            row['date_started'] = datetime.strptime(row['date_started'], format_string).replace(tzinfo=central_tz)
         if row.get('flsa_exempt_y_n'):
-            row['flsa_exempt_y_n'] = True if row['flsa_exempt_y_n'] == 'Y' else 'N'
+            row['flsa_exempt_y_n'] = True if row['flsa_exempt_y_n'] == 'Y' else False
         row["timestamp"] = datetime.fromtimestamp(timestamp).replace(tzinfo=central_tz)
 
 

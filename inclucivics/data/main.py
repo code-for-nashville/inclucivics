@@ -39,6 +39,7 @@ def prepare_and_insert_data(data, timestamp):
         .table(GOVERNMENT_EMPLOYEE_TABLE_NAME)\
         .insert(data)\
         .run(rdb_conn())
+    save_timestamp(timestamp)
 
 
 def insert_latest_data_from_api(timestamp):
@@ -48,14 +49,13 @@ def insert_latest_data_from_api(timestamp):
 
 
 def check_and_update():
-    """"Grabs the latest timestamp from RethinkDB and """
+    """"Checks if there is a more up-to-date employee demographic dataset on the open data portal and if so loads it"""
     latest_loaded_timestamp = get_latest_loaded_timestamp()
 
     latest_online_timestamp = api.check_for_update()
 
     if latest_online_timestamp > latest_loaded_timestamp:
         insert_latest_data_from_api(latest_online_timestamp)
-        save_timestamp(latest_online_timestamp)
 
 
 """Load data from CSV and JSON files manually downloaded off of the open data portal"""
@@ -69,7 +69,7 @@ def get_timestamp_from_filepath(filepath):
 
 def insert_data_from_json_file(filepath):
     timestamp = get_timestamp_from_filepath(filepath)
-    if r.db(INCLUCIVCS_DB_NAME).table(TIMESTAMPS_TABLE).get_all(timestamp):
+    if r.db(INCLUCIVCS_DB_NAME).table(TIMESTAMPS_TABLE).get_all(timestamp).run(rdb_conn()):
         raise Exception(
             "This file for timestamp {timestamp} already been loaded into rethinkdb based on information from "
             "the {table} table. "

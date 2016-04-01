@@ -1,2 +1,12 @@
-def setup():
-    
+DB_NAME = 'inclucivics'
+
+GOVERNMENT_EMPLOYEE_TABLE_NAME = "government_employees"
+TIMESTAMPS_TABLE_NAME = "timestamps"
+STATIC_TABLE_NAME = "static"
+TEMPORAL_TABLE_NAME = "temporal"
+
+TABLE_NAMES = [TIMESTAMPS_TABLE_NAME, STATIC_TABLE_NAME, TEMPORAL_TABLE_NAME]
+INDEX_PAIRS = [
+    (GOVERNMENT_EMPLOYEE_TABLE_NAME, 'current_dept_description',),
+    (GOVERNMENT_EMPLOYEE_TABLE_NAME, 'timestamp',),
+]
