@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
+from inclucivics import __version__
 
 setup(
     name='inclucivics',
-    version='3.2.0',
+    version=__version__,
     packages=find_packages(),
     install_requires=['rethinkdb', 'flask', 'cherrypy', 'paste', "requests", "nose", "coverage", "toolz"],
     url='https://github.com/code-for-nashville/hrc-employment-diversity-report',
