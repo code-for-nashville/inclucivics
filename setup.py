@@ -5,7 +5,7 @@ setup(
     name='inclucivics',
     version=__version__,
     packages=find_packages(),
-    install_requires=['rethinkdb', 'flask', 'cherrypy', 'paste', "requests", "nose", "coverage", "toolz"],
+    install_requires=['rethinkdb', 'flask', 'cherrypy', 'paste', "requests", "nose", "coverage", "toolz", "pytz"],
     url='https://github.com/code-for-nashville/hrc-employment-diversity-report',
     license='MIT',
     author='neolytics',

@@ -1,52 +1,70 @@
-from toolz.itertoolz import groupby, concat
 from collections import Counter
 from datetime import datetime
 
+import pytz
+from toolz.itertoolz import groupby, concat
 
-def sanitize(doc, sanitize_key):
+SALARY_KEY = "annual_salary"
+
+
+def sanitize_salary(doc):
     """
     Salary data often has mixed types ie. $30000.00 and 33000.00 etc so
     I filter all of that and return a cleaned version of the incoming document with the same schema
     """
-    row = doc.copy()
-    assert isinstance(row[sanitize_key], (unicode, str))
-
-    temp = row[sanitize_key].split(".")[0] if "." in row[sanitize_key] else row[sanitize_key]
-
-    row[sanitize_key] = int("".join(char for char in temp if char.isalnum()))
-    assert isinstance(row[sanitize_key], int)
-    return row
+    string_dollar_amount = doc[SALARY_KEY].replace("$", "").replace(",", "")
+    doc[SALARY_KEY] = float(string_dollar_amount or 0)
 
 
-def income_level(doc, salary_key):
+def add_income_level(doc):
     """
-    Creates qualitative descriptions of salaries based on income ranges.  Requires sanitize annual_salary value
+    Adds qualitative descriptions of salaries based on income ranges.  Requires sanitize annual_salary value
     """
-
-    row = doc.copy()
     key = "income_level"
     lower = "Lower Income Range (Less than $33,000)"
     middle = "Middle Income Range ($33,000 and $66,000)"
     upper = "Upper Income Range (Greater than $66,000)"
 
-    if row[salary_key] < 33000:
-        row[key] = lower
-
-    elif 33000 <= row[salary_key] < 66000:
-        row[key] = middle
+    if doc[SALARY_KEY] < 33000:
+        doc[key] = lower
+    elif 33000 <= doc[SALARY_KEY] < 66000:
+        doc[key] = middle
     else:
-        row[key] = upper
-
-    return row
+        doc[key] = upper
 
 
-def return_sanitized(data):
+def realize_numeric_fields(row):
+    """Converts all string numeric fields to longs (if they exist)"""
+    fields = ["address_number", "class", "eeo_job_cat", "ethnic_code", "year_of_birth"]
+    for field in fields:
+        if not row.get(field):
+            continue
+        try:
+            row[field] = int(row[field])
+        except:
+            print "Failed to convert to number field {field} for row: {row}".format(
+                field=field, row=row,
+            )
+
+
+def prepare_for_insert(data, timestamp):
     """
-    Make the API request and scrup all incoming data.  Return unmodified aside from etl step.
-    """
+    Normalize and sanitize data.
 
-    demographics = [income_level(sanitize(row, "annual_salary"), "annual_salary") for row in data]
-    return demographics
+    Make salary a floating point number, add a qualitative income level description field, coalesce other string
+    fields into their correct types, and add a timestamp field to differentiate between different dates this data
+    has been pulled for.
+    """
+    central_tz = pytz.timezone('US/Central')
+    for row in data:
+        realize_numeric_fields(row)
+        sanitize_salary(row)
+        add_income_level(row)
+        if row.get('date_started'):
+            row['date_started'] = datetime.stptime(row['date_started'], '%m/%d/%Y').replace(tzinfo=central_tz)
+        if row.get('flsa_exempt_y_n'):
+            row['flsa_exempt_y_n'] = True if row['flsa_exempt_y_n'] == 'Y' else 'N'
+        row["timestamp"] = datetime.fromtimestamp(timestamp).replace(tzinfo=central_tz)
 
 
 def filter_grouped(grouby_dict, keep_fields):
@@ -136,7 +154,6 @@ def format_for_insert(sanitized_data):
     formatted = [valmap_if(item, "title", "data") for item in sanitized_data]
 
     return formatted
-
 
 
 def prepare_static_data(sanitized_data):

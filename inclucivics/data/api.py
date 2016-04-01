@@ -4,16 +4,7 @@ Primary python API for interacting with the data from the open data portal.  The
 import requests
 import rethinkdb as r
 
-from ..app.include.functions import rdb_conn, LEGACY_DATABASE_NAME
-
-
-def should_update(inclucivics_last_updated, odp_last_updated):
-    """
-    Check rethinkdb for a record of imported datasets.
-    """
-    if int(odp_last_updated) > int(inclucivics_last_updated):
-        return True
-    return False
+from ..app.include.functions import rdb_conn, INCLUCIVCS_DB_NAME
 
 
 def check_for_update():
@@ -34,8 +25,7 @@ def retrieve_data():
     """
     Grab the actual demographics data from the Open Data Portal
     """
-
-    api_endpoint  = "https://data.nashville.gov/resource/4ibi-mxs4.json?$limit=50000"
+    api_endpoint = "https://data.nashville.gov/resource/4ibi-mxs4.json?$limit=50000"
     data = requests.get(api_endpoint).json()
     return data
 
@@ -44,7 +34,7 @@ def inclucivics_last_update():
     """
     Get the last updated value of Inclucivics Data
     """
-    last_updated = [elem for elem in r.db(LEGACY_DATABASE_NAME).table('timestamps').run(rdb_conn())]
+    last_updated = [elem for elem in r.db(INCLUCIVCS_DB_NAME).table('timestamps').run(rdb_conn())]
 
     if last_updated:
         return sorted(last_updated, key=lambda k: k.get("id"), reverse=True)

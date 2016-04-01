@@ -1,8 +1,7 @@
 import rethinkdb as r
 
-LEGACY_DATABASE_NAME = 'hrc'
-DATABASE_NAME = 'inclucivics'
-TABLE_NAME = 'static'
+INCLUCIVCS_DB_NAME = 'inclucivics'
+GOVERNMENT_EMPLOYEE_TABLE_NAME = 'government_employees'
 SERVER = 'localhost'
 PORT = 28015
 
@@ -11,11 +10,15 @@ def rdb_conn():
     return r.connect(SERVER, PORT)
 
 
-def rdb_get_data_by_department(department, key_index):
+def rdb_get_data_by_department(department, key_index, timestamp=None):
+    if not timestamp:
+        from ...data.main import get_latest_loaded_timestamp
+        timestamp = get_latest_loaded_timestamp()
+
     output = [
         elem for elem in
-        r.db(LEGACY_DATABASE_NAME)
-        .table(TABLE_NAME)
+        r.db(INCLUCIVCS_DB_NAME)
+        .table(GOVERNMENT_EMPLOYEE_TABLE_NAME)
         .get_all(
             department,
             index=key_index
@@ -28,8 +31,8 @@ def rdb_get_data_by_department(department, key_index):
 def rdb_get_department_names(department_key):
     output = [
         elem for elem in
-        r.db(LEGACY_DATABASE_NAME)
-        .table(TABLE_NAME)
+        r.db(INCLUCIVCS_DB_NAME)
+        .table(GOVERNMENT_EMPLOYEE_TABLE_NAME)
         .map(
             lambda row: row[department_key]
         )
