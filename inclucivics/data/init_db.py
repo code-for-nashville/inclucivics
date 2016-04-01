@@ -1,5 +1,5 @@
 import rethinkdb as r
-from ntp.data import config
+from inclucivics.data import config
 
 
 class RethinkValidator(object):

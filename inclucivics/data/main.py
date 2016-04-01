@@ -27,7 +27,7 @@ def main(inclucivics_last_updated):
 
     odp_last_updated = api.check_for_update()
 
-    # 0 is the initial condition. See ntp.data.api.inclucivics_last_update()
+    # 0 is the initial condition. See inclucivics.data.api.inclucivics_last_update()
     if inclucivics_last_updated == 0 or api.should_update(inclucivics_last_updated, odp_last_updated):
 
         if not inclucivics_last_updated:

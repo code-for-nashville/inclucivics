@@ -1,4 +1,4 @@
-from ntp.data import api
+from inclucivics.data import api
 
 
 #def test_false():

@@ -11,9 +11,9 @@ build:
         code: python setup.py install 
     - script:
         name: Start celery wercker
-        code: echo Starting Celery; nohup celery -A ntp.data.tasks worker --loglevel=info --beat & 
+        code: echo Starting Celery; nohup celery -A inclucivics.data.tasks worker --loglevel=info --beat & 
     - script:
         name: Run backend api tests
-        code: nosetests -v ntp/data/tests --with-coverage --cover-package=ntp.data
+        code: nosetests -v ntp/data/tests --with-coverage --cover-package=inclucivics.data
 
     

@@ -1,4 +1,4 @@
-from ntp.data.etl import return_sanitized, group_all, prepare_temporal_data, format_for_insert
+from inclucivics.data.etl import return_sanitized, group_all, prepare_temporal_data, format_for_insert
 import json
 from os import path
 

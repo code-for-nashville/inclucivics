@@ -1,7 +1,5 @@
 import time
-import rethinkdb as r
-from ntp.data.init_db import db_name
-from ntp.data import main
+from inclucivics.data import main
 from pprint import pprint
 
 
@@ -22,4 +20,3 @@ def test_main():
     failing = main.main(must_fail)
     assert not failing
     assert isinstance(failing, bool)
-    r.db_drop(db_name).run(r.connect())
