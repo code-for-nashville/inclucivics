@@ -1,14 +1,16 @@
+import rethinkdb as r
+
 INCOME_KEY = "income_level"
 #
 INCOME_DISTRIBUTIONS = {'Lower Income Range (Less than $33,000)': dict(
-    lower=None,
+    lower=r.minval,
     upper=33000
 ), 'Middle Income Range ($33,000 and $66,000)': dict(
     lower=33000,
     upper=66000
 ), 'Upper Income Range (Greater than $66,000)': dict(
     lower=66000,
-    upper=None
+    upper=r.maxval
 )}
 
 EXPECTED = {

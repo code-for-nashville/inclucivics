@@ -1,9 +1,14 @@
+import os
+
 from data.include.rethinkdb.tables import RdbMostRecent, RdbChiMerged
 import rethinkdb as r
 
 
 def rdb_conn():
-    return r.connect()
+    return r.connect(
+        os.environ.get("INCLUCIVICS_RETHINKDB_HOST", "localhost"),
+        os.environ.get("INCLUCIVICS_RETHINKDB_PORT", 28015),
+    )
 
 
 def rdb_get_data_by_department(department, key_index):

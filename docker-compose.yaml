@@ -1,0 +1,22 @@
+version: "3"
+services:
+  web:
+    command: python /srv/inclucivics/ntp/run_server.py
+    depends_on:
+      - db
+    environment:
+      - INCLUCIVICS_RETHINKDB_HOST=db
+      - INCLUCIVICS_RETHINKDB_PORT=28015
+    image: codefornasvhille/inclucivics
+    ports:
+      - "8000:80"
+    volumes:
+    - .:/srv/inclucivics
+  db:
+    image: rethinkdb:latest
+    ports:
+      # Admin interface
+      - "8080:8080"
+      # Database connection
+      - "28015:28015"
+      - "29015:29015"

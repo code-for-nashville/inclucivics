@@ -1,3 +1,4 @@
+import os
 
 # These are the base initilizers for rethinkdb.  RethinkBase handles the highest level client connection
 # While RethinkValidator does database and table checking
@@ -7,9 +8,8 @@
 class RethinkBase(object):
 
     def __init__(self, server=None, port=None):
-
-        self.server = "localhost"
-        self.port = 28015
+        self.server = os.environ.get("INCLUCIVICS_RETHINKDB_HOST", "localhost")
+        self.port = os.environ.get("INCLUCIVICS_RETHINKDB_PORT", 28015)
         self.r = None
 
         try:
