@@ -3,13 +3,9 @@ from setuptools import setup
 setup(
     name='Inclucivics',
     version='3.1.4',
-    packages=[
-        'ntp', 
-        'ntp.app', 
-        'ntp.data' 
-    ],
-    install_requires=['rethinkdb', 'flask', 'cherrypy', 'paste', "celery", "requests", "nose", "coverage", "toolz"], 
-    url='https://github.com/code-for-nashville/hrc-employment-diversity-report',
+    packages=[],
+    install_requires=[],
+    url='https://github.com/code-for-nashville/inclucivics',
     license='',
     author='neolytics',
     author_email='jstaples@nextgxdx.com',
