@@ -1,13 +1,13 @@
 version: "3"
 services:
   web:
+    build: .
     command: python /srv/inclucivics/ntp/run_server.py
     depends_on:
       - db
     environment:
       - INCLUCIVICS_RETHINKDB_HOST=db
       - INCLUCIVICS_RETHINKDB_PORT=28015
-    image: codefornasvhille/inclucivics
     ports:
       - "8000:80"
     volumes:
