@@ -1,6 +1,6 @@
 # IncluCivics
 
-[IncluCivics](code-for-nashville.github.io/inclucivics) is a data visualization app completed in partnership with the Human Relations Commission.  It provides transparency on employee demographics within the Nashville Metropolitan Government.
+[IncluCivics](https://code-for-nashville.github.io/inclucivics) is a data visualization app completed in partnership with the Human Relations Commission.  It provides transparency on employee demographics within the Nashville Metropolitan Government.
 
 ## Running
 To run, use your favorite "server in a box". For example, with python 3, you can run `python3 -m http.server` in the root
