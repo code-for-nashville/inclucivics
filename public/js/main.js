@@ -1,4 +1,4 @@
-$(document).on("ready", function (ev) {
+$(document).ready(function () {
     $(document).on("ChartView", function(event, category, action ){
       ga('send', event.type, category, action);
     });

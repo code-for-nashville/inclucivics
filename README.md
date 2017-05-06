@@ -1,23 +1,26 @@
-INCLUCIVICS
-==========
-![Travis CI Build Status](https://travis-ci.org/code-for-nashville/hrc-employment-diversity-report.svg?branch=master)
+# IncluCivics
 
-INCLUVICS is a data visualization app done in partnership with the Human Relations Commission.  The goal is to provide
-transparency into employee demographics at Nashville's Metro Government.
+[IncluCivics](code-for-nashville.github.io/inclucivics) is a data visualization app completed in partnership with the Human Relations Commission.  It provides transparency on employee demographics within the Nashville Metropolitan Government.
 
-### Requirements:
-* Vagrant >= 1.7.2
-* VirtualBox >= Latest
+## Running
+To run, use your favorite "server in a box". For example, with python 3, you can run `python3 -m http.server` in the root
+directory of this project, and see it live at http://localhost:8000.
 
-### Development Setup:
-1. Make sure Vagrant and Virtual Box are installed
-2. Clone repo, download `vagrant up`
-3. `vagrant ssh` will log you into the VM
-4. `cd /vagrant/ntp`
-5. `sudo python run_server.py` will add all the incluvics data and launch the python webserver available on localhost:8082
+## Adding Data
+Adding data is still a manual process. Help is wanted [automating this process](). To add data:
 
-### How To Deploy Changes
-1. Make a PR (Pull Request) and get it merged
-2. Create a tag with `git tag v#.#`. Replace the #'s with version numbers that are greater (+1) than the largest tag shown on github.
-3. Push the newly created tag with `git push --tags`.
-4. Wait and have a :coffee:
+1. Download the latest version of [General Government Employees Demographics](https://data.nashville.gov/General-Government/General-Government-Employees-Demographics/4ibi-mxs4) from the [Nashville Open Data Portal](data.nashville.gov). Make sure that this data is a more recent update that the latest data in [data/](data)
+2. Copy the data into the [data/](data) folder.
+3. Run `python import_data data/<your_file>`. 🤞 It may fail, in which case please file an issue or try to fix the problem. If successful, this will generate a new `public/department_rollups.json`.
+4. Commit any changes and submit a pull request.
+
+This will update the data in "Custom Reports" to the report you downloaded.  Not that ["Summary of Demographics Over Time" does not include new data right now](https://github.com/code-for-nashville/inclucivics/issues/108).
+
+## Deploying
+The site is hosted directly from the `master` branch using [Github Pages](https://help.github.com/categories/github-pages-basics/)
+
+## Contributing
+Contributions are welcome. Look at the "Issues" tab to squash :bug:s, add features and suggest improvements. If you are new to open source, check out [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/) for a rundown.
+
+## License
+[MIT](LICENSE.md)
