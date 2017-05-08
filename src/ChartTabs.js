@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import CustomCharts from './CustomCharts.js'
+import ExploreCharts from './ExploreCharts.js'
 import SummaryCharts from './SummaryCharts.js'
 
 import './ChartTabs.css'
@@ -26,14 +26,14 @@ export default class ChartTabs extends Component {
     // ReactHighCharts destroys and recreates the component on mount and unmount
     // which is expensive
     let summaryChartsClass = ''
-    let customChartsClass = ''
+    let exploreChartsClass = ''
 
     switch (this.state.tab) {
       case SUMMARY_TAB:
         summaryChartsClass = 'active'
         break
       case CUSTOM_TAB:
-        customChartsClass = 'active'
+        exploreChartsClass = 'active'
         break
       default:
         throw Error(`Bad tab "${this.state.tab}"`)
@@ -50,10 +50,10 @@ export default class ChartTabs extends Component {
               Summary
             </a>
             <a
-              className={`tab ${customChartsClass}`}
+              className={`tab ${exploreChartsClass}`}
               onClick={this.setTab.bind(this, CUSTOM_TAB)}
             >
-              Custom Report
+              Explore
             </a>
           </div>
 
@@ -63,8 +63,8 @@ export default class ChartTabs extends Component {
             <div className={`tab-content ${summaryChartsClass}`}>
               {<SummaryCharts />}
             </div>
-            <div className={`tab-content ${customChartsClass}`}>
-              {<CustomCharts />}
+            <div className={`tab-content ${exploreChartsClass}`}>
+              {<ExploreCharts />}
             </div>
           </div>
         </div>
