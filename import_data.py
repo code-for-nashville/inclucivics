@@ -90,5 +90,5 @@ with open(sys.argv[1], 'r') as f:
                 'type': 'pie',
             })
 
-    with open('public/department_rollups.json', 'w') as f:
+    with open('public/department-rollups.json', 'w') as f:
         json.dump(department_rollups, f)

@@ -1,0 +1,29 @@
+.tabs {
+    border-bottom: 1px solid grey;
+    /* So even if the leftmost tab is selected, there is still a little bottom border leading up to it */
+    padding-left: 0.5rem;
+}
+
+.tabs .tab {
+    border: 1px solid grey;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.tabs .tab.active {
+    border-bottom: 1px solid #fff;
+}
+
+.tabs-content .tab-content {
+   display: none;
+   margin-top: 1rem;
+   min-width: 100%;
+}
+
+.tabs-content .tab-content.active {
+  display: block;
+}
