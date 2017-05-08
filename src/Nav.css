@@ -1,0 +1,29 @@
+.navbar {
+    background-color: #5567A2;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav .navbar-brand {
+  padding-left: 0px;
+  padding-bottom: 0px;
+  color: #fff;
+  font-size: 24px;
+}
+
+.navbar-inclucivics {
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+/*TODO integrate this properly*/
+.Nav__aboutlink, .Nav__aboutlink-active {
+  color: #fefefe;
+  cursor: pointer;
+}

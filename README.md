@@ -3,8 +3,13 @@
 [IncluCivics](https://code-for-nashville.github.io/inclucivics) is a data visualization app completed in partnership with the Human Relations Commission.  It provides transparency on employee demographics within the Nashville Metropolitan Government.
 
 ## Running
-To run, use your favorite "server in a box". For example, with python 3, you can run `python3 -m http.server` in the root
-directory of this project, and see it live at http://localhost:8000.
+To run, make sure you have [`yarn` installed](https://yarnpkg.com/en/docs/install), and run
+
+`yarn start`
+
+to see the site live at http://localhost:3000.
+
+This project is built using [create-react-app](https://github.com/facebookincubator/create-react-app). Check out the [User Guide]() for more information about testing and building.
 
 ## Adding Data
 Adding data is still a manual process. Help is wanted [automating this process](). To add data:
@@ -17,7 +22,7 @@ Adding data is still a manual process. Help is wanted [automating this process](
 This will update the data in "Custom Reports" to the report you downloaded.  Note that ["Summary of Demographics Over Time" does not include new data right now](https://github.com/code-for-nashville/inclucivics/issues/108).
 
 ## Deploying
-The site is hosted directly from the `master` branch using [Github Pages](https://help.github.com/categories/github-pages-basics/)
+Run `yarn deploy`. This will fail if you don't have push rights to the repository's `gh-pages` branch.
 
 ## Contributing
 Contributions are welcome. Look at the "Issues" tab to squash :bug:s, add features and suggest improvements. If you are new to open source, check out [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/) for a rundown.

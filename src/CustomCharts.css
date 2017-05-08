@@ -1,0 +1,21 @@
+.CustomCharts h2 {
+  font-size: 1.1em;
+}
+
+.CustomCharts__SelectContainer {
+  margin-bottom: 2ex;
+}
+
+.CustomCharts__Select {
+  display: inline-block;
+  margin-top: 2ex;
+}
+
+.CustomCharts__DepartmentSelect {
+  width: 400px;
+  margin-right: 2em;
+}
+
+.CustomCharts__MetricSelect {
+  width: 150px;
+}
