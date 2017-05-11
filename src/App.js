@@ -8,12 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
 class App extends Component {
-
-  componentWillMount() {
-    const loader = document.querySelector('.loading')
-    loader.style.display = 'None'
-  }
-
   render() {
     return (
       <div className="App">
