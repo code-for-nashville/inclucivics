@@ -15,6 +15,17 @@ LOW = 'Lower Income Range (Less than $33,000)'
 MID = 'Middle Income Range ($33,000 and $66,000)'
 HIGH = 'Upper Income Range (Greater than $66,000)'
 INCOMES = [LOW, MID, HIGH]
+GENDERS = ['M', 'F']
+DEMOGRAPHICS = [
+    'American Indian/Alaskan Native',
+    'Asian or Pacific Islander',
+    'Black',
+    'Hawaiian or Pacific Islander',
+    'Hispanic',
+    'Two or More Races',
+    'Unknown',
+    'White (Not of Hispanic Origin)',
+]
 
 
 def parse_float(s):
@@ -45,6 +56,9 @@ def income_category(value):
         return MID
     return HIGH
 
+def add_missing_keys(counts, count_keys):
+    for key in count_keys:
+        if key not in counts: counts[key] = 0
 
 with open(sys.argv[1], 'r') as f:
     lines = list(csv.DictReader(f, delimiter="|"))
@@ -78,7 +92,9 @@ with open(sys.argv[1], 'r') as f:
         per_income_level = {k: list(v) for k, v in groupby(by_income_level, key=income)}
         for level, income_values in per_income_level.items():
             gender_counts = Counter(gender(l) for l in income_values)
+            add_missing_keys(gender_counts, GENDERS)
             demographic_counts = Counter(demographic(l) for l in income_values)
+            add_missing_keys(demographic_counts, DEMOGRAPHICS)
             department_rollups[department]['ethnicity'].append({
                 'data': [[demographic, count] for demographic, count in demographic_counts.items()],
                 'income_level': level,
