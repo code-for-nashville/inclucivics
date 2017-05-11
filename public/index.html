@@ -14,8 +14,42 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>IncluCivics</title>
+    <style>
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+    }
+
+    .loading > h1 {
+      font-family: "Helvetica Nue", "Helvetica", sans-serif;
+      color: #5567A2;
+      font-size: 48px;
+    }
+
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #5567A2; /* Blue */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite;
+        display: block;
+        margin: auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    </style>
   </head>
   <body>
+    <div class="loading">
+      <h1>IncluCivics</h1>
+      <div class="loader"></div>
+    </div>
     <div id="root"></div>
     <!--
       This HTML file is a template.
