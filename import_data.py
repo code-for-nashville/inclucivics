@@ -15,11 +15,9 @@ import json
 import sys
 import os
 from datetime import datetime
-from data_constants import SUMMARY_STRUCTURE
+from data_constants import (SUMMARY_STRUCTURE, LOW, MID, HIGH, UNKNOWN_INCOME)
 
-LOW = 'Lower Income Range (Less than $33,000)'
-MID = 'Middle Income Range ($33,000 and $66,000)'
-HIGH = 'Upper Income Range (Greater than $66,000)'
+
 INCOMES = [LOW, MID, HIGH]
 GENDERS = ['M', 'F']
 DEMOGRAPHICS = [
@@ -143,18 +141,47 @@ def generate_summary():
         with open('{}/{}'.format(root, file), 'r') as f:
             lines = list(csv.DictReader(f, delimiter="|"))
         metro_overall = defaultdict()
-        total = 0
-        for line in lines:
+        default_incomes = {
+            LOW: defaultdict(lambda: -1, {'total': 0}),
+            MID: defaultdict(lambda: -1, {'total': 0}),
+            HIGH: defaultdict(lambda: -1, {'total': 0}),
+            UNKNOWN_INCOME: defaultdict(lambda: -1, {'total': 0})
+        }
+        incomes_overall = defaultdict(lambda: -1, default_incomes)
+
+        for ix, line in enumerate(lines):
             # Calculate "Metro Overall"
             if demographic(line) in metro_overall:
                 metro_overall[demographic(line)] += 1
-                total += 1
             else:
                 metro_overall[demographic(line)] = 1
-                total += 1
+            # Calculate "Lower Income Range (Less than $33,000)"
+            try:
+                line['Annual Salary'] = parse_float(line['Annual Salary'])
+                line['Income Category'] = income_category(line['Annual Salary'])
+            except ValueError:
+                line['Income Category'] = UNKNOWN_INCOME
+                print("Skipping line {}: Unable to parse '{}' as float".format(ix,line['Annual Salary']))
+            if demographic(line) in incomes_overall[line['Income Category']]:
+                incomes_overall[line['Income Category']][demographic(line)] += 1
+            else:
+                incomes_overall[line['Income Category']][demographic(line)] = 1
+            incomes_overall[line['Income Category']]['total'] += 1
+
+
         # Add "Metro Overall" to structure
         for serie in summary_structure[0]['series']:
-            serie['data'].append(metro_overall[serie['name']] / total)
+            serie['data'].append(metro_overall[serie['name']] / len(lines))
+
+        # Add "Lower Income Range (Less than $33,000)" to structure
+        for serie in summary_structure[1]['series']:
+            serie['data'].append(incomes_overall[LOW][serie['name']] / incomes_overall[LOW]['total'])
+
+        for serie in summary_structure[2]['series']:
+            serie['data'].append(incomes_overall[MID][serie['name']] / incomes_overall[LOW]['total'])
+
+        for serie in summary_structure[3]['series']:
+            serie['data'].append(incomes_overall[HIGH][serie['name']] / incomes_overall[LOW]['total'])
 
     with open('src/data/summary-test.json', 'w') as f:
         json.dump(summary_structure, f)
