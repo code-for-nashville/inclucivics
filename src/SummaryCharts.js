@@ -6,8 +6,11 @@ import summaries from './data/summary.json'
 
 export default class SummaryCharts extends PureComponent {
   render() {
-    const tables = summaries.map((summary) => (
-      <GraphTable data={summary} key={summary.title}/>
+    // For each income level I need
+    // an array of [demographic, [date,date,date]] pairs
+    //
+    const tables = summaries.map(summary => (
+      <GraphTable summary={summary} key={summary.level}/>
     ))
 
     return (
