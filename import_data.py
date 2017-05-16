@@ -60,11 +60,15 @@ class ReportLine(object):
 
     @property
     def demographic(self):
-        return self._line['Description']
+        demographic = self._line.get('Description')
+        if demographic:
+            return demographic
+
+        return self._line['Ethnic Code Description']
 
     @property
     def department(self):
-        return self._line['Department']
+        return self._line.get('Department', self._line['Current Dept Description'])
 
     @property
     def gender(self):
@@ -81,7 +85,9 @@ class ReportLine(object):
 
 def file_to_lines(filename):
     with open(filename, 'r') as f:
-        lines = list(csv.DictReader(f, delimiter="|"))
+        dialect = csv.Sniffer().sniff(f.read(2048), delimiters=',|')
+        f.seek(0)
+        lines = list(csv.DictReader(f, delimiter=dialect.delimiter))
 
     for ix, l in enumerate(lines):
         try:
