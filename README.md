@@ -15,7 +15,7 @@ This project is built using [create-react-app](https://github.com/facebookincuba
 Adding data is still a manual process. Help is wanted [automating this process](https://github.com/code-for-nashville/inclucivics/issues/110). To add data:
 
 1. Download the latest version of [General Government Employees Demographics](https://data.nashville.gov/General-Government/General-Government-Employees-Demographics/4ibi-mxs4) from the [Nashville Open Data Portal](data.nashville.gov). Make sure that this data is a more recent update that the latest data in [data/](data)
-2. Copy the data into the [input/](data) folder.
+2. Copy the data into the [input/](data) folder. Change the name to YYYYMMDD.csv, based on the "Updated" date.
 3. Run `python import_data input/<your_file>`. 🤞 It may fail, in which case please file an issue or try to fix the problem. If successful, this will generate new data in `src/data/`.
 4. Commit any changes and submit a pull request.
 
