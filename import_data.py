@@ -5,20 +5,19 @@ demographic data, sanitizes it, parses it, and returns a dict of
 summary statistics.
 
 """
-from collections import Counter, defaultdict
+from collections import defaultdict
 import csv
-from itertools import (
-    chain,
-    groupby,
-)
 import json
-import sys
 import os
 from datetime import datetime
-from data_constants import (SUMMARY_STRUCTURE, LOW, MID, HIGH, UNKNOWN_INCOME)
 
-
-INCOMES = [LOW, MID, HIGH]
+ALL_DEPARTMENTS = 'All Departments'
+GENDER = 'gender'
+ETHNICITY = 'ethnicity'
+LOW = 'Lower Income Range (Less than $33,000)'
+MID = 'Middle Income Range ($33,000 and $66,000)'
+HIGH = 'Upper Income Range (Greater than $66,000)'
+INCOMES = [HIGH, MID, LOW]
 GENDERS = ['M', 'F']
 DEMOGRAPHICS = [
     'American Indian/Alaskan Native',
@@ -32,169 +31,174 @@ DEMOGRAPHICS = [
 ]
 
 
-def parse_float(s):
-    """Parse string to float, assuming it uses a comma to separate 1000s."""
-    return float(s.replace(',', '').replace('$', '').strip())
+class ReportLine(object):
+    """Simple wrapper around a line from the demographics report"""
+
+    class BadIncomeException(Exception):
+        """Raised if the income string of a line can't be parsed"""
+        pass
+
+    def __init__(self, line):
+        """ReportLine constructor
+
+            line - a dictionary like the kind returned by csv.DictReader
+        """
+        self._line = line.copy()
+        try:
+            self._line['Annual Salary Parsed'] = self.__parse_income(self._line['Annual Salary'])
+        except ValueError:
+            raise self.BadIncomeException
+
+    def __parse_income(self, income_string):
+        """Internal method to parse the income string we get back from reports into a float
+
+        Some seasonal employees have "Annual Salary" listed as an empty string, and some records in 20150301.csv just
+        have '$-  ' listed as a salary. Allow these to raise a ValueError.
+        """
+        income_string = income_string.replace(',', '').replace('$', '').strip()
+        return float(income_string)
+
+    @property
+    def demographic(self):
+        return self._line['Description']
+
+    @property
+    def department(self):
+        return self._line['Department']
+
+    @property
+    def gender(self):
+        return self._line['Gender']
+
+    @property
+    def income_category(self):
+        if self._line['Annual Salary Parsed'] < 33000:
+            return LOW
+        if self._line['Annual Salary Parsed'] < 66000:
+            return MID
+        return HIGH
 
 
-def demographic(line):
-    """Get 'Description' value off of line."""
-    return line['Description']
-
-
-def department(line):
-    """Get 'Department' value off of line."""
-    return line['Department']
-
-
-def gender(line):
-    """Get 'Gender' value off of line."""
-    return line['Gender']
-
-
-def income(line):
-    """Get 'Income Category' value off of line."""
-    return line['Income Category']
-
-
-def income_category(value):
-    """Enum type function for Income Category."""
-    if value < 33000:
-        return LOW
-    if value < 66000:
-        return MID
-    return HIGH
-
-
-def add_missing_keys(counts, count_keys):
-    for key in count_keys:
-        if key not in counts:
-            counts[key] = 0
-
-
-def generate_report(file):
-    """Create a monthy report."""
-    with open(file, 'r') as f:
+def file_to_lines(filename):
+    with open(filename, 'r') as f:
         lines = list(csv.DictReader(f, delimiter="|"))
 
-# Some seasonal employees have "Annual Salary" listed as an empty string.
-# For now skip, but log how many
-# Some records in 20150301.csv have '$-  '
-        parsed = []
-        for ix, l in enumerate(lines):
-            try:
-                l['Annual Salary'] = parse_float(l['Annual Salary'])
-            except ValueError:
-                print("Skipping line {}: Unable to parse '{}' as float".format(ix, l['Annual Salary']))
-                continue
-            l['Income Category'] = income_category(l['Annual Salary'])
-            parsed.append(l)
+    for ix, l in enumerate(lines):
+        try:
+            yield ReportLine(l)
+        except ReportLine.BadIncomeException:
+            print("Skipping line {}: Unable to parse '{}' as float".format(ix, l['Annual Salary']))
+            continue
 
-        # Group by Department
-        by_department = sorted(parsed, key=department)
-        per_department = {k: list(v) for k, v in groupby(by_department, key=department)}
 
-        # For each income group, generate a grouping by gender and demographic
-        department_rollups = {}
-        # We tack on "All Departments" to get rollups for everyone. It's inefficient but it still sub-second execution time
-        for depart, values in chain(per_department.items(), [('All Departments', parsed)]):
-            department_rollups[depart] = {
-                'ethnicity': [],
-                'gender': [],
+def generate_report(filename):
+    """Generates the report to use in the "Explore" section. The list of departments for the year is also saved
+
+    The report looks like:
+
+        {
+            <department>: {
+                <metric_type>: {
+                    <income level> {
+                        {
+                            <a>: n,
+                            <b>: n,
+                        }
+                    }
+                }
             }
+        }
+    """
+    lines = file_to_lines(filename)
+    # For each department generate income level reports by demographic and gender, and a total
+    report = defaultdict(lambda: {
+        GENDER: defaultdict(lambda: {gender: 0 for gender in GENDERS}),
+        ETHNICITY: defaultdict(lambda: defaultdict(lambda: 0))
+    })
+    departments = set()
 
-            by_income_level = sorted(values, key=income)
-            per_income_level = {k: list(v) for k, v in groupby(by_income_level, key=income)}
-            for level, income_values in per_income_level.items():
-                gender_counts = Counter(gender(l) for l in income_values)
-                demographic_counts = Counter(demographic(l) for l in income_values)
-                department_rollups[depart]['ethnicity'].append({
-                    'data': [[demographic, count] for demographic, count in demographic_counts.items()],
-                    'income_level': level,
-                    'type': 'pie',
-                })
-                department_rollups[depart]['gender'].append({
-                    'data': [[gender, count] for gender, count in gender_counts.items()],
-                    'income_level': level,
-                    'type': 'pie',
-                })
+    for line in lines:
+        departments.add(line.department)
+        for metric, value in [(GENDER, line.gender), (ETHNICITY, line.demographic)]:
+            report[line.department][metric][line.income_category][value] += 1
+            report[ALL_DEPARTMENTS][metric][line.income_category][value] += 1
 
-        with open('public/department-rollups.json', 'w') as f:
-            json.dump(department_rollups, f)
+    # A slightly misleading title, since this includes gender and ethnicity breakdowns
+    with open('src/data/summary-by-department.json', 'w') as f:
+        json.dump(report, f)
 
-
-def parse_filename(filename):
-    """Parse filename into date."""
-    return datetime.strptime(filename[:-4], '%Y%m%d').strftime('%Y - %B')
+    with open('src/data/departments.json', 'w') as f:
+        json.dump([ALL_DEPARTMENTS] + sorted(departments), f)
 
 
 def generate_summary():
-    """Create Summary report."""
-    root, dirs, files = os.walk('input').__next__()
+    """Generate overall information"""
+    root, _, filenames = list(os.walk('input'))[0]
 
-    for file in files:
-        date = parse_filename(file)
-        summary_structure = SUMMARY_STRUCTURE
-        for summary in summary_structure:
-            summary['time'].append(date)
+    OVERALL = 'Metro Overall'
+    summaries = {}
+    dates = []
+    for fname in filenames:
+        lines = file_to_lines('{root}/{fname}'.format(root=root, fname=fname))
 
-        with open('{}/{}'.format(root, file), 'r') as f:
-            lines = list(csv.DictReader(f, delimiter="|"))
-        metro_overall = defaultdict()
-        default_incomes = {
-            LOW: defaultdict(lambda: -1, {'total': 0}),
-            MID: defaultdict(lambda: -1, {'total': 0}),
-            HIGH: defaultdict(lambda: -1, {'total': 0}),
-            UNKNOWN_INCOME: defaultdict(lambda: -1, {'total': 0})
+        # Generate a dict mapping income to demographics to count
+        summary = {
+            'values': defaultdict(
+                lambda: {ethnicity: 0. for ethnicity in DEMOGRAPHICS}
+            ),
+            # Note the "." to make this a float literal
+            'totals': defaultdict(lambda: 0.)
         }
-        incomes_overall = defaultdict(lambda: -1, default_incomes)
 
-        for ix, line in enumerate(lines):
-            # Calculate "Metro Overall"
-            if demographic(line) in metro_overall:
-                metro_overall[demographic(line)] += 1
-            else:
-                metro_overall[demographic(line)] = 1
-            # Calculate "Lower Income Range (Less than $33,000)"
-            try:
-                line['Annual Salary'] = parse_float(line['Annual Salary'])
-                line['Income Category'] = income_category(line['Annual Salary'])
-            except ValueError:
-                line['Income Category'] = UNKNOWN_INCOME
-                print("Skipping line {}: Unable to parse '{}' as float".format(ix,line['Annual Salary']))
-            if demographic(line) in incomes_overall[line['Income Category']]:
-                incomes_overall[line['Income Category']][demographic(line)] += 1
-            else:
-                incomes_overall[line['Income Category']][demographic(line)] = 1
-            incomes_overall[line['Income Category']]['total'] += 1
+        for line in lines:
+            summary['values'][line.income_category][line.demographic] += 1.
+            summary['values'][OVERALL][line.demographic] += 1.
+            summary['totals'][line.income_category] += 1.
+            summary['totals'][OVERALL] += 1.
+
+        fdate = datetime.strptime(fname[:-4], '%Y%m%d').strftime('%Y - %B')
+        summaries[fdate] = summary
+        dates.append(fdate)
+
+    # Reorganize so we have a list of income levels and a list of name/data pairs
+    listy_summaries = [
+        {
+            'data': [
+                {
+                    'name': key,
+                    'data': [
+                        100 * (summaries[d]['values'][level][key] / summaries[d]['totals'][level])
+                        for d in dates
+                    ]
+                }
+                for key in DEMOGRAPHICS
+            ],
+            'dates': dates,
+            'level': level,
+        }
+        for level in [OVERALL] + INCOMES
+    ]
+
+    with open('src/data/summary.json', 'w') as f:
+        json.dump(listy_summaries, f)
 
 
-        # Add "Metro Overall" to structure
-        for serie in summary_structure[0]['series']:
-            serie['data'].append(metro_overall[serie['name']] / len(lines))
+def command():
+    import argparse
+    parser = argparse.ArgumentParser('Generate reports from downloaded files')
+    parser.add_argument('--filename', help='Name of the report you want to generate')
+    args = parser.parse_args()
+    if not args.filename:
+        print('Generating summary reports')
+        generate_summary()
+        return
 
-        # Add "Lower Income Range (Less than $33,000)" to structure
-        for serie in summary_structure[1]['series']:
-            serie['data'].append(incomes_overall[LOW][serie['name']] / incomes_overall[LOW]['total'])
-
-        for serie in summary_structure[2]['series']:
-            serie['data'].append(incomes_overall[MID][serie['name']] / incomes_overall[LOW]['total'])
-
-        for serie in summary_structure[3]['series']:
-            serie['data'].append(incomes_overall[HIGH][serie['name']] / incomes_overall[LOW]['total'])
-
-    with open('src/data/summary-test.json', 'w') as f:
-        json.dump(summary_structure, f)
+    try:
+        print('Generating report for {}'.format(args.filename))
+        generate_report(args.filename)
+    except FileNotFoundError:
+        print('⚠️  Could not locate the 📄  to parse. Try checking the input directory for dataset.')
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        try:
-            file = sys.argv[1]
-            print('Generating report for {}'.format(file))
-            generate_report(file)
-        except FileNotFoundError:
-            print('⚠️  Could not locate the 📄  to parse. Try checking the input directory for dataset.')
-        else:
-            print('Generating summary report')
-            generate_summary()
+    command()

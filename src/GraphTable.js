@@ -11,8 +11,8 @@ const last = (array) => {
 
 export default class GraphTable extends PureComponent {
   render() {
-    const data = this.props.data
-    const rows = data.series.map((item) => {
+    const summary = this.props.summary
+    const rows = summary.data.map((item) => {
       const sparklineConfig = {
         series: [item],
         chart: {
@@ -24,7 +24,7 @@ export default class GraphTable extends PureComponent {
           formatter: function() {
               // Deliberately let this take on the context in which it is called by using
               // `function` syntax``
-              const name = data.time[this.points[0].key]
+              const name = summary.dates[this.points[0].key]
               return `${this.y.toFixed(3)}% - ${name}`
           }
         }
@@ -131,7 +131,7 @@ export default class GraphTable extends PureComponent {
       <table className="GraphTable graph-table table">
         <thead>
           <tr>
-            <th>{data.title}</th>
+            <th>{summary.level}</th>
             <th>% of Total Employees (2015)</th>
             <th>Change</th>
           </tr>
