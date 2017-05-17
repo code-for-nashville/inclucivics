@@ -14,14 +14,15 @@ export default () => (
       available by clicking <a href='https://www.nashville.gov/Human-Relations-Commission/IncluCivics.aspx'>here</a>.
     </p>
     <p>
-      This platform, graciously created and maintained free of charge by  <a target="_blank" href="http://www.codefornashville.org">
-      Code for Nashville</a>, exists for
+      This platform exists for
       two reasons. First, it is imperative to establish a baseline from which to assess our collective
       efforts at attaining a more diverse workforce in the future. Second, to further encourage
       transparency and public education, this platform will capture the demographic data provided
       quarterly by Metro HR, render it in user-friendly charts and graphs, and will track changes
       in the data over time. The raw data used on this platform is available to the public and can be
       found <a href='https://data.nashville.gov/Metro-Government/General-Government-Employees-Demographics/4ibi-mxs4'>here</a>.
+      This platform was created and is maintained by <a target="_blank" href="http://www.codefornashville.org">
+      Code for Nashville</a>.
     </p>
   </div>
 )

@@ -9,6 +9,7 @@ const last = (array) => {
   return array[array.length - 1]
 }
 
+const latestDate = 'April - 2017'
 export default class GraphTable extends PureComponent {
   render() {
     const summary = this.props.summary
@@ -132,7 +133,7 @@ export default class GraphTable extends PureComponent {
         <thead>
           <tr>
             <th>{summary.level}</th>
-            <th>% of Total Employees (2015)</th>
+            <th>% of Total Employees ({latestDate})</th>
             <th>Change</th>
           </tr>
         </thead>
