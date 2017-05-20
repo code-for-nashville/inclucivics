@@ -1,0 +1,15 @@
+{
+  "short_name": "Inclucivics",
+  "name": "Inclucivics",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#fefefe",
+  "background_color": "#5567A2"
+}
