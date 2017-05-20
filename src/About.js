@@ -5,7 +5,7 @@ import './About.css'
 export default () => (
   <div id='about-slide-down' className='About '>
     <p>
-      In January 2015, the <a target="_blank" href="http://www.nashville.gov/Human-Relations-Commission.aspx">
+      In January 2015, the <a rel="noopener noreferrer" target="_blank" href="http://www.nashville.gov/Human-Relations-Commission.aspx">
       Metro Human Relations Commission</a> (MHRC) released the IncluCivics Report,
       analyzing the demographic makeup of 50 Metro Nashville departments. The data in the original
       report was provided by Metro Human Resources Metro HR in August 2014. Since then, Metro HR has
@@ -21,7 +21,7 @@ export default () => (
       quarterly by Metro HR, render it in user-friendly charts and graphs, and will track changes
       in the data over time. The raw data used on this platform is available to the public and can be
       found <a href='https://data.nashville.gov/Metro-Government/General-Government-Employees-Demographics/4ibi-mxs4'>here</a>.
-      This platform was created and is maintained by <a target="_blank" href="http://www.codefornashville.org">
+      This platform was created and is maintained by <a rel="noopener noreferrer" target="_blank" href="http://www.codefornashville.org">
       Code for Nashville</a>.
     </p>
   </div>

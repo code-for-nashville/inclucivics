@@ -16,9 +16,9 @@ class Nav extends Component {
     const about = this.state.showAbout ? <About/> : null
     const aboutClass = this.state.showAbout ? 'Nav__aboutlink-active' : 'Nav__aboutlink'
     return (
-      <nav className="navbar navbar-inclucivics" role="navigation">
+      <nav className="navbar navbar-inclucivics">
         <div className="container navbar-container">
-          <a className="navbar-brand" href="#" id="home-link">IncluCivics</a>
+          <a className="navbar-brand" id="home-link">IncluCivics</a>
           <a className={aboutClass} onClick={this.toggleAbout}>
             Analyzing the demographic makeup of 50 Metro Nashville departments
           </a>
