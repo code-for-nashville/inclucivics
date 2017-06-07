@@ -9,10 +9,10 @@ const last = (array) => {
   return array[array.length - 1]
 }
 
-const latestDate = 'April - 2017'
 export default class GraphTable extends PureComponent {
   render() {
     const summary = this.props.summary
+    const latestDate = last(summary.dates)
     const rows = summary.data.map((item) => {
       const sparklineConfig = {
         series: [item],
