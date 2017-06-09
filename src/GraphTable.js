@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 
 import ReactHighCharts from './ReactHighCharts.js'
-import HighChartsSparkline from './HighChartsSparkline.js'
+import Sparkline from './Sparkline.js'
 
 import './GraphTable.css'
 
@@ -14,23 +14,6 @@ export default class GraphTable extends PureComponent {
     const summary = this.props.summary
     const latestDate = last(summary.dates)
     const rows = summary.data.map((item) => {
-      const sparklineConfig = {
-        series: [item],
-        chart: {
-          style: {
-            marginTop: 5
-          }
-        },
-        tooltip: {
-          formatter: function() {
-              // Deliberately let this take on the context in which it is called by using
-              // `function` syntax``
-              const name = summary.dates[this.points[0].key]
-              return `${this.y.toFixed(3)}% - ${name}`
-          }
-        }
-      }
-
       const barConfig = {
         title: null,
         credits: {
@@ -113,6 +96,13 @@ export default class GraphTable extends PureComponent {
         ]
       }
 
+      const sparklineData = item.data.map((d, i) => {
+        return {
+          change: d,
+          name: `${d.toFixed(3)}% - ${summary.dates[i]}`
+        }
+      })
+
       return (
         <tr key={item.name}>
           <td>
@@ -122,7 +112,7 @@ export default class GraphTable extends PureComponent {
             <ReactHighCharts config={barConfig}/>
           </td>
           <td>
-            <HighChartsSparkline config={sparklineConfig}/>
+            <Sparkline data={sparklineData}/>
           </td>
         </tr>
       )
