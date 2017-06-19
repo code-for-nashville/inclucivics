@@ -12,14 +12,13 @@ to see the site live at http://localhost:3000.
 This project is built using [create-react-app](https://github.com/facebookincubator/create-react-app). Check out the [User Guide](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md) for more information about testing and building.
 
 ## Adding Data
-Adding data is still a manual process. Help is wanted [automating this process](https://github.com/code-for-nashville/inclucivics/issues/110). To add data:
+To add data:
 
-1. Download the latest version of [General Government Employees Demographics](https://data.nashville.gov/General-Government/General-Government-Employees-Demographics/4ibi-mxs4) from the [Nashville Open Data Portal](data.nashville.gov). Make sure that this data is a more recent update that the latest data in [data/](data)
-2. Copy the data into the [input/](data) folder. Change the name to YYYYMMDD.csv, based on the "Updated" date.
-3. Run `python import_data input/<your_file>`. 🤞 It may fail, in which case please file an issue or try to fix the problem. If successful, this will generate new data in `src/data/`.
-4. Commit any changes and submit a pull request.
+1. Run `node fetch_data.js` to download the latest file.
+2. Run `python import_data input/<your_file>`. 🤞 It may fail, in which case please file an issue or try to fix the problem. If successful, this will generate new data in `src/data/`.
+3. Commit any changes and submit a pull request.
 
-This will update the data in "Custom Reports" to the report you downloaded.  Note that we are still working on generating ["Summary" data from the files in `input`](https://github.com/code-for-nashville/inclucivics/issues/108).
+This will update the data in "Custom Reports" to the report you downloaded.
 
 ## Deploying
 Run `yarn deploy`. This will fail if you don't have push rights to the repository's `gh-pages` branch.

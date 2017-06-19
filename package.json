@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "gh-pages": "^0.12.0",
-    "react-scripts": "1.0.1"
+    "react-scripts": "1.0.1",
+    "request": "^2.81.0"
   },
   "scripts": {
     "build": "react-scripts build",
