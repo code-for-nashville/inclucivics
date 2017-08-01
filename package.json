@@ -8,7 +8,8 @@
     "highcharts": "^5.0.11",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-select": "^1.0.0-rc.3"
+    "react-select": "^1.0.0-rc.3",
+    "recharts": "^1.0.0-alpha.0"
   },
   "devDependencies": {
     "gh-pages": "^0.12.0",
