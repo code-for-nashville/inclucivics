@@ -5,7 +5,8 @@
 ## Running
 To run, make sure you have [`yarn` installed](https://yarnpkg.com/en/docs/install), and run
 
-`yarn start`
+
+`yarn install && yarn start`
 
 to see the site live at http://localhost:3000.
 
