@@ -1,5 +1,5 @@
 digraph {
   label="Current Components"
-  labelloc=top 
-  "terraform (code deployment)" -> S3
+  labelloc=top
+  "terraform (code deployment)" -> "S3 (app bucket)"
 }
