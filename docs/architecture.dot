@@ -1,3 +1,4 @@
 digraph {
-  "terraform (code deployment)" -> S3 
+  label = "Current Components"
+  "terraform (code deployment)" -> S3
 }
