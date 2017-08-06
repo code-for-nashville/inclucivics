@@ -1,4 +1,0 @@
-.GraphTable__BarChart {
-  /* Without a min-width, the first few charts rendered are smaller on initial render*/
-  min-width: 714px;
-}
