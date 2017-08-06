@@ -7,16 +7,16 @@ import {
   VictoryAxis
 } from 'victory'
 
-const month1 = new Date('Jun 2017')
-const month2 = new Date('Jul 2017')
-const month3 = new Date('Aug 2017')
+const salary1 = 30000
+const salary2 = 60000
+const salary3 = 90000
 
 
 const data = {
-  'American Indian/Alaskan Native': [{x: month1, y: 2}, {x: month2, y: 1}, {x: month3, y: 2}],
-  'Asian or Pacific Islander': [{x: month1, y: 4}, {x: month2, y: 4}, {x: month3, y: 5}],
-  'Black': [{x: month1, y: 3}, {x: month2, y: 6}, {x: month3, y: 6}],
-  'Hawaiian or Pacific Islander': [{x: month1, y: 6}, {x: month2, y: 4}, {x: month3, y: 2}]
+  'American Indian/Alaskan Native': [{x: salary1, y: 2}, {x: salary2, y: 1}, {x: salary3, y: 2}],
+  'Asian or Pacific Islander': [{x: salary1, y: 4}, {x: salary2, y: 4}, {x: salary3, y: 5}],
+  'Black': [{x: salary1, y: 3}, {x: salary2, y: 6}, {x: salary3, y: 6}],
+  'Hawaiian or Pacific Islander': [{x: salary1, y: 6}, {x: salary2, y: 4}, {x: salary3, y: 2}]
 }
 
 const getEthnicitiesFromData = (data) => {
@@ -24,12 +24,12 @@ const getEthnicitiesFromData = (data) => {
 }
 
 // Assumes every ethnicity has all dates
-const getDatesFromData = (data) => {
+const getSalariesFromData = (data) => {
   return data[getEthnicitiesFromData(data)[0]].map(d => d.x)
 }
 
 const getLegendDataFromData = (data) => {
-  return Object.keys(data).map(d => ({
+  return getEthnicitiesFromData(data).map(d => ({
     name: d
   }))
 }
@@ -65,14 +65,14 @@ export default class Chart extends Component {
 
     return (
       <div>
-        <VictoryChart scale={{x: "time"}}>
+        <VictoryChart>
           <VictoryStack>
             {areas}
           </VictoryStack>
           <VictoryAxis dependentAxis
             tickFormat={this.formatYAxisLabel}
           />
-          <VictoryAxis />
+          <VictoryAxis tickValues={getSalariesFromData(data)}/>
         </VictoryChart>
         <VictoryLegend data={getLegendDataFromData(data)}/>
       </div>
