@@ -1,63 +1,92 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {
   VictoryChart,
   VictoryStack,
   VictoryArea,
-  VictoryLegend,
   VictoryAxis
 } from 'victory'
 
-const salary1 = 30000
-const salary2 = 60000
-const salary3 = 90000
-
-
-const data = {
-  'American Indian/Alaskan Native': [{x: salary1, y: 2}, {x: salary2, y: 1}, {x: salary3, y: 2}],
-  'Asian or Pacific Islander': [{x: salary1, y: 4}, {x: salary2, y: 4}, {x: salary3, y: 5}],
-  'Black': [{x: salary1, y: 3}, {x: salary2, y: 6}, {x: salary3, y: 6}],
-  'Hawaiian or Pacific Islander': [{x: salary1, y: 6}, {x: salary2, y: 4}, {x: salary3, y: 2}]
-}
-
-const getEthnicitiesFromData = (data) => {
-  return Object.keys(data)
-}
-
-// Assumes every ethnicity has all dates
-const getSalariesFromData = (data) => {
-  return data[getEthnicitiesFromData(data)[0]].map(d => d.x)
-}
-
-const getLegendDataFromData = (data) => {
-  return getEthnicitiesFromData(data).map(d => ({
-    name: d
-  }))
-}
-
-// Looks ugly, but we know ethnicity is of fixed length. Time is a different story...
-const getPercentDataFromData = (data) => {
-  const ethnicities = getEthnicitiesFromData(data)
-  const totals = data[ethnicities[0]].map((d, i) => {
-    return ethnicities.reduce((memo, curr) => {
-      return memo + data[curr][i].y
-    }, 0)
-  })
-
-  return ethnicities.reduce((memo, curr) => ({
-    ...memo,
-    [curr]: data[curr].map((datum, i) => {
-      return {x: datum.x, y: (datum.y / totals[i]) * 100}
-    })
-  }), {})
-}
+import Legend from './Legend.js'
 
 export default class Chart extends Component {
+  static props = {
+    data: PropTypes.object, // TODO: Define better
+    salaries: PropTypes.arrayOf(PropTypes.number),
+    ethnicities: PropTypes.arrayOf(PropTypes.string)
+  }
+
+  state = {
+    filteredItems:[]
+  }
+
   formatYAxisLabel (percent) {
     return `${percent}%`
   }
 
+  formatXAxisLabel (salary) {
+    return `$${salary}`
+  }
+
+  getFilteredData (data, ethnicities, filteredItems) {
+    return ethnicities.reduce((memo, ethnicity) => {
+      if (!!~filteredItems.indexOf(ethnicity)) return memo
+      return {
+        ...memo,
+        [ethnicity]: data[ethnicity]
+      }
+    }, {})
+  }
+
+  getLegendData (data, ethnicities, filteredItems) {
+    return ethnicities.map(d => ({
+      name: d,
+      checked: !~filteredItems.indexOf(d)
+    }))
+  }
+
+  // Looks ugly, but we know ethnicity is of fixed length. Time is a different story...
+  getPercentData (data, ethnicities) {
+    const totals = data[ethnicities[0]].map((d, i) => {
+      return ethnicities.reduce((memo, ethnicity) => {
+        return memo + data[ethnicity][i].y
+      }, 0)
+    })
+
+    return ethnicities.reduce((memo, ethnicity) => ({
+      ...memo,
+      [ethnicity]: data[ethnicity].map((datum, i) => {
+        return {x: datum.x, y: (datum.y / totals[i]) * 100}
+      })
+    }), {})
+  }
+
+  handleLegendFilterAdd = (item) => {
+    const filteredItems = this.state.filteredItems.concat(item)
+
+    this.setState(state => ({filteredItems}))
+  }
+
+  handleLegendFilterRemove = (item) => {
+    const filteredItems = this.state.filteredItems.filter(i => i !== item)
+
+    this.setState(state => ({filteredItems}))
+  }
+
   render () {
-    const percentData = getPercentDataFromData(data)
+    const {
+      filteredItems
+    } = this.state
+
+    const {
+      salaries,
+      ethnicities,
+      data
+    } = this.props
+
+    const filteredData = this.getFilteredData(data, ethnicities, filteredItems)
+    const remainingEthnicities = ethnicities.filter(e => !~filteredItems.indexOf(e))
+    const percentData = this.getPercentData(filteredData, remainingEthnicities)
 
     const areas = Object.keys(percentData).map(d => (
       <VictoryArea data={percentData[d]} key={d} />
@@ -69,12 +98,18 @@ export default class Chart extends Component {
           <VictoryStack>
             {areas}
           </VictoryStack>
-          <VictoryAxis dependentAxis
+          <VictoryAxis
+            dependentAxis
             tickFormat={this.formatYAxisLabel}
           />
-          <VictoryAxis tickValues={getSalariesFromData(data)}/>
+          <VictoryAxis
+            tickFormat={this.formatXAxisLabel}
+            tickValues={salaries} />
         </VictoryChart>
-        <VictoryLegend data={getLegendDataFromData(data)}/>
+        <Legend
+          onFilterRemove={this.handleLegendFilterRemove}
+          onFilterAdd={this.handleLegendFilterAdd}
+          data={this.getLegendData(data, ethnicities, filteredItems)} />
       </div>
     )
   }
