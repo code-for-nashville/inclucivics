@@ -4,7 +4,9 @@ import {
   VictoryChart,
   VictoryStack,
   VictoryArea,
-  VictoryAxis
+  VictoryAxis,
+  VictoryTooltip,
+  VictoryVoronoiContainer
 } from 'victory'
 
 import Legend from './Legend.js'
@@ -26,6 +28,10 @@ export default class Chart extends Component {
 
   formatXAxisLabel (salary) {
     return `$${salary}`
+  }
+
+  formatTooltipLabel (datum) {
+    return `${datum.ethnicity}: ${datum.count}`
   }
 
   getFilteredData (data, ethnicities, filteredItems) {
@@ -56,7 +62,7 @@ export default class Chart extends Component {
     return ethnicities.reduce((memo, ethnicity) => ({
       ...memo,
       [ethnicity]: data[ethnicity].map((datum, i) => {
-        return {x: datum.x, y: (datum.y / totals[i]) * 100}
+        return {x: datum.x, y: (datum.y / totals[i]) * 100, count: datum.y, ethnicity}
       })
     }), {})
   }
@@ -94,7 +100,12 @@ export default class Chart extends Component {
 
     return (
       <div>
-        <VictoryChart>
+        <VictoryChart containerComponent={
+          <VictoryVoronoiContainer
+            dimension='x'
+            labels={this.formatTooltipLabel}
+            labelComponent={<VictoryTooltip />}
+          />}>
           <VictoryStack>
             {areas}
           </VictoryStack>
