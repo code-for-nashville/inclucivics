@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
-
+import groupBy from 'lodash.groupby'
 import ReactHighCharts from './ReactHighCharts.js'
+import constants from './constants.js'
 
 // Adapted from a set of "Fall" colors
 // http://duoparadigms.com/2013/10/11/10-color-palettes-perfect-autumnfall-season/
@@ -16,49 +17,31 @@ const piechartColors = [
 ]
 
 export default class IncomeLevelPieCharts extends PureComponent {
-  constructor (props) {
-    super(props)
-    this.state = {
-      byDepartment: null
-    }
-  }
-
-  loadByDepartment () {
-    window.fetch('./data/summary-by-department.json')
-      .then(res => res.json())
-      .then(byDepartment => {
-        this.setState({byDepartment})
-      })
-      .catch(console.error)
-  }
-
-  componentDidMount () {
-    this.loadByDepartment()
-  }
-
   render () {
-    if (!this.props.department || !this.props.metric || !this.state.byDepartment) {
+    if (!this.props.attribute) {
       return null
     }
 
-    const graphData = []
-    const incomeLevels = this.state.byDepartment[this.props.department][this.props.metric]
-    for (let level in incomeLevels) {
-      const levelGraph = {
-        level: level,
-        data: [],
-        type: 'pie'
-      }
-
-      let metrics = incomeLevels[level]
-      for (let m in metrics) {
-        levelGraph.data.push([m, metrics[m]])
-      }
-
-      graphData.push(levelGraph)
+    let employees = this.props.employees
+    if (this.props.departmentId) {
+      employees = this.props.employees.filter(
+        e => e.departmentId === this.props.departmentId
+      )
     }
 
-    const pieCharts = graphData.map((graph, ix) => {
+    const bySalaryBucket = groupBy(employees, e => e.salaryBucketId)
+
+    // Get totals for each attribute group w/in each income group
+    const pieCharts = Object.keys(bySalaryBucket).map((bucket, ix) => {
+      const byAttribute = groupBy(
+        bySalaryBucket[bucket],
+        e => e[this.props.attribute]
+      )
+
+      const data = constants.ATTRIBUTE_TO_CHOICES[this.props.attribute].map(
+        (choice) => [choice, (byAttribute[choice] || []).length]
+      )
+
       const config = {
         chart: {
           plotBackgroundColor: null,
@@ -69,7 +52,7 @@ export default class IncomeLevelPieCharts extends PureComponent {
           enabled: false
         },
         title: {
-          text: graph.level
+          text: constants.SALARY_BUCKET_LABELS[bucket]
         },
         tooltip: {
           pointFormat: '{name}: <b>{point.percentage:.1f}%</b>'
@@ -89,7 +72,7 @@ export default class IncomeLevelPieCharts extends PureComponent {
             showInLegend: true
           }
         },
-        series: [graph]
+        series: [{data, type: 'pie'}]
       }
 
       return <ReactHighCharts key={ix} config={config} />

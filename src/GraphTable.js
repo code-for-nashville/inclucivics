@@ -1,32 +1,39 @@
 import React, { PureComponent } from 'react'
-
+import { format as formatDate, masks } from 'fecha'
+import last from 'lodash.last'
+import sortBy from 'lodash.sortby'
 import ReactHighCharts from './ReactHighCharts.js'
 import HighChartsSparkline from './HighChartsSparkline.js'
 
 import './GraphTable.css'
 
-const last = (array) => {
-  return array[array.length - 1]
-}
-
 export default class GraphTable extends PureComponent {
   render () {
-    const summary = this.props.summary
-    const latestDate = last(summary.dates)
-    const rows = summary.data.map((item) => {
+    let latestDate
+
+    const rows = this.props.summaries.map(summary => {
+      const items = sortBy(summary.items, 'date')
+      const lastItem = last(items)
+      if (!latestDate) {
+        latestDate = last(items).date
+      }
       const sparklineConfig = {
-        series: [item],
+        series: [{
+          data: items.map(i => [Date.parse(i.date), i.percent * 100])
+        }],
         chart: {
           style: {
             marginTop: 5
           }
         },
+        xAxis: {
+          type: 'datetime'
+        },
         tooltip: {
           formatter: function () {
-              // Deliberately let this take on the context in which it is called by using
-              // `function` syntax``
-            const name = summary.dates[this.points[0].key]
-            return `${this.y.toFixed(3)}% - ${name}`
+            // Deliberately let this take on the context in which it is called by using
+            // `function` syntax
+            return `${this.y.toFixed(3)}% - ${formatDate(this.x, 'MMM - YYYY')}`
           }
         }
       }
@@ -104,16 +111,16 @@ export default class GraphTable extends PureComponent {
         },
         series: [
           {
-            data: [last(item.data)],
-            name: item.name
+            data: [lastItem.percent * 100],
+            name: summary.name
           }
         ]
       }
 
       return (
-        <tr key={item.name}>
+        <tr key={summary.name}>
           <td>
-            {item.name}
+            {summary.name}
           </td>
           <td className='GraphTable__BarChart'>
             <ReactHighCharts config={barConfig} />
@@ -129,8 +136,8 @@ export default class GraphTable extends PureComponent {
       <table className='GraphTable graph-table table'>
         <thead>
           <tr>
-            <th>{summary.level}</th>
-            <th>% of Total Employees ({latestDate})</th>
+            <th>{this.props.title}</th>
+            <th>% of Total Employees ({formatDate(latestDate, masks.shortDate)})</th>
             <th>Change</th>
           </tr>
         </thead>
