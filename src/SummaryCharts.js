@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
+import groupBy from 'lodash.groupby'
 
 import GraphTable from './GraphTable'
+import { ETHNICITY_ID_LABELS, SALARY_BUCKET_LABELS } from './constants.js'
 
 export default class SummaryCharts extends PureComponent {
   constructor (props) {
@@ -11,9 +13,12 @@ export default class SummaryCharts extends PureComponent {
   }
 
   loadSummaries () {
-    window.fetch('./data/summary.json')
+    window.fetch('./data/summaries.json')
       .then(res => res.json())
       .then(summaries => {
+        summaries.forEach(s => {
+          s.date = new Date(s.date)
+        })
         this.setState({summaries})
       })
       .catch(console.error)
@@ -24,12 +29,20 @@ export default class SummaryCharts extends PureComponent {
   }
 
   render () {
-    // For each income level I need
-    // an array of [demographic, [date,date,date]] pairs
-    //
-    const tables = this.state.summaries.map(summary => (
-      <GraphTable summary={summary} key={summary.level} />
-    ))
+    const bySalaryBucket = groupBy(this.state.summaries, 'salaryBucketId')
+    const tables = []
+    for (let bucket in bySalaryBucket) {
+      const byEthnicity = groupBy(bySalaryBucket[bucket], 'ethnicityId')
+      const ethnicitySummaries = Object.entries(byEthnicity).map(entry => {
+        return {
+          name: ETHNICITY_ID_LABELS[entry[0]],
+          items: entry[1]
+        }
+      })
+      tables.push(
+        <GraphTable summaries={ethnicitySummaries} key={bucket} title={SALARY_BUCKET_LABELS[bucket]} />
+      )
+    }
 
     return (
       <div className='SummaryCharts col-xs-12'>

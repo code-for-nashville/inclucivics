@@ -4,8 +4,18 @@
   "homepage": "http://www.codefornashville.org/inclucivics",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "commander": "^2.11.0",
     "create-react-class": "^15.5.2",
+    "d3-dsv": "^1.0.5",
+    "fecha": "^2.3.1",
     "highcharts": "^5.0.11",
+    "lodash.countby": "^4.6.0",
+    "lodash.flatmap": "^4.5.0",
+    "lodash.frompairs": "^4.0.1",
+    "lodash.groupby": "^4.6.0",
+    "lodash.last": "^3.0.0",
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.sortby": "^4.7.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-select": "^1.0.0-rc.3",
@@ -23,7 +33,9 @@
     "predeploy": "npm run build",
     "start": "react-scripts start",
     "test": "yarn standard && react-scripts test --env=jsdom",
-    "lint": "standard"
+    "lint": "standard",
+    "data:fetch": "node scripts/data-fetch",
+    "data:import": "node scripts/data-import"
   },
   "standard": {
     "globals": [ "it" ]
