@@ -85,9 +85,7 @@ class ReportLine(object):
 
 def file_to_lines(filename):
     with open(filename, 'r') as f:
-        dialect = csv.Sniffer().sniff(f.read(2048), delimiters=',|')
-        f.seek(0)
-        lines = list(csv.DictReader(f, delimiter=dialect.delimiter))
+        lines = list(csv.DictReader(f))
 
     for ix, l in enumerate(lines):
         try:
