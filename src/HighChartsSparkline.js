@@ -91,8 +91,8 @@ const defaultOptions = {
 }
 
 export default class HighChartsSparkline extends PureComponent {
-  render() {
+  render () {
     const config = ReactHighCharts.Highcharts.merge(defaultOptions, this.props.config || {})
-    return <ReactHighCharts config={config}/>
+    return <ReactHighCharts config={config} />
   }
 }

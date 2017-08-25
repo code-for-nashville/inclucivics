@@ -9,18 +9,18 @@ const SUMMARY_TAB = 'summary'
 const CUSTOM_TAB = 'custom'
 
 export default class ChartTabs extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       tab: SUMMARY_TAB
     }
   }
 
-  setTab(tabName) {
+  setTab (tabName) {
     this.setState({ tab: tabName })
   }
 
-  render() {
+  render () {
     // Instead of swapping out the actual content, just set display: none on
     // unselected tabs.
     // ReactHighCharts destroys and recreates the component on mount and unmount
@@ -40,9 +40,9 @@ export default class ChartTabs extends Component {
     }
 
     return (
-      <div className="ChartTabs col-xs-12">
-        <div className="container">
-          <div className="tabs">
+      <div className='ChartTabs col-xs-12'>
+        <div className='container'>
+          <div className='tabs'>
             <a
               className={`tab ${summaryChartsClass}`}
               onClick={this.setTab.bind(this, SUMMARY_TAB)}
@@ -57,9 +57,9 @@ export default class ChartTabs extends Component {
             </a>
           </div>
 
-          <div style={{clear: 'both'}}></div>
+          <div style={{clear: 'both'}} />
 
-          <div className="tabs-content">
+          <div className='tabs-content'>
             <div className={`tab-content ${summaryChartsClass}`}>
               {<SummaryCharts />}
             </div>

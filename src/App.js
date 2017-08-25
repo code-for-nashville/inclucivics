@@ -8,14 +8,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
 class App extends Component {
-  render() {
+  render () {
     return (
-      <div className="App">
-        <Nav/>
-        <div className="Content">
-          <ChartTabs/>
+      <div className='App'>
+        <Nav />
+        <div className='Content'>
+          <ChartTabs />
         </div>
-        <Footer/>
+        <Footer />
       </div>
     )
   }
