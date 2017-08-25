@@ -11,7 +11,12 @@ import Highcharts from 'highcharts'
   and react-highcharts.
 */
 class ReactHighCharts extends PureComponent {
-  renderChart() {
+  constructor (props) {
+    super(props)
+    this.setChartElement = this.setChartElement.bind(this)
+  }
+
+  renderChart () {
     const chartConfig = this.props.config.chart
     this.chart = new Highcharts.Chart({
       ...this.props.config,
@@ -22,20 +27,24 @@ class ReactHighCharts extends PureComponent {
     })
   }
 
-  componentDidUpdate(_, nextProps) {
+  componentDidUpdate (_, nextProps) {
     this.renderChart()
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.renderChart(this.props.config)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.chart.destroy()
   }
 
-  render() {
-    return <div className="ReactHighCharts" ref={el => this.chartEl = el} />
+  setChartElement (el) {
+    this.chartEl = el
+  }
+
+  render () {
+    return <div className='ReactHighCharts' ref={this.setChartElement} />
   }
 }
 

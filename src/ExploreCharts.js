@@ -13,7 +13,7 @@ const arrayToOptions = (array) => {
 }
 
 export default class ExploreCharts extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       department: 'All Departments',
@@ -24,20 +24,19 @@ export default class ExploreCharts extends PureComponent {
     this.setMetric = this.setMetric.bind(this)
   }
 
-
-  render() {
+  render () {
     return (
-      <section className="ExploreCharts">
-        <div className="ExploreCharts__SelectContainer">
+      <section className='ExploreCharts'>
+        <div className='ExploreCharts__SelectContainer'>
           <h2>Select a department and a metric to generate a custom report for the most recent year</h2>
           <Select
-            className="ExploreCharts__Select ExploreCharts__DepartmentSelect"
+            className='ExploreCharts__Select ExploreCharts__DepartmentSelect'
             onChange={this.setDepartment}
             options={arrayToOptions(departments)}
             value={this.state.department}
           />
           <Select
-            className="ExploreCharts__Select ExploreCharts__MetricSelect"
+            className='ExploreCharts__Select ExploreCharts__MetricSelect'
             onChange={this.setMetric}
             options={arrayToOptions(['ethnicity', 'gender'])}
             value={this.state.metric}
@@ -51,7 +50,7 @@ export default class ExploreCharts extends PureComponent {
     )
   }
 
-  setDepartment(option) {
+  setDepartment (option) {
     if (!option) {
       option = { value: '' }
     }
@@ -59,7 +58,7 @@ export default class ExploreCharts extends PureComponent {
     this.setState({ department: option.value })
   }
 
-  setMetric(option) {
+  setMetric (option) {
     if (!option) {
       option = { value: '' }
     }

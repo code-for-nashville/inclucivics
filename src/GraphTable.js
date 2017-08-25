@@ -10,7 +10,7 @@ const last = (array) => {
 }
 
 export default class GraphTable extends PureComponent {
-  render() {
+  render () {
     const summary = this.props.summary
     const latestDate = last(summary.dates)
     const rows = summary.data.map((item) => {
@@ -22,11 +22,11 @@ export default class GraphTable extends PureComponent {
           }
         },
         tooltip: {
-          formatter: function() {
+          formatter: function () {
               // Deliberately let this take on the context in which it is called by using
               // `function` syntax``
-              const name = summary.dates[this.points[0].key]
-              return `${this.y.toFixed(3)}% - ${name}`
+            const name = summary.dates[this.points[0].key]
+            return `${this.y.toFixed(3)}% - ${name}`
           }
         }
       }
@@ -43,10 +43,10 @@ export default class GraphTable extends PureComponent {
           enabled: false
         },
         tooltip: {
-          formatter: function() {
+          formatter: function () {
               // Deliberately let this take on the context in which it is called by using
               // `function` syntax``
-              return `${this.y.toFixed(3)}%`
+            return `${this.y.toFixed(3)}%`
           }
         },
         xAxis: {
@@ -62,7 +62,7 @@ export default class GraphTable extends PureComponent {
           max: 100,
           minPadding: 0,
           maxPadding: 0,
-          type: "linear",
+          type: 'linear',
           tickInterval: 25,
           breaks: [
             {
@@ -79,20 +79,17 @@ export default class GraphTable extends PureComponent {
           labels: {
             y: 12,
             style: {
-              fontSize: "10px"
+              fontSize: '10px'
             },
-            formatter: function() {
-              if (this.isLast)
-                return this.value + "%"
-              else
-                return this.value
+            formatter: function () {
+              if (this.isLast) { return this.value + '%' } else { return this.value }
             }
           },
           plotBands: [
             {
               from: 0,
               to: 100,
-              color: "rgba(200, 200, 200, 0.7)"
+              color: 'rgba(200, 200, 200, 0.7)'
             }
           ]
         },
@@ -102,7 +99,7 @@ export default class GraphTable extends PureComponent {
           }
         },
         chart: {
-          type: "bar",
+          type: 'bar',
           height: 50
         },
         series: [
@@ -118,18 +115,18 @@ export default class GraphTable extends PureComponent {
           <td>
             {item.name}
           </td>
-          <td className="GraphTable__BarChart">
-            <ReactHighCharts config={barConfig}/>
+          <td className='GraphTable__BarChart'>
+            <ReactHighCharts config={barConfig} />
           </td>
           <td>
-            <HighChartsSparkline config={sparklineConfig}/>
+            <HighChartsSparkline config={sparklineConfig} />
           </td>
         </tr>
       )
     })
 
     return (
-      <table className="GraphTable graph-table table">
+      <table className='GraphTable graph-table table'>
         <thead>
           <tr>
             <th>{summary.level}</th>
