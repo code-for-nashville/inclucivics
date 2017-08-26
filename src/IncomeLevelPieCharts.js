@@ -4,17 +4,18 @@ import ReactHighCharts from './ReactHighCharts.js'
 
 import byDepartment from './data/summary-by-department.json'
 
-const piechartColors = (function () {
-  const colors = []
-  const base = ReactHighCharts.Highcharts.getOptions().colors[0]
-
-  for (let i = -5; i < 5; i += 1) {
-    let color = ReactHighCharts.Highcharts.Color(base).brighten(i / 10).get()
-    colors.push(color)
-  }
-
-  return colors
-}())
+// Adapted from a set of "Fall" colors
+// http://duoparadigms.com/2013/10/11/10-color-palettes-perfect-autumnfall-season/
+const piechartColors = [
+  '#6D7696',
+  '#59484F',
+  '#455C4F',
+  '#CC5543',
+  '#EDB579',
+  '#DBE6AF',
+  '#694364',
+  '#94353C'
+]
 
 export default class IncomeLevelPieCharts extends PureComponent {
   constructor (props) {
