@@ -18,7 +18,7 @@ This project is built using [create-react-app](https://github.com/facebookincuba
 To add data:
 
 1. Run `node fetch_data.js` to download the latest file.
-2. Run `python import_data input/<your_file>`. 🤞 It may fail, in which case please file an issue or try to fix the problem. If successful, this will generate new data in `src/data/`.
+2. Run `python import_data input/<your_file>`. 🤞 It may fail, in which case please file an issue or try to fix the problem. If successful, this will generate new data in `public/data/`.
 3. Commit any changes and submit a pull request.
 
 This will update the data in "Custom Reports" to the report you downloaded.

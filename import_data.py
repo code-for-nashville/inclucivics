@@ -128,10 +128,10 @@ def generate_report(filename):
             report[ALL_DEPARTMENTS][metric][line.income_category][value] += 1
 
     # A slightly misleading title, since this includes gender and ethnicity breakdowns
-    with open('src/data/summary-by-department.json', 'w') as f:
+    with open('public/data/summary-by-department.json', 'w') as f:
         json.dump(report, f)
 
-    with open('src/data/departments.json', 'w') as f:
+    with open('public/data/departments.json', 'w') as f:
         json.dump([ALL_DEPARTMENTS] + sorted(departments), f)
 
 
@@ -183,7 +183,7 @@ def generate_summary():
         for level in [OVERALL] + INCOMES
     ]
 
-    with open('src/data/summary.json', 'w') as f:
+    with open('public/data/summary.json', 'w') as f:
         json.dump(listy_summaries, f)
 
 
