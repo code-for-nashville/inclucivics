@@ -2,8 +2,6 @@ import React, { PureComponent } from 'react'
 
 import ReactHighCharts from './ReactHighCharts.js'
 
-import byDepartment from './data/summary-by-department.json'
-
 // Adapted from a set of "Fall" colors
 // http://duoparadigms.com/2013/10/11/10-color-palettes-perfect-autumnfall-season/
 const piechartColors = [
@@ -20,16 +18,31 @@ const piechartColors = [
 export default class IncomeLevelPieCharts extends PureComponent {
   constructor (props) {
     super(props)
-    this.byDepartment = byDepartment
+    this.state = {
+      byDepartment: null
+    }
+  }
+
+  loadByDepartment () {
+    window.fetch('./data/summary-by-department.json')
+      .then(res => res.json())
+      .then(byDepartment => {
+        this.setState({byDepartment})
+      })
+      .catch(console.error)
+  }
+
+  componentDidMount () {
+    this.loadByDepartment()
   }
 
   render () {
-    if (!this.props.department || !this.props.metric) {
+    if (!this.props.department || !this.props.metric || !this.state.byDepartment) {
       return null
     }
 
     const graphData = []
-    const incomeLevels = this.byDepartment[this.props.department][this.props.metric]
+    const incomeLevels = this.state.byDepartment[this.props.department][this.props.metric]
     for (let level in incomeLevels) {
       const levelGraph = {
         level: level,

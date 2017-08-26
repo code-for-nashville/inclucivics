@@ -6,8 +6,6 @@ import IncomeLevelPieCharts from './IncomeLevelPieCharts.js'
 import 'react-select/dist/react-select.css'
 import './ExploreCharts.css'
 
-import departments from './data/departments.json'
-
 const arrayToOptions = (array) => {
   return array.map((el) => ({ label: el, value: el }))
 }
@@ -16,12 +14,26 @@ export default class ExploreCharts extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
+      departments: [],
       department: 'All Departments',
       metric: 'ethnicity'
     }
 
     this.setDepartment = this.setDepartment.bind(this)
     this.setMetric = this.setMetric.bind(this)
+  }
+
+  loadDepartments () {
+    window.fetch('./data/departments.json')
+      .then(res => res.json())
+      .then(departments => {
+        this.setState({departments})
+      })
+      .catch(console.error)
+  }
+
+  componentDidMount () {
+    this.loadDepartments()
   }
 
   render () {
@@ -32,7 +44,7 @@ export default class ExploreCharts extends PureComponent {
           <Select
             className='ExploreCharts__Select ExploreCharts__DepartmentSelect'
             onChange={this.setDepartment}
-            options={arrayToOptions(departments)}
+            options={arrayToOptions(this.state.departments)}
             value={this.state.department}
           />
           <Select

@@ -2,14 +2,32 @@ import React, { PureComponent } from 'react'
 
 import GraphTable from './GraphTable'
 
-import summaries from './data/summary.json'
-
 export default class SummaryCharts extends PureComponent {
+  constructor (props) {
+    super(props)
+    this.state = {
+      'summaries': []
+    }
+  }
+
+  loadSummaries () {
+    window.fetch('./data/summary.json')
+      .then(res => res.json())
+      .then(summaries => {
+        this.setState({summaries})
+      })
+      .catch(console.error)
+  }
+
+  componentDidMount () {
+    this.loadSummaries()
+  }
+
   render () {
     // For each income level I need
     // an array of [demographic, [date,date,date]] pairs
     //
-    const tables = summaries.map(summary => (
+    const tables = this.state.summaries.map(summary => (
       <GraphTable summary={summary} key={summary.level} />
     ))
 
