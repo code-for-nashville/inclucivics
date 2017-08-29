@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "node"
+  # To support lambda development
+  - "6"
+
+cache:
+  directories:
+    - node_modules
+script:
+  # TODO: Add unit tests
+  - yarn lint
