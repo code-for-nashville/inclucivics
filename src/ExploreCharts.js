@@ -25,30 +25,43 @@ export default class ExploreCharts extends PureComponent {
     this.setAttribute = this.setAttribute.bind(this)
   }
 
-  loadDepartments () {
-    window.fetch('./data/departments.json')
+  fetchDepartments () {
+    return window.fetch('./data/departments.json')
       .then(res => res.json())
-      .then(departments => {
-        this.setState({departments})
-      })
-      .catch(console.error)
   }
 
-  loadEmployees () {
-    window.fetch('./data/employees.csv')
-    .then(res => res.text())
-    .then(text => {
+  fetchEmployees (date) {
+    return window.fetch(
+      `./data/${date}/employees.csv`
+    ).then(
+      res => res.text()
+    ).then(text => {
       const employees = csvParse(text)
       employees.forEach(employee => {
         employee.ethnicity = ETHNICITY_ID_LABELS[employee.ethnicityId]
       })
-      this.setState({employees})
-    }).catch(console.error)
+      return employees
+    })
+  }
+
+  fetchDates () {
+    return window.fetch(`./data/dates.json`)
+    .then(res => res.json())
   }
 
   componentDidMount () {
-    this.loadDepartments()
-    this.loadEmployees()
+    const employeesPromise = this.fetchDates()
+    .then(dates => {
+      const latestDate = dates[dates.length - 1]
+      return this.fetchEmployees(latestDate)
+    })
+
+    const departmentsPromise = this.fetchDepartments()
+
+    Promise.all([employeesPromise, departmentsPromise])
+    .then(([employees, departments]) => {
+      this.setState({employees, departments})
+    }).catch(console.error)
   }
 
   render () {

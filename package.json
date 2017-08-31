@@ -4,7 +4,6 @@
   "homepage": "http://www.codefornashville.org/inclucivics",
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "commander": "^2.11.0",
     "create-react-class": "^15.5.2",
     "d3-dsv": "^1.0.5",
     "fecha": "^2.3.1",
@@ -38,6 +37,8 @@
     "data:import": "node scripts/data-import"
   },
   "standard": {
-    "globals": [ "it" ]
+    "globals": [
+      "it"
+    ]
   }
 }
