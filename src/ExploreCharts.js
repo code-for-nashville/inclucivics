@@ -18,11 +18,14 @@ export default class ExploreCharts extends PureComponent {
     this.state = {
       departments: [],
       departmentId: null,
-      attribute: ETHNICITY_ATTRIBUTE
+      attribute: ETHNICITY_ATTRIBUTE,
+      dates: [],
+      date: null
     }
 
     this.setDepartmentId = this.setDepartmentId.bind(this)
     this.setAttribute = this.setAttribute.bind(this)
+    this.setDate = this.setDate.bind(this)
   }
 
   fetchDepartments () {
@@ -50,17 +53,23 @@ export default class ExploreCharts extends PureComponent {
   }
 
   componentDidMount () {
-    const employeesPromise = this.fetchDates()
-    .then(dates => {
+    const datesPromise = this.fetchDates()
+    const employeesPromise = datesPromise.then(dates => {
       const latestDate = dates[dates.length - 1]
       return this.fetchEmployees(latestDate)
     })
-
     const departmentsPromise = this.fetchDepartments()
 
-    Promise.all([employeesPromise, departmentsPromise])
-    .then(([employees, departments]) => {
-      this.setState({employees, departments})
+    Promise.all(
+      [datesPromise, departmentsPromise, employeesPromise]
+    ).then(results => {
+      const [dates, departments, employees] = results
+      this.setState({
+        dates: dates,
+        date: dates[dates.length - 1],
+        departments,
+        employees}
+      )
     }).catch(console.error)
   }
 
@@ -69,19 +78,40 @@ export default class ExploreCharts extends PureComponent {
       ([id, name]) => ({ label: name, value: id })
     )
 
+    const dateOptions = this.state.dates.map(
+      value => ({ label: value, value: value })
+    )
+
     return (
       <section className='ExploreCharts'>
         <div className='ExploreCharts__SelectContainer'>
-          <h2>Select a department and a metric to generate a custom report for the most recent year</h2>
+          <label for='explore-charts-date-select'>Date</label>
+          <Select
+            className='ExploreCharts__Select ExploreCharts__DateSelect'
+            id='explore-charts-date-select'
+            onChange={this.setDate}
+            clearable={false}
+            options={dateOptions}
+            value={this.state.date}
+            isLoading={!this.state.date}
+          />
+          <label for='explore-charts-department-select'>Department</label>
           <Select
             className='ExploreCharts__Select ExploreCharts__DepartmentSelect'
+            id='explore-charts-department-select'
             onChange={this.setDepartmentId}
             options={departmentOptions}
             value={this.state.departmentId}
+            isLoading={!departmentOptions.length}
+            placeholder='All departments'
           />
+          <label for='explore-charts-attribute-select'>Attribute</label>
           <Select
-            className='ExploreCharts__Select ExploreCharts__MetricSelect'
+            className='ExploreCharts__Select ExploreCharts__AttributeSelect'
+            id='explore-charts-attribute-select'
             onChange={this.setAttribute}
+            clearable={false}
+            searchable={false}
             options={[
               {label: 'Ethnicity', value: ETHNICITY_ATTRIBUTE},
               {label: 'Gender', 'value': GENDER_ATTRIBUTE}
@@ -96,6 +126,15 @@ export default class ExploreCharts extends PureComponent {
         />
       </section>
     )
+  }
+
+  setDate (option) {
+    if (!option) {
+      option = { value: '' }
+    }
+
+    this.setState({date: option.value})
+    this.fetchEmployees(option.value).then(employees => this.setState({employees}))
   }
 
   setDepartmentId (option) {

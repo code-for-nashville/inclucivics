@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 const countBy = require('lodash.countby')
-const fromPairs = require('lodash.fromPairs')
 const groupBy = require('lodash.groupby')
 const mapValues = require('lodash.mapvalues')
 const {csvParse, csvFormat} = require('d3-dsv')
 const fs = require('fs')
-const pkg = require('../package.json')
 const constants = require('../src/constants.js')
 
 const DEPARTMENT_NAMES_TO_IDS = {}
 const DEPARTMENT_IDS_TO_NAMES = {}
 let departmentId = 0
 
-console.log("Creating a processed file for each date, and a summary file for all date")
+console.log('Creating a processed file for each date, and a summary file for all date')
 main()
 
 /*
@@ -42,7 +40,7 @@ function main () {
     const employees = lines.map(employeeFromCSVLine)
     fs.writeFileSync(`${dateDirectory}/employees.csv`, csvFormat(employees))
 
-    employeesByDate[date]  = employees
+    employeesByDate[date] = employees
   })
 
   const salaryBucketTotals = mapValues(employeesByDate, employees => {
@@ -95,15 +93,6 @@ function employeeFromCSVLine (employee) {
     departmentId: getDepartmentId(employee['Current Dept Description'] || employee['Department']),
     gender: employee['Gender']
   }
-}
-
-/*
-  Read the employees for a particular date
-*/
-function employeesForDate (date) {
-  const blob = fs.readFileSync(`input/${date}.csv`, 'utf8')
-  const lines = csvParse(blob)
-  return lines.map(employeeFromCSVLine)
 }
 
 /*

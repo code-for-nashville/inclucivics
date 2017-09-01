@@ -4003,10 +4003,6 @@ lodash.flatmap@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.flatmap/-/lodash.flatmap-4.5.0.tgz#ef8cbf408f6e48268663345305c6acc0b778702e"
 
-lodash.frompairs@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/lodash.frompairs/-/lodash.frompairs-4.0.1.tgz#bc4e5207fa2757c136e573614e9664506b2b1bd2"
-
 lodash.groupby@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.groupby/-/lodash.groupby-4.6.0.tgz#0b08a1dcf68397c397855c3239783832df7403d1"

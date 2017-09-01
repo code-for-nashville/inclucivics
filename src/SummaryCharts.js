@@ -16,7 +16,9 @@ export default class SummaryCharts extends PureComponent {
     return window.fetch('./data/summaries.json')
       .then(res => res.json())
       .then(summaries => {
-        summaries.forEach(s => s.date = new Date(s.date))
+        summaries.forEach(s => {
+          s.date = new Date(s.date)
+        })
         return summaries
       })
       .catch(console.error)
