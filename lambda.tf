@@ -25,8 +25,8 @@ resource "aws_lambda_function" "refresh_stats"{
 
   environment {
     variables = {
-      S3_BUCKET = "${aws_s3_bucket.website.bucket}"
-      S3_KEY = "last_modified.txt"
+      S3_BUCKET = "${aws_s3_bucket_object.last_modified.bucket}"
+      S3_KEY = "${aws_s3_bucket_object.last_modified.key}"
     }
   }
 }
