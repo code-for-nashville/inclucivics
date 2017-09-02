@@ -85,7 +85,7 @@ export default class ExploreCharts extends PureComponent {
     return (
       <section className='ExploreCharts'>
         <div className='ExploreCharts__SelectContainer'>
-          <label for='explore-charts-date-select'>Date</label>
+          <label htmlFor='explore-charts-date-select'>Date</label>
           <Select
             className='ExploreCharts__Select ExploreCharts__DateSelect'
             id='explore-charts-date-select'
@@ -95,7 +95,7 @@ export default class ExploreCharts extends PureComponent {
             value={this.state.date}
             isLoading={!this.state.date}
           />
-          <label for='explore-charts-department-select'>Department</label>
+          <label htmlFor='explore-charts-department-select'>Department</label>
           <Select
             className='ExploreCharts__Select ExploreCharts__DepartmentSelect'
             id='explore-charts-department-select'
@@ -105,7 +105,7 @@ export default class ExploreCharts extends PureComponent {
             isLoading={!departmentOptions.length}
             placeholder='All departments'
           />
-          <label for='explore-charts-attribute-select'>Attribute</label>
+          <label htmlFor='explore-charts-attribute-select'>Attribute</label>
           <Select
             className='ExploreCharts__Select ExploreCharts__AttributeSelect'
             id='explore-charts-attribute-select'
