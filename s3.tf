@@ -68,6 +68,7 @@ resource "aws_s3_bucket_object" "last_modified" {
   content = "initialize"
   acl    = "public-read"
   # etag   = "${md5(file("docs/architecture.dot.png"))}"
+  content_type = "text/html"
   storage_class = "REDUCED_REDUNDANCY"
 
   tags = {
