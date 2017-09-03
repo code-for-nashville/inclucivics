@@ -1,21 +1,10 @@
-.ExploreCharts h2 {
-  font-size: 1.1em;
-}
-
 .ExploreCharts__SelectContainer {
   margin-bottom: 2ex;
+  min-width: 250px; /* Seems to look decent on mobile */
+  width: 50%;
 }
 
-.ExploreCharts__Select {
-  display: inline-block;
-  margin-top: 2ex;
-}
-
-.ExploreCharts__DepartmentSelect {
-  width: 400px;
-  margin-right: 2em;
-}
-
-.ExploreCharts__MetricSelect {
-  width: 150px;
+.ExploreCharts__SelectContainer label {
+  margin: 1em 0 0 0;
+  display: block;
 }

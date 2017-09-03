@@ -1,47 +1,47 @@
 #!/usr/bin/env node
 const countBy = require('lodash.countby')
-const fromPairs = require('lodash.fromPairs')
 const groupBy = require('lodash.groupby')
 const mapValues = require('lodash.mapvalues')
-const fecha = require('fecha')
 const {csvParse, csvFormat} = require('d3-dsv')
 const fs = require('fs')
-const pkg = require('../package.json')
-const program = require('commander')
 const constants = require('../src/constants.js')
 
 const DEPARTMENT_NAMES_TO_IDS = {}
 const DEPARTMENT_IDS_TO_NAMES = {}
 let departmentId = 0
 
-program
-    .version(pkg.version)
-    .usage('[options]')
-    .option('-d, --date [date]', 'The date of the input data to import in YYYYMMDD format, e.g. 20170401')
-    .parse(process.argv)
+console.log('Creating a processed file for each date, and a summary file for all date')
+main()
 
-if (program.date) {
-  console.log(`Importing input data from ${program.date}`)
-  generateReport(program.date)
-} else {
-  console.log('Generating aggregate reports')
-  generateSummaries()
-}
+/*
+  For each file in input, generate a list of departments and processed data
+  suitable for the Explore page
 
-function employeesForDate (date) {
-  const blob = fs.readFileSync(`input/${date}.csv`, 'utf8')
-  const lines = csvParse(blob)
-  return lines.map(employeeFromCSVLine)
-}
-
-function generateSummaries () {
+  Also generate a summary file of all input files
+*/
+function main () {
   // Generate an overall summary for each salary bucket per year
   const filenames = fs.readdirSync('./input')
-  const employeesByDate = fromPairs(filenames.map(f => {
-    // Remove trailing '.csv'
-    const dateString = f.replace('.csv', '')
-    return [fecha.parse(dateString, 'YYYYMMDD'), employeesForDate(dateString)]
-  }))
+
+  const employeesByDate = {}
+
+  filenames.forEach(f => {
+    // YYYYMMDD format
+    let date = f.replace('.csv', '')
+    // Since we end up sending this to the frontend, make it parseable upfront
+    date = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`
+
+    const dateDirectory = `public/data/${date}`
+    if (!fs.existsSync(dateDirectory)) {
+      fs.mkdirSync(dateDirectory)
+    }
+    const blob = fs.readFileSync(`input/${f}`, 'utf8')
+    const lines = csvParse(blob)
+    const employees = lines.map(employeeFromCSVLine)
+    fs.writeFileSync(`${dateDirectory}/employees.csv`, csvFormat(employees))
+
+    employeesByDate[date] = employees
+  })
 
   const salaryBucketTotals = mapValues(employeesByDate, employees => {
     return countBy(employees, e => e.salaryBucketId)
@@ -57,7 +57,7 @@ function generateSummaries () {
       const ethnicitySummaries = constants.ETHNICITY_IDS.map(ethnicityId => {
         const ethnicityTotal = ethnicityTotals[ethnicityId] || 0
         return {
-          date: fecha.format(Date.parse(dateString), 'YYYY-MM-DD'),
+          date: dateString,
           salaryBucketId: bucket,
           ethnicityId,
           percent: ethnicityTotal / (salaryBucketTotals[dateString][bucket] || 1)
@@ -67,22 +67,20 @@ function generateSummaries () {
     })
   }
 
-  fs.writeFileSync('./public/data/summaries.json', JSON.stringify(summaries))
-}
-
-function generateReport (date) {
-  const employees = employeesForDate(date)
-  const dateDirectory = `public/data`
-  if (!fs.existsSync(dateDirectory)) {
-    fs.mkdirSync(dateDirectory)
-  }
-
-  fs.writeFileSync(`${dateDirectory}/employees.csv`, csvFormat(employees))
+  fs.writeFileSync(
+    './public/data/summaries.json',
+    JSON.stringify(summaries)
+  )
 
   fs.writeFileSync(
-        `${dateDirectory}/departments.json`,
-        JSON.stringify(DEPARTMENT_IDS_TO_NAMES)
-    )
+    `public/data/departments.json`,
+    JSON.stringify(DEPARTMENT_IDS_TO_NAMES)
+  )
+
+  fs.writeFileSync(
+    './public/data/dates.json',
+    JSON.stringify(Object.keys(employeesByDate))
+  )
 }
 
 function employeeFromCSVLine (employee) {

@@ -18,37 +18,59 @@ export default class ExploreCharts extends PureComponent {
     this.state = {
       departments: [],
       departmentId: null,
-      attribute: ETHNICITY_ATTRIBUTE
+      attribute: ETHNICITY_ATTRIBUTE,
+      dates: [],
+      date: null
     }
 
     this.setDepartmentId = this.setDepartmentId.bind(this)
     this.setAttribute = this.setAttribute.bind(this)
+    this.setDate = this.setDate.bind(this)
   }
 
-  loadDepartments () {
-    window.fetch('./data/departments.json')
+  fetchDepartments () {
+    return window.fetch('./data/departments.json')
       .then(res => res.json())
-      .then(departments => {
-        this.setState({departments})
-      })
-      .catch(console.error)
   }
 
-  loadEmployees () {
-    window.fetch('./data/employees.csv')
-    .then(res => res.text())
-    .then(text => {
+  fetchEmployees (date) {
+    return window.fetch(
+      `./data/${date}/employees.csv`
+    ).then(
+      res => res.text()
+    ).then(text => {
       const employees = csvParse(text)
       employees.forEach(employee => {
         employee.ethnicity = ETHNICITY_ID_LABELS[employee.ethnicityId]
       })
-      this.setState({employees})
-    }).catch(console.error)
+      return employees
+    })
+  }
+
+  fetchDates () {
+    return window.fetch(`./data/dates.json`)
+    .then(res => res.json())
   }
 
   componentDidMount () {
-    this.loadDepartments()
-    this.loadEmployees()
+    const datesPromise = this.fetchDates()
+    const employeesPromise = datesPromise.then(dates => {
+      const latestDate = dates[dates.length - 1]
+      return this.fetchEmployees(latestDate)
+    })
+    const departmentsPromise = this.fetchDepartments()
+
+    Promise.all(
+      [datesPromise, departmentsPromise, employeesPromise]
+    ).then(results => {
+      const [dates, departments, employees] = results
+      this.setState({
+        dates: dates,
+        date: dates[dates.length - 1],
+        departments,
+        employees}
+      )
+    }).catch(console.error)
   }
 
   render () {
@@ -56,19 +78,40 @@ export default class ExploreCharts extends PureComponent {
       ([id, name]) => ({ label: name, value: id })
     )
 
+    const dateOptions = this.state.dates.map(
+      value => ({ label: value, value: value })
+    )
+
     return (
       <section className='ExploreCharts'>
         <div className='ExploreCharts__SelectContainer'>
-          <h2>Select a department and a metric to generate a custom report for the most recent year</h2>
+          <label htmlFor='explore-charts-date-select'>Date</label>
+          <Select
+            className='ExploreCharts__Select ExploreCharts__DateSelect'
+            id='explore-charts-date-select'
+            onChange={this.setDate}
+            clearable={false}
+            options={dateOptions}
+            value={this.state.date}
+            isLoading={!this.state.date}
+          />
+          <label htmlFor='explore-charts-department-select'>Department</label>
           <Select
             className='ExploreCharts__Select ExploreCharts__DepartmentSelect'
+            id='explore-charts-department-select'
             onChange={this.setDepartmentId}
             options={departmentOptions}
             value={this.state.departmentId}
+            isLoading={!departmentOptions.length}
+            placeholder='All departments'
           />
+          <label htmlFor='explore-charts-attribute-select'>Attribute</label>
           <Select
-            className='ExploreCharts__Select ExploreCharts__MetricSelect'
+            className='ExploreCharts__Select ExploreCharts__AttributeSelect'
+            id='explore-charts-attribute-select'
             onChange={this.setAttribute}
+            clearable={false}
+            searchable={false}
             options={[
               {label: 'Ethnicity', value: ETHNICITY_ATTRIBUTE},
               {label: 'Gender', 'value': GENDER_ATTRIBUTE}
@@ -83,6 +126,15 @@ export default class ExploreCharts extends PureComponent {
         />
       </section>
     )
+  }
+
+  setDate (option) {
+    if (!option) {
+      option = { value: '' }
+    }
+
+    this.setState({date: option.value})
+    this.fetchEmployees(option.value).then(employees => this.setState({employees}))
   }
 
   setDepartmentId (option) {

@@ -12,20 +12,22 @@ export default class SummaryCharts extends PureComponent {
     }
   }
 
-  loadSummaries () {
-    window.fetch('./data/summaries.json')
+  fetchSummaries () {
+    return window.fetch('./data/summaries.json')
       .then(res => res.json())
       .then(summaries => {
         summaries.forEach(s => {
           s.date = new Date(s.date)
         })
-        this.setState({summaries})
+        return summaries
       })
       .catch(console.error)
   }
 
   componentDidMount () {
-    this.loadSummaries()
+    this.fetchSummaries().then(summaries => {
+      this.setState({summaries})
+    })
   }
 
   render () {

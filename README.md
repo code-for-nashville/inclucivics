@@ -8,7 +8,6 @@
 ## Running
 To run, make sure you have [`yarn` installed](https://yarnpkg.com/en/docs/install), and run
 
-
 `yarn install && yarn start`
 
 to see the site live at http://localhost:3000.
@@ -18,12 +17,9 @@ This project is built using [create-react-app](https://github.com/facebookincuba
 ## Adding Data
 To add data:
 
-1. Run `yarn data:fetch` to download the latest file.
-2. Run `yarn data:import input/<new_file>`. This will produce new files in `public/data` that will be used in the Explore section of the grahps. _Note:_ The import may fail because of changes to column names or data format. If you encouter a failure, please [file an issue](https://github.com/code-for-nashville/inclucivics/issues/new) :writing_hand:
-3. Run `yarn data:import` with no arguments to regenerate summaries.
+1. Run `yarn data:fetch` to download the latest file to the `input/` directory.
+2. Run `yarn data:import`. This will produce new files in `public/data/` that will be used in the Explore section of the grahps. _Note:_ The import may fail because of changes to column names or data format. If you encouter a failure, please [file an issue](https://github.com/code-for-nashville/inclucivics/issues/new) :writing_hand:.  This will also generate a summary of all files in the `input/` directory
 4. Commit any changes and submit a pull request.
-
-This will update the data in "Custom Reports" to the report you downloaded.
 
 ## Deploying
 Run `yarn deploy`. This will fail if you don't have push rights to the repository's `gh-pages` branch.
