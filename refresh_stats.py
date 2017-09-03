@@ -10,5 +10,6 @@ def last_modified(event, context):
     """
     Initializes of overwrites s3 file with current time as 'last modified' text
     """
-    body = 'Last Modified @ ' +  datetime.now(timezone.utc).isoformat()
-    return s3_object.put(Body=body)
+    body = ('Last Modified @ ' +  datetime.now(timezone.utc).isoformat()).encode()
+    return s3_object.put(Body=body, ACL='public-read', ContentType='text/html',
+        StorageClass='REDUCED_REDUNDANCY')
