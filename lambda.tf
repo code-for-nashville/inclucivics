@@ -30,3 +30,27 @@ resource "aws_lambda_function" "refresh_stats"{
     }
   }
 }
+
+# The rest pertains to scheduling and triggering the lambda
+resource "aws_cloudwatch_event_rule" "every5minutes" {
+  name        = "every5minutes"
+  description = "Run every 5 minutes"
+  # This can also take cron expression
+  schedule_expression = "cron(* * * * ? *)"
+  is_enabled = true
+}
+
+resource "aws_cloudwatch_event_target" "refresh_stats" {
+  rule      = "${aws_cloudwatch_event_rule.every5minutes.name}"
+  target_id = "trigger-refresh_stats-lambda"
+  arn       = "${aws_lambda_function.refresh_stats.arn}"
+  # role_arn  = "${data.aws_iam_role.lambda.arn}"
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch" {
+  statement_id   = "AllowExecutionFromCloudWatch"
+  action         = "lambda:InvokeFunction"
+  function_name  = "${aws_lambda_function.refresh_stats.function_name}"
+  principal      = "events.amazonaws.com"
+  source_arn     = "${aws_cloudwatch_event_rule.every5minutes.arn}"
+}
