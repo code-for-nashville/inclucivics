@@ -11,7 +11,7 @@ const DEPARTMENT_IDS_TO_NAMES = {}
 let departmentId = 0
 
 console.log('Creating a processed file for each date, and a summary file for all date')
-main()
+// main()
 
 /*
   For each file in input, generate a list of departments and processed data

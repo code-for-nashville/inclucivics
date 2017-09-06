@@ -16,4 +16,4 @@ function fetchPublishedData () {
   })
 }
 
-fetchPublishedData()
+// fetchPublishedData()
