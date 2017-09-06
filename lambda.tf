@@ -3,7 +3,7 @@
 
 data "archive_file" "inclucivics_zip" {
     type        = "zip"
-    source_file = "inclucivics.py"
+    source_file = "inclucivics.js"
     output_path = "inclucivics.zip"
 }
 
@@ -21,7 +21,7 @@ resource "aws_lambda_function" "inclucivics"{
   role             = "${data.aws_iam_role.lambda.arn}"
   handler          = "inclucivics.last_modified"
   source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
-  runtime          = "python3.6"
+  runtime          = "nodejs6.10"
 
   environment {
     variables = {
