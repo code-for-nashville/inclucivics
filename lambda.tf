@@ -1,10 +1,10 @@
 # define Archives to autozip the lambda source code
 # from https://github.com/hashicorp/terraform/issues/8344#issuecomment-265548941
 
-data "archive_file" "refresh_stats_zip" {
+data "archive_file" "inclucivics_zip" {
     type        = "zip"
-    source_file = "refresh_stats.py"
-    output_path = "refresh_stats.zip"
+    source_file = "inclucivics.py"
+    output_path = "inclucivics.zip"
 }
 
 # Don't want to give developers permissions to create / destroy roles
@@ -15,12 +15,12 @@ data "aws_iam_role" "lambda" {
   role_name = "lambda_role"
 }
 
-resource "aws_lambda_function" "refresh_stats"{
-  filename = "refresh_stats.zip"
-  function_name    = "refresh_stats"
+resource "aws_lambda_function" "inclucivics"{
+  filename = "inclucivics.zip"
+  function_name    = "inclucivics"
   role             = "${data.aws_iam_role.lambda.arn}"
-  handler          = "refresh_stats.last_modified"
-  source_code_hash = "${data.archive_file.refresh_stats_zip.output_base64sha256}"
+  handler          = "inclucivics.last_modified"
+  source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
   runtime          = "python3.6"
 
   environment {
@@ -40,17 +40,17 @@ resource "aws_cloudwatch_event_rule" "every5minutes" {
   is_enabled = true
 }
 
-resource "aws_cloudwatch_event_target" "refresh_stats" {
+resource "aws_cloudwatch_event_target" "inclucivics" {
   rule      = "${aws_cloudwatch_event_rule.every5minutes.name}"
-  target_id = "trigger-refresh_stats-lambda"
-  arn       = "${aws_lambda_function.refresh_stats.arn}"
+  target_id = "trigger-inclucivics-lambda"
+  arn       = "${aws_lambda_function.inclucivics.arn}"
   # role_arn  = "${data.aws_iam_role.lambda.arn}"
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
   statement_id   = "AllowExecutionFromCloudWatch"
   action         = "lambda:InvokeFunction"
-  function_name  = "${aws_lambda_function.refresh_stats.function_name}"
+  function_name  = "${aws_lambda_function.inclucivics.function_name}"
   principal      = "events.amazonaws.com"
   source_arn     = "${aws_cloudwatch_event_rule.every5minutes.arn}"
 }

@@ -3,7 +3,7 @@ digraph {
   labelloc=top
   tf [label = "terraform (code deployment)"]
   s3 [label = "S3 (app bucket)"]
-  lf [label = "Lambda Function (refresh_stats)"]
+  lf [label = "Lambda Function (inclucivics)"]
   cw [label = "Cloud Watch Scheduled Event"]
   tf -> cw -> lf -> s3
   tf -> lf
