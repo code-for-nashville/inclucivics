@@ -6,7 +6,7 @@ const DATA_URL = 'http://data.nashville.gov/api/views/4ibi-mxs4'
 /**
  * HTTP requests for latest published General Government Employees Demographics dataset.
  */
-exports.fetchPublishedData = function fetchPublishedData () {
+exports.lambda_handler = function fetchPublishedData (event, context) {
   request(DATA_URL, function (error, response, body) {
     if (error) console.error(error)
     var data = JSON.parse(body)
