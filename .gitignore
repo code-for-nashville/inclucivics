@@ -9,3 +9,6 @@
 terraform.tfstate*
 .terraform
 *.tfvars
+
+# Ignore Lambda package libraries
+node_modules
