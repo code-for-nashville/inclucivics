@@ -19,7 +19,7 @@ resource "aws_lambda_function" "inclucivics"{
   filename = "inclucivics.zip"
   function_name    = "inclucivics"
   role             = "${data.aws_iam_role.lambda.arn}"
-  handler          = "inclucivics.last_modified"
+  handler          = "inclucivics.fetchPublishedData"
   source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
   runtime          = "nodejs6.10"
 
