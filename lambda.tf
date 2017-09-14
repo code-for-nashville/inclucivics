@@ -3,7 +3,7 @@
 
 data "archive_file" "inclucivics_zip" {
     type        = "zip"
-    source_file = "inclucivics.js"
+    source_dir  = "inclucivics"
     output_path = "inclucivics.zip"
 }
 
