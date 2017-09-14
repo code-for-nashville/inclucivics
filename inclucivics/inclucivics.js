@@ -15,5 +15,3 @@ exports.lambda_handler = function fetchPublishedData (event, context) {
     request(`${DATA_URL}/rows.csv`).pipe(fs.createWriteStream(`./input/${filename}.csv`))
   })
 }
-
-fetchPublishedData()
