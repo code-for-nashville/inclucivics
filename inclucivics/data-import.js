@@ -41,7 +41,7 @@ const ETHNICITY_ID_LABELS = {
   4: 'Asian or Pacific Islander',
   5: 'American Indian/Alaskan Native'
 }
-const ETHNICITY_LABELS = Object.values(ETHNICITY_ID_LABELS)
+const ETHNICITY_LABELS = Object.keys(ETHNICITY_ID_LABELS).map(label => (ETHNICITY_ID_LABELS[label]))
 
 const GENDER_ATTRIBUTE = 'gender'
 const GENDERS = ['M', 'F']
