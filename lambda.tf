@@ -12,7 +12,7 @@ data "archive_file" "inclucivics_zip" {
 # It would be better to read it directly from a terraform project
 # Or, when necessary a different person is required to apply security changes
 data "aws_iam_role" "lambda" {
-  role_name = "lambda_role"
+  name = "lambda_role"
 }
 
 resource "aws_lambda_function" "inclucivics"{
