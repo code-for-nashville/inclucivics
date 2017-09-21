@@ -15,11 +15,11 @@ data "aws_iam_role" "lambda" {
   name = "lambda_role"
 }
 
-resource "aws_lambda_function" "inclucivics"{
+resource "aws_lambda_function" "data-fetch"{
   filename = "inclucivics.zip"
-  function_name    = "inclucivics"
+  function_name    = "data-fetch"
   role             = "${data.aws_iam_role.lambda.arn}"
-  handler          = "inclucivics.lambda_handler"
+  handler          = "data-fetch.lambda_handler"
   source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
   runtime          = "nodejs6.10"
 
@@ -40,17 +40,17 @@ resource "aws_cloudwatch_event_rule" "every5minutes" {
   is_enabled = true
 }
 
-resource "aws_cloudwatch_event_target" "inclucivics" {
+resource "aws_cloudwatch_event_target" "data-fetch" {
   rule      = "${aws_cloudwatch_event_rule.every5minutes.name}"
-  target_id = "trigger-inclucivics-lambda"
-  arn       = "${aws_lambda_function.inclucivics.arn}"
+  target_id = "trigger-data-fetch-lambda"
+  arn       = "${aws_lambda_function.data-fetch.arn}"
   # role_arn  = "${data.aws_iam_role.lambda.arn}"
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
   statement_id   = "AllowExecutionFromCloudWatch"
   action         = "lambda:InvokeFunction"
-  function_name  = "${aws_lambda_function.inclucivics.function_name}"
+  function_name  = "${aws_lambda_function.data-fetch.function_name}"
   principal      = "events.amazonaws.com"
   source_arn     = "${aws_cloudwatch_event_rule.every5minutes.arn}"
 }
