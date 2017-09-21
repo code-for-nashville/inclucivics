@@ -61,6 +61,10 @@
 <p>Terraform tracks the state of your (remote) infrastructure. Meanwhile, git tracks your current files, including a couple build files (e.g. <a href="docs/architecture.dot.png">docs/architecture.dot.png</a>).</p>
 <p>For convenience, I've put in some git hooks to update the build every time you commit. However, you would need to trigger <code>terraform apply</code> after rebuilding those files (to deploy them to S3).</p>
 <p>You may want to deploy changes to terraform (to a dev or feature environment) before committing to git. In that case, just run <code>source hooks/pre-commit</code> to build the files locally, first.</p>
+<h2>Installing nodejs dependencies</h2>
+<pre><code>pushd inclucivics
+npm install
+</code></pre>
                             </div>
                           </div>
                         </div>
