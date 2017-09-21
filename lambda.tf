@@ -31,6 +31,22 @@ resource "aws_lambda_function" "data-fetch"{
   }
 }
 
+resource "aws_lambda_function" "data-import"{
+  filename = "inclucivics.zip"
+  function_name    = "data-import"
+  role             = "${data.aws_iam_role.lambda.arn}"
+  handler          = "data-import.lambda_handler"
+  source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
+  runtime          = "nodejs6.10"
+
+  environment {
+    variables = {
+      S3_BUCKET = "${aws_s3_bucket_object.last_modified.bucket}"
+      S3_KEY = "${aws_s3_bucket_object.last_modified.key}"
+    }
+  }
+}
+
 # The rest pertains to scheduling and triggering the lambda
 resource "aws_cloudwatch_event_rule" "every5minutes" {
   name        = "every5minutes"
