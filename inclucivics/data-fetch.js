@@ -16,7 +16,7 @@ exports.lambda_handler = function fetchPublishedData (event, context, callback) 
     var rowsUpdatedAt = new Date(data['rowsUpdatedAt'] * 1000)
     var filename = rowsUpdatedAt.toISOString().replace(/-/g, '').slice(0, 8)
     request(`${DATA_URL}/rows.csv`, function (error, response, body) {
-      var params = {Bucket: process.env.S3_BUCKET, Key: filename, Body: body, ACL: 'public-read'}
+      var params = {Bucket: process.env.S3_BUCKET, Key: `input/${filename}`, Body: body, ACL: 'public-read'}
       s3.upload(params, function(err, data) {
         console.log(err, data);
         callback(null, data)

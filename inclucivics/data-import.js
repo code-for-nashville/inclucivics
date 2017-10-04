@@ -91,6 +91,9 @@ exports.lambda_handler = function main (event, context, callback) {
 }
 
 function copyEach(s3ObjectList) {
+  if (!fs.existsSync(`/tmp/input/`)) {
+    fs.mkdirSync(`/tmp/input/`)
+  }
   const promises = s3ObjectList['Contents'].map(metadata => {
     var params = {
       Bucket: process.env.S3_BUCKET,
@@ -98,7 +101,7 @@ function copyEach(s3ObjectList) {
     };
     return s3.getObject(params).promise()
       .then(data => {
-        fs.writeFileSync(`/tmp${metadata.Key}`, data.Body);
+        fs.writeFileSync(`/tmp/${metadata.Key}`, data.Body);
       })
   });
   return Promise.all(promises)
@@ -106,12 +109,12 @@ function copyEach(s3ObjectList) {
 
 function processFiles() {
   // Generate an overall summary for each salary bucket per year
-  const filenames = fs.readdirSync('/tmp/')
+  const filenames = fs.readdirSync('/tmp/input/')
 
   const employeesByDate = {}
 
   fs.mkdirSync(`/tmp/public/`)
-  fs.mkdirSync(`/tmp/public/data`)
+  fs.mkdirSync(`/tmp/public/data/`)
 
   filenames.forEach(f => {
     // YYYYMMDD format
@@ -123,7 +126,7 @@ function processFiles() {
     if (!fs.existsSync(dateDirectory)) {
       fs.mkdirSync(dateDirectory)
     }
-    const blob = fs.readFileSync(`/tmp/${f}`, 'utf8')
+    const blob = fs.readFileSync(`/tmp/input/${f}`, 'utf8')
     const lines = csvParse(blob)
     const employees = lines.map(employeeFromCSVLine)
     fs.writeFileSync(`${dateDirectory}/employees.csv`, csvFormat(employees))
@@ -169,6 +172,8 @@ function processFiles() {
     };
     s3.putObject(params).promise()
   })
+  // clean-up tmp in case another lambda runs in same container
+  // fs.unlink('/tmp')
   return Promise.all(putObjectPromises)
 }
 
