@@ -91,6 +91,7 @@ exports.lambda_handler = function main (event, context, callback) {
 }
 
 function copyEach(s3ObjectList) {
+  //lambda may be borrowing a previous container, so don't know if these exist
   if (!fs.existsSync(`/tmp/input/`)) {
     fs.mkdirSync(`/tmp/input/`)
   }
@@ -113,8 +114,13 @@ function processFiles() {
 
   const employeesByDate = {}
 
-  fs.mkdirSync(`/tmp/public/`)
-  fs.mkdirSync(`/tmp/public/data/`)
+  //lambda may be borrowing a previous container, so don't know if these exist
+  if (!fs.existsSync(`/tmp/public/`)) {
+    fs.mkdirSync(`/tmp/public/`)
+  }
+  if (!fs.existsSync(`/tmp/public/data/`)) {
+    fs.mkdirSync(`/tmp/public/data/`)
+  }
 
   filenames.forEach(f => {
     // YYYYMMDD format
