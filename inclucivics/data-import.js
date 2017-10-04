@@ -213,7 +213,7 @@ Some seasonal employees have "Annual Salary" listed as an empty string, and
 some records in 20150301.csv just have '$-  ' listed as a salary. Allow these
 to raise an exception.
 
-salary - String - a dollar amount with thousands separators and dollar sing
+salary - String - a dollar amount with thousands separators and dollar sign
     e.g. '$1,324.00'. May also be just '$-'
 */
 function parseSalary (salary) {
