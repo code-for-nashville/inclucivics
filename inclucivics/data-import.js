@@ -66,8 +66,8 @@ const constants = {
   ATTRIBUTE_TO_CHOICES
 }
 
-console.log('Creating a processed file for each date, and a summary file for all date')
-main()
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
 
 /*
   For each file in input, generate a list of departments and processed data
@@ -75,11 +75,43 @@ main()
 
   Also generate a summary file of all input files
 */
-function main () {
+exports.lambda_handler = function main (event, context, callback) {
+  // Copy s3 to local tmp directory
+  var params = {
+    Bucket: process.env.S3_BUCKET,
+    MaxKeys: 1000,
+    Prefix: 'input/'
+  };
+
+  s3.listObjects(params).promise()
+    .then(copyEach)
+    .then(processFiles)
+    .then(() => callback(null, 'Yay'))
+    .catch(callback)
+}
+
+function copyEach(s3ObjectList) {
+  const promises = s3ObjectList['Contents'].map(metadata => {
+    var params = {
+      Bucket: process.env.S3_BUCKET,
+      Key: metadata.Key
+    };
+    return s3.getObject(params).promise()
+      .then(data => {
+        fs.writeFileSync(`/tmp${metadata.Key}`, data.Body);
+      })
+  });
+  return Promise.all(promises)
+}
+
+function processFiles() {
   // Generate an overall summary for each salary bucket per year
-  const filenames = fs.readdirSync('./input')
+  const filenames = fs.readdirSync('/tmp/')
 
   const employeesByDate = {}
+
+  fs.mkdirSync(`/tmp/public/`)
+  fs.mkdirSync(`/tmp/public/data`)
 
   filenames.forEach(f => {
     // YYYYMMDD format
@@ -87,11 +119,11 @@ function main () {
     // Since we end up sending this to the frontend, make it parseable upfront
     date = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`
 
-    const dateDirectory = `public/data/${date}`
+    const dateDirectory = `/tmp/public/data/${date}`
     if (!fs.existsSync(dateDirectory)) {
       fs.mkdirSync(dateDirectory)
     }
-    const blob = fs.readFileSync(`input/${f}`, 'utf8')
+    const blob = fs.readFileSync(`/tmp/${f}`, 'utf8')
     const lines = csvParse(blob)
     const employees = lines.map(employeeFromCSVLine)
     fs.writeFileSync(`${dateDirectory}/employees.csv`, csvFormat(employees))
@@ -123,20 +155,21 @@ function main () {
     })
   }
 
-  fs.writeFileSync(
-    './public/data/summaries.json',
-    JSON.stringify(summaries)
-  )
+  const putObjectParams = [
+    [summaries, 'summaries.json'],
+    [DEPARTMENT_IDS_TO_NAMES, 'departments.json'],
+    [Object.keys(employeesByDate), 'dates.json']
+  ]
 
-  fs.writeFileSync(
-    `public/data/departments.json`,
-    JSON.stringify(DEPARTMENT_IDS_TO_NAMES)
-  )
-
-  fs.writeFileSync(
-    './public/data/dates.json',
-    JSON.stringify(Object.keys(employeesByDate))
-  )
+  const putObjectPromises = putObjectParams.map(([data, filename]) => {
+    var params = {
+      Body: JSON.stringify(data),
+      Bucket: process.env.S3_BUCKET,
+      Key: `public/data/${filename}`,
+    };
+    s3.putObject(params).promise()
+  })
+  return Promise.all(putObjectPromises)
 }
 
 function employeeFromCSVLine (employee) {

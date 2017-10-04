@@ -25,8 +25,8 @@ resource "aws_lambda_function" "data-fetch"{
 
   environment {
     variables = {
-      S3_BUCKET = "${aws_s3_bucket_object.last_modified.bucket}"
-      S3_KEY = "${aws_s3_bucket_object.last_modified.key}"
+      S3_BUCKET = "${aws_s3_bucket.website.bucket}"
+      # S3_KEY = "${aws_s3_bucket_object.last_modified.key}"
     }
   }
 }
@@ -38,11 +38,12 @@ resource "aws_lambda_function" "data-import"{
   handler          = "data-import.lambda_handler"
   source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
   runtime          = "nodejs6.10"
+  timeout          = 60
 
   environment {
     variables = {
-      S3_BUCKET = "${aws_s3_bucket_object.last_modified.bucket}"
-      S3_KEY = "${aws_s3_bucket_object.last_modified.key}"
+      S3_BUCKET = "${aws_s3_bucket.website.bucket}"
+      # S3_KEY = "${aws_s3_bucket_object.last_modified.key}"
     }
   }
 }
