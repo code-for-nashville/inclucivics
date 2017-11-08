@@ -175,6 +175,7 @@ function processFiles() {
       Body: JSON.stringify(data),
       Bucket: process.env.S3_BUCKET,
       Key: `public/data/${filename}`,
+      ACL: `public-read`
     };
     s3.putObject(params).promise()
   })
