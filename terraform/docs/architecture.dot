@@ -1,0 +1,16 @@
+digraph {
+  label="Current Components"
+  labelloc=top
+  tf [label = "Terraform (code deployment)"]
+  s3 [label = "S3 (raw)"]
+  s4 [label = "S3 (normalized)"]
+  df [label = "Lambda Function (data-fetch)"]
+  di [label = "Lambda Function (data-import)"]
+  cw [label = "Cloud Watch Scheduled Event"]
+
+  tf -> cw -> df -> s3 -> di -> s4
+  tf -> di
+  tf -> df
+  tf -> s3
+  tf -> s4
+}

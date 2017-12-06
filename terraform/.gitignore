@@ -1,0 +1,14 @@
+# Terraform Patterns
+
+# First 2 only work with Tim's convention: `terraform plan -out plan.tmp`
+*.tmp
+*plan*
+
+*.tar.gz
+*.zip
+terraform.tfstate*
+.terraform
+*.tfvars
+
+# Ignore Lambda package libraries
+node_modules

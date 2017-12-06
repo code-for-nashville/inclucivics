@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# This automatically updates and adds architecture.dot.png before you commit.
+# But first you have to configure your repo for git hooks:
+# https://stackoverflow.com/a/37861972/5555637
+
+# build architecture graph
+echo updating docs/architecture.dot.png
+dot -T png -O docs/architecture.dot
+git add docs/architecture.dot.png
+
+# compile markdown
+grip --user-content --export README.md index.html
