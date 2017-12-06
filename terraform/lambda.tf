@@ -17,7 +17,7 @@ data "aws_iam_role" "lambda" {
 
 resource "aws_lambda_function" "data-fetch"{
   filename = "inclucivics.zip"
-  function_name    = "data-fetch"
+  function_name    = "${terraform.env}-data-fetch"
   role             = "${data.aws_iam_role.lambda.arn}"
   handler          = "data-fetch.lambda_handler"
   source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
@@ -33,7 +33,7 @@ resource "aws_lambda_function" "data-fetch"{
 
 resource "aws_lambda_function" "data-import"{
   filename = "inclucivics.zip"
-  function_name    = "data-import"
+  function_name    = "${terraform.env}-data-import"
   role             = "${data.aws_iam_role.lambda.arn}"
   handler          = "data-import.lambda_handler"
   source_code_hash = "${data.archive_file.inclucivics_zip.output_base64sha256}"
