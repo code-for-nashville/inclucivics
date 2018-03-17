@@ -31,9 +31,7 @@
     "predeploy": "npm run build",
     "start": "react-scripts start",
     "test": "yarn standard && react-scripts test --env=jsdom",
-    "lint": "standard",
-    "data:fetch": "node scripts/data-fetch",
-    "data:import": "node scripts/data-import"
+    "lint": "standard"
   },
   "standard": {
     "globals": [

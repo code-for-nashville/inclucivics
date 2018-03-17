@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import groupBy from 'lodash.groupby'
 
 import GraphTable from './GraphTable'
-import { ETHNICITY_ID_LABELS, SALARY_BUCKET_LABELS } from './constants.js'
+import { ETHNICITY_ID_LABELS, SALARY_BUCKET_LABELS, S3_URL } from './constants.js'
 
 export default class SummaryCharts extends PureComponent {
   constructor (props) {
@@ -13,7 +13,7 @@ export default class SummaryCharts extends PureComponent {
   }
 
   fetchSummaries () {
-    return window.fetch('./data/summaries.json')
+    return window.fetch(`${S3_URL}/data/summaries.json`)
       .then(res => res.json())
       .then(summaries => {
         summaries.forEach(s => {
