@@ -115,31 +115,17 @@ function processFiles() {
   // Generate an overall summary for each salary bucket per year
   const filenames = fs.readdirSync('/tmp/input/')
 
+  // Populate flattened employee data employees for each date
   const employeesByDate = {}
-
-  //lambda may be borrowing a previous container, so don't know if these exist
-  if (!fs.existsSync(`/tmp/public/`)) {
-    fs.mkdirSync(`/tmp/public/`)
-  }
-  if (!fs.existsSync(`/tmp/public/data/`)) {
-    fs.mkdirSync(`/tmp/public/data/`)
-  }
-
   filenames.forEach(f => {
     // YYYYMMDD format
     let date = f.replace('.csv', '')
     // Since we end up sending this to the frontend, make it parseable upfront
     date = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`
 
-    const dateDirectory = `/tmp/public/data/${date}`
-    if (!fs.existsSync(dateDirectory)) {
-      fs.mkdirSync(dateDirectory)
-    }
     const blob = fs.readFileSync(`/tmp/input/${f}`, 'utf8')
     const lines = csvParse(blob)
     const employees = lines.map(employeeFromCSVLine)
-    fs.writeFileSync(`${dateDirectory}/employees.csv`, csvFormat(employees))
-
     employeesByDate[date] = employees
   })
 
@@ -177,12 +163,22 @@ function processFiles() {
     var params = {
       Body: JSON.stringify(data),
       Bucket: S3_BUCKET,
-      Key: `public/data/${filename}`,
+      Key: `data/${filename}`,
       ACL: `public-read`
     };
     s3.putObject(params).promise()
   })
-  return Promise.all(putObjectPromises)
+
+  const employeesByDatePromises = Object.keys(employeesByDate).map(dateString => {
+    var params = {
+      Body: csvFormat(employeesByDate[dateString]),
+      Bucket: S3_BUCKET,
+      Key: `data/${dateString}/employees.csv`,
+      ACL: `public-read`
+    };
+    s3.putObject(params).promise()
+  })
+  return Promise.all([...putObjectPromises, ...employeesByDatePromises])
 }
 
 function employeeFromCSVLine (employee) {
