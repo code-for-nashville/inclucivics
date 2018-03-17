@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
 # data bucket lambda writes to
 resource "aws_s3_bucket" "data" {
   acl = "public-read"
@@ -7,8 +11,7 @@ resource "aws_s3_bucket" "data" {
 
   cors_rule {
     allowed_methods =["GET"]
-    # Another hardcoded section - make sure to update this if we move URLS
-    allowed_origins = ["http://www.codefornashville.org/inclucivics/"]
+    allowed_origins = ["*"]
   }
 
   versioning {

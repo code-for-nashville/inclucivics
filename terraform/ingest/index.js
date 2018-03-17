@@ -245,6 +245,7 @@ function fetchPublishedData () {
     .then(data => {
       const rowsUpdatedAt = new Date(data['rowsUpdatedAt'] * 1000)
       filename = rowsUpdatedAt.toISOString().replace(/-/g, '').slice(0, 8)
+      filename = `${filename}.csv`
       return fetch(`${DATA_URL}/rows.csv`)
     })
     .then(resp => resp.text())
