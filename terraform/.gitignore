@@ -6,8 +6,8 @@
 
 *.tar.gz
 *.zip
-terraform.tfstate*
 .terraform
+terraform.tfstate.backup
 *.tfvars
 
 # Ignore Lambda package libraries

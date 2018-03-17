@@ -1,12 +1,17 @@
 #!/usr/bin/env node
+const aws = require('aws-sdk');
 const countBy = require('lodash.countby')
 const groupBy = require('lodash.groupby')
 const mapValues = require('lodash.mapvalues')
 const {csvParse, csvFormat} = require('d3-dsv')
+const fetch = require('node-fetch')
 const fs = require('fs')
+const s3 = new aws.S3()
 
+const DATA_URL = 'http://data.nashville.gov/api/views/4ibi-mxs4'
 const DEPARTMENT_NAMES_TO_IDS = {}
 const DEPARTMENT_IDS_TO_NAMES = {}
+const S3_BUCKET = 'codefornashville-inclucivics-c9b520'
 let departmentId = 0
 
 // these constants need to accessed separately as global resource (front-end too)
@@ -66,24 +71,22 @@ const constants = {
   ATTRIBUTE_TO_CHOICES
 }
 
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
-
 /*
   For each file in input, generate a list of departments and processed data
   suitable for the Explore page
 
   Also generate a summary file of all input files
 */
-exports.lambda_handler = function main (event, context, callback) {
+exports.handler = function main (event, context, callback) {
   // Copy s3 to local tmp directory
   var params = {
-    Bucket: process.env.S3_BUCKET,
+    Bucket: S3_BUCKET,
     MaxKeys: 1000,
     Prefix: 'input/'
   };
 
-  s3.listObjects(params).promise()
+  fetchPublishedData()
+    .then(() => s3.listObjects(params).promise())
     .then(copyEach)
     .then(processFiles)
     .then(() => callback(null, 'Yay'))
@@ -97,7 +100,7 @@ function copyEach(s3ObjectList) {
   }
   const promises = s3ObjectList['Contents'].map(metadata => {
     var params = {
-      Bucket: process.env.S3_BUCKET,
+      Bucket: S3_BUCKET,
       Key: metadata.Key
     };
     return s3.getObject(params).promise()
@@ -173,14 +176,12 @@ function processFiles() {
   const putObjectPromises = putObjectParams.map(([data, filename]) => {
     var params = {
       Body: JSON.stringify(data),
-      Bucket: process.env.S3_BUCKET,
+      Bucket: S3_BUCKET,
       Key: `public/data/${filename}`,
       ACL: `public-read`
     };
     s3.putObject(params).promise()
   })
-  // clean-up tmp in case another lambda runs in same container
-  // fs.unlink('/tmp')
   return Promise.all(putObjectPromises)
 }
 
@@ -236,4 +237,28 @@ function parseSalary (salary) {
     console.warn(`Exception ${ex}`)
     return 0
   }
+}
+
+/**
+ * HTTP requests for latest published General Government Employees Demographics dataset.
+ */
+function fetchPublishedData () {
+  var filename;
+  return fetch(DATA_URL)
+    .then(resp => resp.json())
+    .then(data => {
+      const rowsUpdatedAt = new Date(data['rowsUpdatedAt'] * 1000)
+      filename = rowsUpdatedAt.toISOString().replace(/-/g, '').slice(0, 8)
+      return fetch(`${DATA_URL}/rows.csv`)
+    })
+    .then(resp => resp.text())
+    .then(body => {
+      const params = {
+        Bucket: S3_BUCKET,
+        Key: `input/${filename}`,
+        Body: body,
+        ACL: 'public-read'
+      }
+      s3.upload(params, console.log)
+    })
 }

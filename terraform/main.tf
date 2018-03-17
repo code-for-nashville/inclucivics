@@ -1,24 +1,49 @@
-provider "aws" {
-  profile = "combinatorist"
-  region = "us-east-1"
+# data bucket lambda writes to
+resource "aws_s3_bucket" "data" {
+  acl = "public-read"
+  # The bucket name is hardcoded into the app
+  # Make sure to change there if you change me!
+  bucket = "codefornashville-inclucivics-c9b520"
+
+  cors_rule {
+    allowed_methods =["GET"]
+    # Another hardcoded section - make sure to update this if we move URLS
+    allowed_origins = ["http://www.codefornashville.org/inclucivics/"]
+  }
+
+  versioning {
+    enabled = true
+  }
 }
 
-data "aws_caller_identity" "current" {}
+# handler archive
+data "archive_file" "ingest" {
+    type        = "zip"
+    source_dir  = "ingest"
+    output_path = "ingest.zip"
+}
 
-terraform {
-    backend "s3" {
-        # S3 bucket names are globally unique, so we'll get conflict
-        # But we can't auto-create *backend* buckets in same terraform project
-        # Create your (versioned!) bucket
-        # Enter bucket name in command prompt after running `terraform init`
-        # Bug: terraform uses default profile to access to s3 remote
-        # So you really need `terraform init --backend-config 'profile=<profile>`
-        # (see https://github.com/hashicorp/terraform/issues/5839#issuecomment-239900719)
+data "aws_iam_policy_document" "s3" {
+  statement {
+    sid = "1"
+    actions = [
+      "s3:*",
+    ]
+    resources = [
+      "${aws_s3_bucket.data.arn}",
+      "${aws_s3_bucket.data.arn}/*",
+    ]
+  }
+}
 
-        profile = "combinatorist" # we need a way for everyone to run this
-
-        bucket = "terraform-state-b5d3b702-2814-d332-00bd-91ef2fcb6296"
-        region = "us-east-1"
-        key = "terraform-demo.tfstate" # resolve conflict if exists
-    }
+module "scheduled_ingest" {
+  source              = "github.com/terraform-community-modules/tf_aws_lambda_scheduled"
+  lambda_name         = "inclucivics_ingest"
+  runtime             = "nodejs6.10"
+  lambda_zipfile      = "ingest.zip"
+  source_code_hash    = "${data.archive_file.ingest.output_base64sha256}"
+  handler             = "index.handler"
+  schedule_expression = "rate(1 day)"
+  timeout             = 200
+  iam_policy_document = "${data.aws_iam_policy_document.s3.json}"
 }

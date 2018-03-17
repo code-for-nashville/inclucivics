@@ -1,17 +1,17 @@
-# Terraform Demo (with AWS)
+# Inclucivics Terraform
+This Terraform module provision the Infrastructure required by IncluCivics.
 
-## Architecture
-![Architecture Diagram](docs/architecture.dot.png)
+## Overview
 
-## Git Hooks & Terraform
-Terraform tracks the state of your (remote) infrastructure. Meanwhile, git tracks your current files, including a couple build files (e.g. [docs/architecture.dot.png](docs/architecture.dot.png)).
+Right now this is:
 
-For convenience, I've put in some git hooks to update the build every time you commit. However, you would need to trigger `terraform apply` after rebuilding those files (to deploy them to S3).
+* A public S3 bucket to store processed data
+* A lambda that fetches and processes data from data.nashville.gov every day, and writes it out to the S3 bucket.
 
-You may want to deploy changes to terraform (to a dev or feature environment) before committing to git. In that case, just run `source hooks/pre-commit` to build the files locally, first.
+The website itself is still hosted on Github Pages, and deployed using `yarn deploy` in the project root.
 
-## Installing nodejs dependencies
-```
-pushd inclucivics
-npm install
-```
+The code to run the import is stored in the `ingest` subdirectory.
+
+## Testing
+
+To test the Terraform configuration, open up your [AWS Lambda Console](https://console.aws.amazon.com/lambda). You should see the lambda "inclucivics_ingest" if you have access.  Click it.  Create a test event in the dropdown (the values are ignored) and click "Test" to run.
