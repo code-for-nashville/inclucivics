@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const aws = require('aws-sdk');
+const aws = require('aws-sdk')
 const countBy = require('lodash.countby')
 const groupBy = require('lodash.groupby')
 const mapValues = require('lodash.mapvalues')
@@ -83,7 +83,7 @@ exports.handler = function main (event, context, callback) {
     Bucket: S3_BUCKET,
     MaxKeys: 1000,
     Prefix: 'input/'
-  };
+  }
 
   fetchPublishedData()
     .then(() => s3.listObjects(params).promise())
@@ -93,8 +93,8 @@ exports.handler = function main (event, context, callback) {
     .catch(callback)
 }
 
-function copyEach(s3ObjectList) {
-  //lambda may be borrowing a previous container, so don't know if these exist
+function copyEach (s3ObjectList) {
+  // lambda may be borrowing a previous container, so don't know if these exist
   if (!fs.existsSync(`/tmp/input/`)) {
     fs.mkdirSync(`/tmp/input/`)
   }
@@ -102,16 +102,16 @@ function copyEach(s3ObjectList) {
     var params = {
       Bucket: S3_BUCKET,
       Key: metadata.Key
-    };
+    }
     return s3.getObject(params).promise()
       .then(data => {
-        fs.writeFileSync(`/tmp/${metadata.Key}`, data.Body);
+        fs.writeFileSync(`/tmp/${metadata.Key}`, data.Body)
       })
-  });
+  })
   return Promise.all(promises)
 }
 
-function processFiles() {
+function processFiles () {
   // Generate an overall summary for each salary bucket per year
   const filenames = fs.readdirSync('/tmp/input/')
 
@@ -165,7 +165,7 @@ function processFiles() {
       Bucket: S3_BUCKET,
       Key: `data/${filename}`,
       ACL: `public-read`
-    };
+    }
     s3.putObject(params).promise()
   })
 
@@ -175,7 +175,7 @@ function processFiles() {
       Bucket: S3_BUCKET,
       Key: `data/${dateString}/employees.csv`,
       ACL: `public-read`
-    };
+    }
     s3.putObject(params).promise()
   })
   return Promise.all([...putObjectPromises, ...employeesByDatePromises])
@@ -239,7 +239,7 @@ function parseSalary (salary) {
  * HTTP requests for latest published General Government Employees Demographics dataset.
  */
 function fetchPublishedData () {
-  var filename;
+  var filename
   return fetch(DATA_URL)
     .then(resp => resp.json())
     .then(data => {
