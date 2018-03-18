@@ -77,7 +77,7 @@ const constants = {
 
   Also generate a summary file of all input files
 */
-exports.handler = function(event, context, callback) {
+exports.handler = function (event, context, callback) {
   // Copy s3 to local tmp directory
   var params = {
     Bucket: S3_BUCKET,
