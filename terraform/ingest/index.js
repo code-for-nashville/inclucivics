@@ -77,7 +77,7 @@ const constants = {
 
   Also generate a summary file of all input files
 */
-exports.handler = function(_, _, callback) {
+exports.handler = function(event, context, callback) {
   // Copy s3 to local tmp directory
   var params = {
     Bucket: S3_BUCKET,
@@ -90,7 +90,7 @@ exports.handler = function(_, _, callback) {
     .then(copyEach)
     .then(processFiles)
     .then(() => callback(null, 'Yay'))
-    .catch(callback)
+    .catch(err => callback(err))
 }
 
 function copyEach (s3ObjectList) {
