@@ -11,7 +11,10 @@ resource "aws_s3_bucket" "data" {
 
   cors_rule {
     allowed_methods =["GET"]
-    allowed_origins = ["*"]
+    allowed_origins = [
+      "http://www.codefornashville.org/",
+      "http://localhost:3000/",
+    ]
   }
 
   versioning {

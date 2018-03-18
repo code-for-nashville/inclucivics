@@ -77,7 +77,7 @@ const constants = {
 
   Also generate a summary file of all input files
 */
-exports.handler = function main (event, context, callback) {
+exports.handler = function(_, _, callback) {
   // Copy s3 to local tmp directory
   var params = {
     Bucket: S3_BUCKET,
@@ -244,8 +244,7 @@ function fetchPublishedData () {
     .then(resp => resp.json())
     .then(data => {
       const rowsUpdatedAt = new Date(data['rowsUpdatedAt'] * 1000)
-      filename = rowsUpdatedAt.toISOString().replace(/-/g, '').slice(0, 8)
-      filename = `${filename}.csv`
+      filename = `${rowsUpdatedAt.toISOString()}.csv`
       return fetch(`${DATA_URL}/rows.csv`)
     })
     .then(resp => resp.text())
