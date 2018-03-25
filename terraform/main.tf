@@ -55,6 +55,10 @@ module "scheduled_ingest" {
   iam_policy_document = "${data.aws_iam_policy_document.s3.json}"
 }
 
+resource "aws_cloudwatch_log_group" "logs" {
+  name = "/aws/lambda/${var.lambda_name}"
+}
+
 resource "aws_cloudwatch_metric_alarm" "failure" {
   alarm_name          = "inclucivics_ingest_failure"
   comparison_operator = "GreaterThanThreshold"
