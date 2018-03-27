@@ -63,6 +63,7 @@ resource "aws_cloudwatch_metric_alarm" "failure" {
   namespace           = "AWS/Lambda"
   period              = 300
   threshold           = 0
+  treat_missing_data  = "notBreaching"
   statistic           = "SampleCount"
 
   dimensions {
