@@ -120,8 +120,11 @@ function processFiles () {
   filenames.forEach(f => {
     // YYYYMMDD format
     let date = f.replace('.csv', '')
+    let re = /(?<year>\d{4})-*(?<month>\d{2})-*(?<day>\d{2})/
+    let {groups: {day, month, year}} = re.exec(date)
+
     // Since we end up sending this to the frontend, make it parseable upfront
-    date = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`
+    date = `${day}-${month}-${year}`
 
     const blob = fs.readFileSync(`/tmp/input/${f}`, 'utf8')
     const lines = csvParse(blob)

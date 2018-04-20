@@ -17,7 +17,9 @@ export default class SummaryCharts extends PureComponent {
       .then(res => res.json())
       .then(summaries => {
         summaries.forEach(s => {
-          s.date = new Date(s.date)
+          let [year, month, day] = s.date.split("-").map((x) => parseInt(x))
+          // Need to subtract 1 because Date's month field is 0 based
+          s.date = new Date(year, month - 1, day)
         })
         return summaries
       })
