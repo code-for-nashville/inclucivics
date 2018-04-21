@@ -118,12 +118,9 @@ function processFiles () {
   // Populate flattened employee data employees for each date
   const employeesByDate = {}
   filenames.forEach(f => {
-    // YYYYMMDD format
-    let date = f.replace('.csv', '')
+    // YYYY-MM-DDThh:mm:ss:sssZ format
     // Since we end up sending this to the frontend, make it parseable upfront
-    let re = /(\d{4})-*(\d{2})-*(\d{2})/
-    let dateGroups = re.exec(date)
-    date = `${dateGroups[1]}-${dateGroups[2]}-${dateGroups[3]}`
+    let date = f.substring(0, 10)
 
     const blob = fs.readFileSync(`/tmp/input/${f}`, 'utf8')
     const lines = csvParse(blob)
