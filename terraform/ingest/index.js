@@ -19,10 +19,12 @@ const LOW = 0
 const MID = 1
 const HIGH = 2
 const SALARY_BUCKETS = [HIGH, MID, LOW]
+const SALARY_THRESHOLD_LOW = 33000
+const SALARY_THRESHOLD_MID = 66000
 const SALARY_BUCKET_LABELS = {
-  [LOW]: 'Lower Income Range (Less than $33,000)',
-  [MID]: 'Middle Income Range ($33,000 and $66,000)',
-  [HIGH]: 'Upper Income Range (Greater than $66,000)'
+  [LOW]: 'Lower Income Range (Less than $' + SALARY_THRESHOLD_LOW.toString() + ')',
+  [MID]: 'Middle Income Range ($' + SALARY_THRESHOLD_LOW.toString() + ' and $' + SALARY_THRESHOLD_MID.toString() + ')',
+  [HIGH]: 'Upper Income Range (Greater than $' + SALARY_THRESHOLD_MID.toString() + ')'
 }
 
 const ETHNICITY_ATTRIBUTE = 'ethnicity'
@@ -209,8 +211,8 @@ function getDepartmentId (department) {
 }
 
 function bucketSalary (salary) {
-  if (salary < 33000) return constants.LOW
-  if (salary < 66000) return constants.MID
+  if (salary < SALARY_THRESHOLD_LOW) return constants.LOW
+  if (salary < SALARY_THRESHOLD_MID) return constants.MID
   return constants.HIGH
 }
 
