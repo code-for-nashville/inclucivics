@@ -5,6 +5,17 @@
 
 [IncluCivics](https://code-for-nashville.github.io/inclucivics) is a data visualization app completed in partnership with the Human Relations Commission.  It provides transparency on employee demographics within the Nashville Metropolitan Government.
 
+## Prerequisites
+### Frontend
+The frontend can be run locally without access to any AWS account.
+- [npm](https://www.npmjs.com/)
+- [yarn](https://www.npmjs.com/package/yarn)
+
+### Backend
+You will need access to an AWS account to run or modify the backend.
+- [Terraform](https://www.terraform.io/)
+- [AWS](https://aws.amazon.com/)
+
 ## Running
 To run, make sure you have [`yarn` installed](https://yarnpkg.com/en/docs/install), and run
 
