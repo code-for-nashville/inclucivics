@@ -7,7 +7,6 @@ const SALARY_BUCKET_LABELS = {
   [MID]: 'Middle Income Range ($33,000 and $66,000)',
   [HIGH]: 'Upper Income Range (Greater than $66,000)'
 }
-const S3_URL = (process.env.NODE_ENV==='production' ? 'https://s3.amazonaws.com/codefornashville-inclucivics-c9b520' : '/test')
 
 const ETHNICITY_ATTRIBUTE = 'ethnicity'
 const ETHNICITY_IDS = [
@@ -52,6 +51,5 @@ module.exports = {
   ETHNICITY_LABELS,
   GENDER_ATTRIBUTE,
   GENDERS,
-  ATTRIBUTE_TO_CHOICES,
-  S3_URL
+  ATTRIBUTE_TO_CHOICES
 }

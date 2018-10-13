@@ -5,8 +5,7 @@ import { csvParse } from 'd3-dsv'
 import {
   ETHNICITY_ATTRIBUTE,
   ETHNICITY_ID_LABELS,
-  GENDER_ATTRIBUTE,
-  S3_URL
+  GENDER_ATTRIBUTE
 } from './constants.js'
 import IncomeLevelPieCharts from './IncomeLevelPieCharts.js'
 
@@ -30,13 +29,13 @@ export default class ExploreCharts extends PureComponent {
   }
 
   fetchDepartments () {
-    return window.fetch(`${S3_URL}/data/departments.json`)
+    return window.fetch('./data/departments.json')
       .then(res => res.json())
   }
 
   fetchEmployees (date) {
     return window.fetch(
-      `${S3_URL}/data/${date}/employees.csv`
+      `./data/${date}/employees.csv`
     ).then(
       res => res.text()
     ).then(text => {
@@ -49,7 +48,7 @@ export default class ExploreCharts extends PureComponent {
   }
 
   fetchDates () {
-    return window.fetch(`${S3_URL}/data/dates.json`)
+    return window.fetch(`./data/dates.json`)
     .then(res => res.json())
   }
 
