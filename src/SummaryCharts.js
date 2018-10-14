@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import groupBy from 'lodash.groupby'
 
 import GraphTable from './GraphTable'
-import { ETHNICITY_ID_LABELS, SALARY_BUCKET_LABELS, S3_URL } from './constants.js'
+import { ETHNICITY_ID_LABELS, SALARY_BUCKET_LABELS } from './constants.js'
 
 export default class SummaryCharts extends PureComponent {
   constructor (props) {
@@ -13,13 +13,11 @@ export default class SummaryCharts extends PureComponent {
   }
 
   fetchSummaries () {
-    return window.fetch(`${S3_URL}/data/summaries.json`)
+    return window.fetch('./data/summaries.json')
       .then(res => res.json())
       .then(summaries => {
         summaries.forEach(s => {
-          let [year, month, day] = s.date.split('-').map((x) => parseInt(x))
-          // Need to subtract 1 because Date's month field is 0 based
-          s.date = new Date(year, month - 1, day)
+          s.date = new Date(s.date)
         })
         return summaries
       })
