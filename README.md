@@ -22,7 +22,7 @@ To add data:
 4. Commit any changes and submit a pull request.
 
 ## Deploying
-Run `yarn deploy`. This will fail if you don't have push rights to the repository's `gh-pages` branch.
+Run `yarn deploy`. This will fail if you don't have push rights to the repository's `gh-pages` branch. The app is configured to use git over https. If you have two-factor authentication to github, you will need to create a [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) with the 'public_repo' permission.
 
 ## Contributing
 Contributions are welcome. Look at the "Issues" tab to squash :bug:s, add features and suggest improvements. If you are new to open source, check out [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/) for a rundown.
