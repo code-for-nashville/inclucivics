@@ -1,7 +1,7 @@
 {
   "name": "inclucivics",
   "version": "0.1.0",
-  "homepage": "http://www.codefornashville.org/inclucivics",
+  "homepage": "http://inclucivics.org/",
   "dependencies": {
     "bootstrap": ">=4.1.2",
     "create-react-class": "^15.5.2",
