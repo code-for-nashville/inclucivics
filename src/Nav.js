@@ -22,6 +22,7 @@ class Nav extends Component {
           <a className={aboutClass} onClick={this.toggleAbout}>
             Analyzing the demographic makeup of 50 Metro Nashville departments
           </a>
+          <button className='navbar-expand' onClick={this.toggleAbout}></button>
           {about}
         </div>
       </nav>
