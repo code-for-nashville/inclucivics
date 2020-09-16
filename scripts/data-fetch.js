@@ -1,19 +1,43 @@
-var fs = require('fs')
-var request = require('request')
-
-const DATA_URL = 'http://data.nashville.gov/api/views/4ibi-mxs4'
+const fs = require('fs');
+const fetch = require('node-fetch');
+const https = require('https');
 
 /**
- * HTTP requests for latest published General Government Employees Demographics dataset.
+ * Fetches all of the data files stored on the Code For Nashville
+ * Open Data Portal on GitHub and saves the files
+ * in the input directory locally.
+ * These files are needed for the preprartion that will
+ * take place in the data-import script.
  */
-function fetchPublishedData () {
-  request(DATA_URL, function (error, response, body) {
-    if (error) console.error(error)
-    var data = JSON.parse(body)
-    var rowsUpdatedAt = new Date(data['rowsUpdatedAt'] * 1000)
-    var filename = rowsUpdatedAt.toISOString().replace(/-/g, '').slice(0, 8)
-    request(`${DATA_URL}/rows.csv`).pipe(fs.createWriteStream(`./input/${filename}.csv`))
-  })
-}
 
-fetchPublishedData()
+const fetchPublishedData = async () => {
+    const httpsAgent = https.Agent({
+        rejectUnauthorized: false,
+        requestCert: false
+    });
+    
+    const options = {
+        agent: httpsAgent
+    }
+        ,apiEndpoint = 'https://api.github.com/repos'
+        ,repoAddress = '/code-for-nashville/open-data-portal'
+        ,path = '/nashville/metro-general-government-employees-demographic-data/renamed-csv';
+    
+    let res = await fetch(apiEndpoint + repoAddress + '/contents' + path, options);
+    let resolved = await res.ok;
+    if (resolved) {
+        let fileList = await res.json();
+        fileList.map(async x => {
+            let rows = await fetch(x.download_url, options);
+            let data = await rows.text();
+            var filename = x.name.replace(/-/g, '').slice(0, 6) + '01';
+            fs.writeFileSync(`./input/${filename}.csv`, data);
+        });
+    } else {
+        console.log('ERROR: ');
+        console.log(await res.statusText);
+    };
+
+};
+
+fetchPublishedData();
