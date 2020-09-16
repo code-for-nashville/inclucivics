@@ -1,3 +1,6 @@
+// This is the original data fetch directly from the city's open data portal.
+// But, now we use the ./data-fetch.js module which gets it from our open data portal.
+
 var fs = require('fs')
 var request = require('request')
 
