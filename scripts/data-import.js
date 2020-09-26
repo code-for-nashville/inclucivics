@@ -92,7 +92,14 @@ function employeeFromCSVLine (employee) {
 
   // filter through the keys of the employee object to find the column
   // that contains the name of the department
-  let department_name = employee[Object.keys(employee).filter(k => k.match(dept_regex) != null)]
+  // the first filter clause finds all of the column titles that contain DEPT or DEPARTMENT
+  // the second filter clause checks the contents of the each column found to determine
+  // if the column contains letter and not just numbers.  In some of the older
+  // files, there are two department columns, one with a number, and one with the name
+  // for this purpose we just want the name of the department
+  let department_name = employee[Object.keys(employee)
+                                .filter(k => k.match(dept_regex) != null)
+                                .filter(l => employee[l].match(/[a-z]+/gi) != null)]
 
   return {
     ethnicityId: parseInt(employee['Ethnic Code']),
