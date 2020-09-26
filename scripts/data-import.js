@@ -86,11 +86,18 @@ function main () {
 function employeeFromCSVLine (employee) {
   const salary = parseSalary(employee['Annual Salary'])
   const salaryBucketId = bucketSalary(salary)
+  // store the regex to find either Dept or Department in the keys of the
+  // employee object that's passed in to this function (i flag allows regex to ignore case)
+  const dept_regex = /DEPT|DEPARTMENT/gi
+
+  // filter through the keys of the employee object to find the column
+  // that contains the name of the department
+  let department_name = employee[Object.keys(employee).filter(k => k.match(dept_regex) != null)]
 
   return {
     ethnicityId: parseInt(employee['Ethnic Code']),
     salaryBucketId,
-    departmentId: getDepartmentId(employee['Current Dept Description'] || employee['Department']),
+    departmentId: getDepartmentId(department_name),
     gender: employee['Gender']
   }
 }
