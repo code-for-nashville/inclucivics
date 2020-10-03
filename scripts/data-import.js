@@ -88,7 +88,7 @@ function employeeFromCSVLine (employee) {
   const salaryBucketId = bucketSalary(salary)
   // store the regex to find either Dept or Department in the keys of the
   // employee object that's passed in to this function (i flag allows regex to ignore case)
-  const dept_regex = /DEPT|DEPARTMENT/gi
+  const deptRegex = /DEPT|DEPARTMENT/gi
 
   // filter through the keys of the employee object to find the column
   // that contains the name of the department
@@ -97,14 +97,14 @@ function employeeFromCSVLine (employee) {
   // if the column contains letter and not just numbers.  In some of the older
   // files, there are two department columns, one with a number, and one with the name
   // for this purpose we just want the name of the department
-  let department_name = employee[Object.keys(employee)
-                                .filter(k => k.match(dept_regex) != null)
+  let departmentName = employee[Object.keys(employee)
+                                .filter(k => k.match(deptRegex) != null)
                                 .filter(l => employee[l].match(/[a-z]+/gi) != null)]
 
   return {
     ethnicityId: parseInt(employee['Ethnic Code']),
     salaryBucketId,
-    departmentId: getDepartmentId(department_name),
+    departmentId: getDepartmentId(departmentName),
     gender: employee['Gender']
   }
 }
